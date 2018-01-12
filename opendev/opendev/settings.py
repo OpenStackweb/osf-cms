@@ -126,43 +126,43 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 TINYMCE_DEFAULT_CONFIG = {
-    'theme': "advanced",
-    'file': "/admin/filebrowser/browse?pop",
-    'language': "en",
-    'gecko_spellcheck' : 'true',
-    'dialog_type': "modal",
-    'object_resizing': 'true',
-    'cleanup_on_startup': 'true',
-    'forced_root_block': "p",
-    'remove_trailing_nbsp': 'true',
-    'theme_advanced_toolbar_location': "top",
-    'theme_advanced_toolbar_align': "left",
-    'theme_advanced_statusbar_location': "none",
-    'theme_advanced_buttons1': "formatselect,bold,italic,bullist,numlist,hr,link,unlink,anchor,image,separator,undo,redo,separator,removeformat,pastetext,code",
-    'theme_advanced_buttons2': "tablecontrols",
-    'theme_advanced_buttons3': "",
-    'theme_advanced_path': 'false',
-    'theme_advanced_resizing' : 'false',
-    'theme_advanced_blockformats': 'p,h3,h4,pre',
-    'width': '690',
-    'height': '350',
-    'plugins': "inlinepopups,paste,advimage,table",
-    'content_css' : "/static/app/assets/css/tinymce_custom.css",
-    'advimage_update_dimensions_onchange': 'true',
-    'relative_urls': 'true',
-    'convert_urls' : 'true',
-    'valid_elements' : "" +
-        "-p," +
-        "a[href|title|id|class|target]," +
-        "-strong/-b," +
-        "-em/-i," +
-        "-sup," +
-        "-ol," +
-        "-ul," +
-        "-li," +
-        "img[src|alt|width|height]," +
-        "br," +
-        "hr," +
-        "table,thead,tbody,tfoot,th,td,tr," +
-        "h3,h4,pre",
+	'theme': "advanced",
+	'file': "/admin/filebrowser/browse?pop",
+	'language': "en",
+	'gecko_spellcheck' : 'true',
+	'dialog_type': "modal",
+	'object_resizing': 'true',
+	'cleanup_on_startup': 'true',
+	'forced_root_block': "p",
+	'remove_trailing_nbsp': 'true',
+	'theme_advanced_toolbar_location': "top",
+	'theme_advanced_toolbar_align': "left",
+	'theme_advanced_statusbar_location': "none",
+	'theme_advanced_buttons1': "formatselect,bold,italic,bullist,numlist,hr,link,unlink,anchor,image,separator,undo,redo,separator,removeformat,pastetext,code",
+	'theme_advanced_buttons2': "tablecontrols",
+	'theme_advanced_buttons3': "",
+	'theme_advanced_path': 'false',
+	'theme_advanced_resizing' : 'false',
+	'theme_advanced_blockformats': 'p,h3,h4,pre',
+	'width': '690',
+	'height': '350',
+	'plugins': "inlinepopups,paste,advimage,table",
+	'content_css' : "/static/app/assets/css/tinymce_custom.css",
+	'advimage_update_dimensions_onchange': 'true',
+	'relative_urls': 'true',
+	'convert_urls' : 'true',
+	'valid_elements' : "" +
+		"-p," +
+		"a[href|title|id|class|target]," +
+		"-strong/-b," +
+		"-em/-i," +
+		"-sup," +
+		"-ol," +
+		"-ul," +
+		"-li," +
+		"img[src|alt|width|height]," +
+		"br," +
+		"hr," +
+		"table,thead,tbody,tfoot,th,td,tr," +
+		"h3,h4,pre",
 }
