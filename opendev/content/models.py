@@ -7,9 +7,17 @@ from tinymce.models import HTMLField
 class Page(models.Model):
 	title = models.CharField(max_length=50, blank=False)
 	slug = models.SlugField()
-	content = HTMLField(max_length=65535)
+	content = HTMLField(max_length=65535, blank=True)
 	created = models.DateTimeField(auto_now_add=True)
 	modified = models.DateTimeField(auto_now=True)
+
+	def __str__(self):
+		return self.title
+
+
+class Style(models.Model):
+	title = models.CharField(max_length=50, blank=False)
+	slug = models.SlugField(blank=False, null=False)
 
 	def __str__(self):
 		return self.title
@@ -20,38 +28,21 @@ class Module(models.Model):
 		('LEFT', 'Left'),
 		('RIGHT', 'Right'),
 	)
-	BACKGROUND_CHOICES = (
-		('BLACK', 'Black'),
-		('WHITE', 'White'),
-		('DARKGREY', 'Dark grey'),
-		('LIGHTGREY', 'Light grey'),
-		('RED', 'Red'),
-		('LIGHTBLUE', 'Light blue'),
-	)
-	FONT_CHOICES = (
-		('BLACK', 'Black'),
-		('WHITE', 'White'),
-	)
-	title = models.CharField(max_length=50, blank=False)
-	page = models.ForeignKey(Page, related_name='modules', on_delete=models.SET_NULL, null=True, blank=False)
-	order = models.PositiveIntegerField('Order', default=0)
-	content = HTMLField(max_length=65535)
-	background_color = models.CharField(max_length=9, choices=BACKGROUND_CHOICES, default='BLACK')
-	font_color = models.CharField(max_length=9, choices=FONT_CHOICES, default='WHITE')
+	title = models.CharField(max_length=50)
+	display_title = models.BooleanField(default=True)
+	content = HTMLField(max_length=65535, blank=True)
+	style = models.ForeignKey(Style, on_delete=models.SET_NULL, null=True)
 	image = models.ImageField(blank=True)
 	image_position = models.CharField(max_length=6, choices=IMAGE_POSITION_CHOICES, default='LEFT')
+	image_on_background = models.BooleanField(default=False)
 	created = models.DateTimeField(auto_now_add=True)
 	modified = models.DateTimeField(auto_now=True)
 
-	def save(self, *args, **kwargs):
-		if self.pk is None:
-			page_modules = self.page.modules.all()
-			self.order = page_modules.count() + 1
-		super(Module, self).save(*args, **kwargs)
-
-
-	class Meta:
-		ordering = ('order',)
+	# def save(self, *args, **kwargs):
+	# 	if self.pk is None:
+	# 		page_modules = self.page.modules.all()
+	# 		self.order = page_modules.count() + 1
+	# 	super(Module, self).save(*args, **kwargs)
 
 	def __str__(self):
 		return self.title
@@ -62,6 +53,8 @@ class Block(Module):
 		('ONECOL', 'One column'),
 		('TWOCOL', 'Two columns'),
 	)
+	list_title = models.CharField(max_length=50, blank=True)
+	display_list = models.BooleanField(default=False)
 	kicker = models.CharField(max_length=50, blank=True)
 	layout = models.CharField(max_length=6, choices=LAYOUT_CHOICES, default='ONECOL')
 
@@ -109,3 +102,27 @@ class Talk(models.Model):
 
 	def __str__(self):
 		return self.title
+
+
+class ModuleInPage(models.Model):
+	module = models.ForeignKey(Module, on_delete=models.CASCADE, related_name='modules_in_page')
+	page = models.ForeignKey(Page, on_delete=models.CASCADE, related_name='modules_in_page')
+	order = models.PositiveIntegerField('Order', default=0)
+
+	class Meta:
+		ordering = ['order',]
+		verbose_name = "Module"
+
+	def __str__(self):
+		return "{} ({})".format(self.module.title, self.page.title)
+
+
+class ListItem(models.Model):
+	icon = models.ImageField()
+	caption = models.CharField(max_length=50, blank=True, null=True)
+	module = models.ForeignKey(Module, on_delete=models.CASCADE, related_name='list_items')
+	order = models.PositiveIntegerField('Order', default=0)
+
+	class Meta:
+		verbose_name_plural = 'List items'
+		ordering = ('order',)

@@ -6,3 +6,11 @@
 \.env/
 
 /opendev/db.sqlite3
+
+opendev/content/__pycache__/
+opendev/content/migrations/__pycache__/
+opendev/menus/__pycache__/
+opendev/menus/migrations/__pycache__/
+opendev/opendev/__pycache__/
+
+*.sqlite3
