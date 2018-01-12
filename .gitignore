@@ -6,6 +6,7 @@
 \.env/
 
 /opendev/db.sqlite3
+/opendev/media
 
 opendev/content/__pycache__/
 opendev/content/migrations/__pycache__/
