@@ -2,6 +2,7 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from filebrowser.fields import FileBrowseField
 from tinymce.models import HTMLField
 
 class Page(models.Model):
@@ -32,7 +33,7 @@ class Module(models.Model):
 	display_title = models.BooleanField(default=True)
 	content = HTMLField(max_length=65535, blank=True)
 	style = models.ForeignKey(Style, on_delete=models.SET_NULL, null=True)
-	image = models.ImageField(blank=True)
+	image = FileBrowseField(max_length=200, directory='assets', format='Image', blank=True, null=True)
 	image_position = models.CharField(max_length=6, choices=IMAGE_POSITION_CHOICES, default='LEFT')
 	image_on_background = models.BooleanField(default=False)
 	created = models.DateTimeField(auto_now_add=True)
@@ -67,6 +68,7 @@ class Sponsorship(Module):
 class ImageGallery(Module):
 	class Meta:
 		verbose_name_plural = 'Image galleries'
+
 
 class ImageInGallery(models.Model):
 	image = models.ImageField()
@@ -118,7 +120,7 @@ class ModuleInPage(models.Model):
 
 
 class ListItem(models.Model):
-	icon = models.ImageField()
+	icon = FileBrowseField(max_length=200, directory="images", format='Image', blank=True, null=True)
 	caption = models.CharField(max_length=50, blank=True, null=True)
 	module = models.ForeignKey(Module, on_delete=models.CASCADE, related_name='list_items')
 	order = models.PositiveIntegerField('Order', default=0)
