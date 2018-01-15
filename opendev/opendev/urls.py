@@ -16,6 +16,7 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from django.urls import path, include
+from views import about, sponsors, schedule, videos, faq
 from filebrowser.sites import site as filebrowser_site
 
 
@@ -23,4 +24,9 @@ urlpatterns = [
     url(r'^admin/filebrowser/', filebrowser_site.urls), # filebrowser URLS
     path('admin/', admin.site.urls),
     url(r'^tinymce/', include('tinymce.urls')),
+    url(r'^home/', about, name='about'),
+    url(r'^sponsors/', sponsors, name='sponsors'),
+    url(r'^schedule/', schedule, name='schedule'),
+    url(r'^videos/', videos, name='videos'),
+    url(r'^faq/', faq, name='faq'),
 ]

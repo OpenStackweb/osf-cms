@@ -5,6 +5,7 @@ from django.dispatch import receiver
 from filebrowser.fields import FileBrowseField
 from tinymce.models import HTMLField
 
+
 class Page(models.Model):
 	title = models.CharField(max_length=50, blank=False)
 	slug = models.SlugField()
