@@ -13,7 +13,9 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf import settings
 from django.conf.urls import url
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 from views import about, sponsors, schedule, videos, faq
@@ -24,9 +26,9 @@ urlpatterns = [
     url(r'^admin/filebrowser/', filebrowser_site.urls), # filebrowser URLS
     path('admin/', admin.site.urls),
     url(r'^tinymce/', include('tinymce.urls')),
-    url(r'^home/', about, name='about'),
+    url(r'^about/', about, name='about'),
     url(r'^sponsors/', sponsors, name='sponsors'),
     url(r'^schedule/', schedule, name='schedule'),
     url(r'^videos/', videos, name='videos'),
     url(r'^faq/', faq, name='faq'),
-]
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -83,6 +83,28 @@ h2 {
         margin-top: 13px;
         color: #FEEBFF; }
 
+.white-red {
+  color: white;
+  padding: 60px 0;
+  background-size: 450px;
+  background: #EE265E 90% center no-repeat;
+}
+  .white-red .intro-cta {
+    text-align: center;
+    position: relative;
+    min-height: 100px; }
+    .white-red .intro-cta .content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      -webkit-transform: translate(-50%, -50%);
+              transform: translate(-50%, -50%); }
+      .white-red .intro-cta .content span {
+        display: block;
+        font-size: 0.8em;
+        margin-top: 13px;
+        color: #FEEBFF; }
+
 ul.date-local {
   padding: 0;
   margin: 40px 0 0; }

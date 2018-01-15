@@ -1,9 +1,327 @@
 {% load static from staticfiles %}
-{% load add_active from custom_tags %}
+{% load add_active set_background_img from custom_tags %}
 <!DOCTYPE html>
 <html lang="en">
 
 {% block header %}
+    <body>
+
+    {% block navigation %}
+        <!-- Navigation -->
+        <!-- Navigation -->
+        <nav class="navbar navbar-default navbar-inverse navbar-custom">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#mobile-nav">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="/">
+                        <img class="header-logo" src={% static 'images/opendev-logo.svg' %} alt="OpenDev">
+                    </a>
+                </div>
+
+                <div class="collapse navbar-collapse" id="mobile-nav">
+                    <ul class="nav navbar-nav navbar-right">
+
+                        {% for page in pages %}
+                            <li class='{% add_active request page.page.slug %}'>
+                                <a href="/{{ page.page.slug }}">{{ page.display_name }}</a>
+                            </li>
+                        {% endfor %}
+
+
+
+                        <!--
+                                                <li class="">
+                                                    <a href="/assets/opendev-faq_081617.pdf">FAQ</a>
+                                                </li>
+                                                -->
+
+                    </ul>
+                </div>
+                <!-- /.navbar-collapse -->
+            </div>
+            <!-- /.container-fluid -->
+        </nav>
+    {% endblock %}
+    <!-- Page Header -->
+    <body id="page-top" class="index">
+
+    {% block content %}
+        <!-- Begin Page Content -->
+        {% for module in modules %}
+            {% if module.title == 'Intro' %}
+                <div class="{{ module.style.slug }}" style='background-image: url("{{ module.image.url }}")'>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12">
+                                {{ module.content | safe }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+{#        <div class="intro-section">#}
+{#            <div class="container">#}
+{#                <div class="row">#}
+{#                    <div class="col-sm-12 col-md-12">#}
+{#                        <p>#}
+{#                            <strong>OpenDev</strong> is an annual event focused at the intersection of composable open infrastructure and modern applications. The 2017 gathering will focus on edge computing, bringing together practitioners along with the brightest#}
+{#                            minds in the industry to collaborate around use cases, reference architectures and gap analysis. The event is structured to have an impact on future development and integration efforts, achieved by collaboratively produced deliverables#}
+{#                            to share back with the industry and open source communities. Overall, the event is designed in a way to create focused, intimate and productive sharing of information.#}
+{#                        </p>#}
+{#                        <p>#}
+{#                        <ul class="date-local">#}
+{#                            <li>September 7-8, 2017</li>#}
+{#                            <li>DogPatch Studios</li>#}
+{#                            <li>San Francisco, CA</li>#}
+{#                        </ul>#}
+{#                        </p>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{#        <div class="edge-section">#}
+{#            <div class="container">#}
+{#                <div class="row">#}
+{#                    <div class="col-sm-3 center">#}
+{#                        <img class="edge-earth" src="/images/edge-earth.png" alt="">#}
+{#                    </div>#}
+{#                    <div class="col-sm-9">#}
+{#                        <h2>Welcome to the EDGE of cloud.</h2>#}
+{#                        <p>#}
+{#                            Today, almost every company in every industry sector needs near-instant data to be successful. Edge computing pushes applications, data and computing power services away from centralized points to the logical extremes of a network. It enables companies#}
+{#                            to put the right data in the right place at the right time, supporting fast and secure access. The result is an improved client experience and, oftentimes, a valuable strategic advantage. The decision to implement an edge computing#}
+{#                            architecture is typically driven by the need for location optimization, security, and most of all, speed.#}
+{#                        </p>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{#        <div class="how-section">#}
+{#            <div class="container">#}
+{#                <div class="row">#}
+{#                    <div class="col-sm-4">#}
+{#                        <div class="left-side">#}
+{#                            <h5>How OpenDev can help to</h5>#}
+{#                            <h2>Advance the future of EDGE computing</h2>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                    <div class="col-sm-8 center">#}
+{#                        <p>#}
+{#                            OpenDev is designed to facilitate collaboration at a technical level with productive, working space, in addition to lightning talk presentations on edge use cases.#}
+{#                        </p>#}
+{#                        <div class="right-bottom-side">#}
+{#                            <strong>Targeted outcome includes:</strong>#}
+{#                            <div class="row">#}
+{#                                <div class="col-xs-4">#}
+{#                                    <img class="check" src="/images/check.svg" alt="">#}
+{#                                    <p>#}
+{#                                        Education of what differentiates an edge application and how to categorize them#}
+{#                                    </p>#}
+{#                                </div>#}
+{#                                <div class="col-xs-4">#}
+{#                                    <img class="check" src="/images/check.svg" alt="">#}
+{#                                    <p>#}
+{#                                        Documentation around the recommended technology stack and architecture for edge#}
+{#                                    </p>#}
+{#                                </div>#}
+{#                                <div class="col-xs-4">#}
+{#                                    <img class="check" src="/images/check.svg" alt="">#}
+{#                                    <p>#}
+{#                                        Gap analysis across OpenStack and other technologies needed for edge#}
+{#                                    </p>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{#        <div class="who-section">#}
+{#            <div class="container">#}
+{#                <div class="row">#}
+{#                    <div class="col-sm-8 col-sm-push-2">#}
+{#                        <h2>Who Should Attend</h2>#}
+{#                        <p>#}
+{#                            This event is for technical experts in edge computing, cloud computing and cloud applications. Operators with real world edge use cases including IoT, machine learning and geographically diverse technology-empowered businesses are also encouraged#}
+{#                            to attend. Venue capacity is limited; attendance is limited to 10 representatives per company.#}
+{#                        </p>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{#        <div class="committee-section">#}
+{#            <div class="container">#}
+{#                <div class="row">#}
+{#                    <div class="col-sm-12">#}
+{#                        <h2>Programming Committee</h2>#}
+{#                    </div>#}
+{#                </div>#}
+{#                <div class="row">#}
+{#                    <div class="col-sm-5ths">#}
+{#                        <div class="headshot-wrapper">#}
+{#                            <img class="committee-headshot" src="/images/committee/Andrew.jpg" alt="">#}
+{#                        </div>#}
+{#                        <div class="committee-name">#}
+{#                            Andrew Mitry, Walmart#}
+{#                        </div>#}
+{#                    </div>#}
+{#                    <div class="col-sm-5ths">#}
+{#                        <div class="headshot-wrapper">#}
+{#                            <img class="committee-headshot" src="/images/committee/Beth.png" alt="">#}
+{#                        </div>#}
+{#                        <div class="committee-name">#}
+{#                            Beth Cohen, Verizon#}
+{#                        </div>#}
+{#                    </div>#}
+{#                    <div class="col-sm-5ths">#}
+{#                        <div class="headshot-wrapper">#}
+{#                            <img class="committee-headshot" src="/images/committee/Chris.jpg" alt="">#}
+{#                        </div>#}
+{#                        <div class="committee-name">#}
+{#                            Chris Price, Ericsson#}
+{#                        </div>#}
+{#                    </div>#}
+{#                    <div class="col-sm-5ths">#}
+{#                        <div class="headshot-wrapper">#}
+{#                            <img class="committee-headshot" src="/images/committee/Kandan.jpg" alt="">#}
+{#                        </div>#}
+{#                        <div class="committee-name">#}
+{#                            Kandan Kathrivel, AT&T#}
+{#                        </div>#}
+{#                    </div>#}
+{#                    <div class="col-sm-5ths">#}
+{#                        <div class="headshot-wrapper">#}
+{#                            <img class="committee-headshot" src="/images/committee/Gregory.jpg" alt="">#}
+{#                        </div>#}
+{#                        <div class="committee-name">#}
+{#                            Gregory Katsaros, Inmarsat#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{#        <div class="format-section">#}
+{#            <div class="container">#}
+{#                <div class="row">#}
+{#                    <div class="col-sm-10 col-sm-push-1 top-side">#}
+{#                        <h2>Format & Organization</h2>#}
+{#                        <p>#}
+{#                            OpenDev is a two-day event primarily comprised of collaborative working sessions, roundtables, and architecture show-and-tells with a limited number of use case lightning talks.#}
+{#                        </p>#}
+{#                        <p>#}
+{#                            While OpenDev is underwritten and primarily organized by the OpenStack Foundation, the focus is on bringing together composable open infrastructure technologies across communities and industries. The programming committee is made up of experts across#}
+{#                            open source communities, with a particular focus on Edge Computing for 2017. A limited number of sponsors will also help with funding.#}
+{#                        </p>#}
+{#                    </div>#}
+{#                </div>#}
+{#                <div class="row">#}
+{#                    <div class="col-sm-10 col-sm-push-1">#}
+{#                        <div class="row">#}
+{#                            <div class="col-sm-6 left-side">#}
+{#                                <h6>Code of conduct</h6>#}
+{#                                <p>#}
+{#                                    All attendees of the OpenDev event must follow the OpenStack community <a href="https://www.openstack.org/legal/community-code-of-conduct/">Code of Conduct</a>.#}
+{#                                </p>#}
+{#                            </div>#}
+{#                            <div class="col-sm-6">#}
+{#                                <h6>What to find out more?</h6>#}
+{#                                <p>#}
+{#                                    Contact <a href="mailto:events@openstack.org">events@openstack.org</a>.#}
+{#                                </p>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+        <!-- End Page Content -->
+    {% endblock %}
+    <!-- Footer -->
+    <footer>
+        {% block footer %}
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <a href="/">
+                            <img class="footer-logo" src={% static "/images/opendev-logo.svg" %} alt="OpenDev">
+                        </a>
+                        <div class="footer-links">
+                            <ul class="nav navbar-nav navbar-right">
+
+
+
+                                <li class="active">
+                                    <a href="/">About</a>
+                                </li>
+
+
+
+                                <li class="">
+                                    <a href="/sponsors/">Sponsors</a>
+                                </li>
+
+
+
+                                <li class="">
+                                    <a href="/schedule/">Schedule</a>
+                                </li>
+
+
+
+                                <li class="">
+                                    <a href="/videos/">Videos</a>
+                                </li>
+
+
+
+                                <li class="">
+                                    <a href="/assets/opendev-faq_081617.pdf">FAQ</a>
+                                </li>
+
+                            </ul>
+                            <div class="footer-copyright">
+                                Copyright © 2017. All Rights Reserved.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endblock %}
+    </footer>
+
+    {% block footer-scripts %}
+        <!-- jQuery -->
+        <script src={% static '/js/jquery.js' %}></script>
+
+        <!-- Bootstrap Core JavaScript -->
+        <script src={% static '/js/bootstrap.min.js'%}></script>
+
+        <!-- Resize Videos -->
+        <script src={% static "/js/video-resize.js" %}></script>
+
+        <!-- Twitter universal website tag code -->
+        <script>
+            !function(e,t,n,s,u,a){e.twq||(s=e.twq=function(){s.exe?s.exe.apply(s,arguments):s.queue.push(arguments);
+            },s.version='1.1',s.queue=[],u=t.createElement(n),u.async=!0,u.src='//static.ads-twitter.com/uwt.js',
+                a=t.getElementsByTagName(n)[0],a.parentNode.insertBefore(u,a))}(window,document,'script');
+            // Insert Twitter Pixel ID and Standard Event data below
+            twq('init','nxuu6');
+            twq('track','PageView');
+        </script>
+        <!-- End Twitter universal website tag code -->
+    {% endblock %}
+
+    </body>
+
+    </html>
+{% endblock %}
+
     <head>
 
     <meta charset="utf-8">
@@ -45,326 +363,3 @@
     </script>
 
     </head>
-{% endblock %}
-
-<body>
-
-{% block navigation %}
-<!-- Navigation -->
-    <!-- Navigation -->
-    <nav class="navbar navbar-default navbar-inverse navbar-custom">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#mobile-nav">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="/">
-                	<img class="header-logo" src={% static 'images/opendev-logo.svg' %} alt="OpenDev">
-                </a>
-            </div>
-
-            <div class="collapse navbar-collapse" id="mobile-nav">
-                <ul class="nav navbar-nav navbar-right">
-
-                        {% for page in pages %}
-                            <li class='{% add_active request page.page.slug %}'>
-                                <a href="/{{ page.page.slug }}">{{ page.display_name }}</a>
-                            </li>
-                        {% endfor %}
-
-
-
-<!--
-					    <li class="">
-					        <a href="/sponsors/">Sponsors</a>
-					    </li>
-
-
-
-					    <li class="">
-					        <a href="/schedule/">Schedule</a>
-					    </li>
-
-
-
-					    <li class="">
-					        <a href="/videos/">Videos</a>
-					    </li>
-
-
-
-					    <li class="">
-					        <a href="/assets/opendev-faq_081617.pdf">FAQ</a>
-					    </li>
-					    -->
-
-                </ul>
-            </div>
-            <!-- /.navbar-collapse -->
-        </div>
-        <!-- /.container-fluid -->
-    </nav>
-{% endblock %}
-<!-- Page Header -->
-<body id="page-top" class="index">
-
-{% block content %}
-        <!-- Begin Page Content -->
-        <div class="intro-section">
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-12 col-md-12">
-                    <p>
-                        <strong>OpenDev</strong> is an annual event focused at the intersection of composable open infrastructure and modern applications. The 2017 gathering will focus on edge computing, bringing together practitioners along with the brightest
-                        minds in the industry to collaborate around use cases, reference architectures and gap analysis. The event is structured to have an impact on future development and integration efforts, achieved by collaboratively produced deliverables
-                        to share back with the industry and open source communities. Overall, the event is designed in a way to create focused, intimate and productive sharing of information.
-                    </p>
-                    <p>
-                        <ul class="date-local">
-                            <li>September 7-8, 2017</li>
-                            <li>DogPatch Studios</li>
-                            <li>San Francisco, CA</li>
-                        </ul>
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="edge-section">
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-3 center">
-                    <img class="edge-earth" src="/images/edge-earth.png" alt="">
-                </div>
-                <div class="col-sm-9">
-                    <h2>Welcome to the EDGE of cloud.</h2>
-                    <p>
-                        Today, almost every company in every industry sector needs near-instant data to be successful. Edge computing pushes applications, data and computing power services away from centralized points to the logical extremes of a network. It enables companies
-                        to put the right data in the right place at the right time, supporting fast and secure access. The result is an improved client experience and, oftentimes, a valuable strategic advantage. The decision to implement an edge computing
-                        architecture is typically driven by the need for location optimization, security, and most of all, speed.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="how-section">
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-4">
-                    <div class="left-side">
-                        <h5>How OpenDev can help to</h5>
-                        <h2>Advance the future of EDGE computing</h2>
-                    </div>
-                </div>
-                <div class="col-sm-8 center">
-                    <p>
-                        OpenDev is designed to facilitate collaboration at a technical level with productive, working space, in addition to lightning talk presentations on edge use cases.
-                    </p>
-                    <div class="right-bottom-side">
-                        <strong>Targeted outcome includes:</strong>
-                        <div class="row">
-                            <div class="col-xs-4">
-                                <img class="check" src="/images/check.svg" alt="">
-                                <p>
-                                    Education of what differentiates an edge application and how to categorize them
-                                </p>
-                            </div>
-                            <div class="col-xs-4">
-                                <img class="check" src="/images/check.svg" alt="">
-                                <p>
-                                    Documentation around the recommended technology stack and architecture for edge
-                                </p>
-                            </div>
-                            <div class="col-xs-4">
-                                <img class="check" src="/images/check.svg" alt="">
-                                <p>
-                                    Gap analysis across OpenStack and other technologies needed for edge
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="who-section">
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-8 col-sm-push-2">
-                    <h2>Who Should Attend</h2>
-                    <p>
-                        This event is for technical experts in edge computing, cloud computing and cloud applications. Operators with real world edge use cases including IoT, machine learning and geographically diverse technology-empowered businesses are also encouraged
-                        to attend. Venue capacity is limited; attendance is limited to 10 representatives per company.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="committee-section">
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-12">
-                    <h2>Programming Committee</h2>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-5ths">
-                    <div class="headshot-wrapper">
-                        <img class="committee-headshot" src="/images/committee/Andrew.jpg" alt="">
-                    </div>
-                    <div class="committee-name">
-                        Andrew Mitry, Walmart
-                    </div>
-                </div>
-                <div class="col-sm-5ths">
-                    <div class="headshot-wrapper">
-                        <img class="committee-headshot" src="/images/committee/Beth.png" alt="">
-                    </div>
-                    <div class="committee-name">
-                        Beth Cohen, Verizon
-                    </div>
-                </div>
-                <div class="col-sm-5ths">
-                    <div class="headshot-wrapper">
-                        <img class="committee-headshot" src="/images/committee/Chris.jpg" alt="">
-                    </div>
-                    <div class="committee-name">
-                        Chris Price, Ericsson
-                    </div>
-                </div>
-                <div class="col-sm-5ths">
-                    <div class="headshot-wrapper">
-                        <img class="committee-headshot" src="/images/committee/Kandan.jpg" alt="">
-                    </div>
-                    <div class="committee-name">
-                        Kandan Kathrivel, AT&T
-                    </div>
-                </div>
-                <div class="col-sm-5ths">
-                    <div class="headshot-wrapper">
-                        <img class="committee-headshot" src="/images/committee/Gregory.jpg" alt="">
-                    </div>
-                    <div class="committee-name">
-                        Gregory Katsaros, Inmarsat
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="format-section">
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-10 col-sm-push-1 top-side">
-                    <h2>Format & Organization</h2>
-                    <p>
-                        OpenDev is a two-day event primarily comprised of collaborative working sessions, roundtables, and architecture show-and-tells with a limited number of use case lightning talks.
-                    </p>
-                    <p>
-                        While OpenDev is underwritten and primarily organized by the OpenStack Foundation, the focus is on bringing together composable open infrastructure technologies across communities and industries. The programming committee is made up of experts across
-                        open source communities, with a particular focus on Edge Computing for 2017. A limited number of sponsors will also help with funding.
-                    </p>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-10 col-sm-push-1">
-                    <div class="row">
-                        <div class="col-sm-6 left-side">
-                            <h6>Code of conduct</h6>
-                            <p>
-                                All attendees of the OpenDev event must follow the OpenStack community <a href="https://www.openstack.org/legal/community-code-of-conduct/">Code of Conduct</a>.
-                            </p>
-                        </div>
-                        <div class="col-sm-6">
-                            <h6>What to find out more?</h6>
-                            <p>
-                                Contact <a href="mailto:events@openstack.org">events@openstack.org</a>.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- End Page Content -->
-{% endblock %}
-        <!-- Footer -->
-    <footer>
-        {% block footer %}
-            <div class="container">
-                <div class="row">
-                    <div class="col-sm-12">
-                        <a href="/">
-                            <img class="footer-logo" src={% static "/images/opendev-logo.svg" %} alt="OpenDev">
-                        </a>
-                        <div class="footer-links">
-                            <ul class="nav navbar-nav navbar-right">
-
-
-
-                                    <li class="active">
-                                        <a href="/">About</a>
-                                    </li>
-
-
-
-                                    <li class="">
-                                        <a href="/sponsors/">Sponsors</a>
-                                    </li>
-
-
-
-                                    <li class="">
-                                        <a href="/schedule/">Schedule</a>
-                                    </li>
-
-
-
-                                    <li class="">
-                                        <a href="/videos/">Videos</a>
-                                    </li>
-
-
-
-                                    <li class="">
-                                        <a href="/assets/opendev-faq_081617.pdf">FAQ</a>
-                                    </li>
-
-                            </ul>
-                            <div class="footer-copyright">
-                                Copyright © 2017. All Rights Reserved.
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        {% endblock %}
-    </footer>
-
-    {% block footer-scripts %}
-        <!-- jQuery -->
-        <script src={% static '/js/jquery.js' %}></script>
-
-        <!-- Bootstrap Core JavaScript -->
-        <script src={% static '/js/bootstrap.min.js'%}></script>
-
-        <!-- Resize Videos -->
-        <script src={% static "/js/video-resize.js" %}></script>
-
-        <!-- Twitter universal website tag code -->
-        <script>
-        !function(e,t,n,s,u,a){e.twq||(s=e.twq=function(){s.exe?s.exe.apply(s,arguments):s.queue.push(arguments);
-        },s.version='1.1',s.queue=[],u=t.createElement(n),u.async=!0,u.src='//static.ads-twitter.com/uwt.js',
-        a=t.getElementsByTagName(n)[0],a.parentNode.insertBefore(u,a))}(window,document,'script');
-        // Insert Twitter Pixel ID and Standard Event data below
-        twq('init','nxuu6');
-        twq('track','PageView');
-        </script>
-        <!-- End Twitter universal website tag code -->
-    {% endblock %}
-
-</body>
-
-</html>
