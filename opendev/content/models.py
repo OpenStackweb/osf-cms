@@ -30,15 +30,26 @@ class Module(models.Model):
 		('LEFT', 'Left'),
 		('RIGHT', 'Right'),
 	)
+	WIDTH_CHOICES = (
+		('WIDE', 'Wide'),
+		('NARROW', 'Narrow'),
+	)
+	TYPE_CHOICES = (
+		('BLOCK', 'Block'),
+		('SPONSOR', 'Sponsorship'),
+		('IMAGEGALLERY', 'Image gallery'),
+	)
 	title = models.CharField(max_length=50)
 	display_title = models.BooleanField(default=True)
 	content = HTMLField(max_length=65535, blank=True)
+	content_width = models.CharField(max_length=6, choices=WIDTH_CHOICES, default='WIDE')
 	style = models.ForeignKey(Style, on_delete=models.SET_NULL, null=True)
 	image = FileBrowseField(max_length=200, directory='assets', format='Image', blank=True, null=True)
 	image_position = models.CharField(max_length=6, choices=IMAGE_POSITION_CHOICES, default='LEFT')
 	image_on_background = models.BooleanField(default=False)
 	created = models.DateTimeField(auto_now_add=True)
 	modified = models.DateTimeField(auto_now=True)
+	type = models.CharField(max_length=12, choices=TYPE_CHOICES, null=True)
 
 	# def save(self, *args, **kwargs):
 	# 	if self.pk is None:
@@ -56,17 +67,37 @@ class Block(Module):
 		('TWOCOL', 'Two columns'),
 	)
 	list_title = models.CharField(max_length=50, blank=True)
-	display_list = models.BooleanField(default=False)
 	kicker = models.CharField(max_length=50, blank=True)
 	layout = models.CharField(max_length=6, choices=LAYOUT_CHOICES, default='ONECOL')
+
+	def save(self, *args, **kwargs):
+		super(Block, self).save(*args, **kwargs)
+		if self.pk is None:
+			module = self.module_ptr
+			module.type = 'BLOCK'
+			module.save()
 
 
 class Sponsorship(Module):
 	subtitle = models.CharField(max_length=50, blank=True)
 	price = models.FloatField(blank=False)
 
+	def save(self, *args, **kwargs):
+		super(Sponsorship, self).save(*args, **kwargs)
+		if self.pk is None:
+			module = self.module_ptr
+			module.type = 'SPONSOR'
+			module.save()
+
 
 class ImageGallery(Module):
+
+	def save(self, *args, **kwargs):
+		super(ImageGallery, self).save(*args, **kwargs)
+		if self.pk is None:
+			module = self.module_ptr
+			module.type = 'IMAGEGALLERY'
+			module.save()
 	class Meta:
 		verbose_name_plural = 'Image galleries'
 
@@ -121,8 +152,8 @@ class ModuleInPage(models.Model):
 
 
 class ListItem(models.Model):
-	icon = FileBrowseField(max_length=200, directory="images", format='Image', blank=True, null=True)
-	caption = models.CharField(max_length=50, blank=True, null=True)
+	icon = FileBrowseField(max_length=200, directory="images", format='Icon', blank=True, null=True)
+	caption = models.CharField(max_length=200, blank=True, null=True)
 	module = models.ForeignKey(Module, on_delete=models.CASCADE, related_name='list_items')
 	order = models.PositiveIntegerField('Order', default=0)
 

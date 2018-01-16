@@ -41,7 +41,7 @@ class SponsorshipAdmin(admin.ModelAdmin):
 			'fields': ('title', 'display_title', 'subtitle', 'price', 'content',)
 		}),
 		('Layout', {
-			'fields': ('style', )
+			'fields': ('style', 'content_width')
 		}),
 		('Media', {
 			'fields': ('image', 'image_position', 'image_on_background')
@@ -54,13 +54,13 @@ class BlockAdmin(admin.ModelAdmin):
 			'fields': ('kicker', 'title', 'display_title', 'content',)
 		}),
 		('Layout', {
-			'fields': ('layout', 'style')
+			'fields': ('layout', 'style', 'content_width')
 		}),
 		('Media', {
 			'fields': ('image', 'image_position', 'image_on_background')
 		}),
 		('List', {
-			'fields': ('list_title', 'display_list')
+			'fields': ('list_title', )
 		}),
 	)
 	inlines = [ListItemInline,]

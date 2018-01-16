@@ -182,3 +182,20 @@ TINYMCE_DEFAULT_CONFIG = {
 FILEBROWSER_DIRECTORY = ''
 DIRECTORY = ''
 
+FILEBROWSER_EXTENSIONS = {
+    'Folder': [''],
+    'Icon': ['.svg'],
+    'Image': ['.jpg','.jpeg','.gif','.png','.tif','.tiff'],
+    'Document': ['.pdf','.doc','.rtf','.txt','.xls','.csv'],
+    'Video': ['.mov','.wmv','.mpeg','.mpg','.avi','.rm'],
+    'Audio': ['.mp3','.mp4','.wav','.aiff','.midi','.m4p']
+}
+
+FILEBROWSER_SELECT_FORMATS = {
+    'file': ['Folder','Image','Document','Video','Audio'],
+    'image': ['Image'],
+    'icon': ['Icon'],
+    'icon-image': ['Icon','Image'],
+    # 'document': ['Document'],
+    'video': ['Video'],
+}

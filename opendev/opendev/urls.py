@@ -18,7 +18,7 @@ from django.conf.urls import url
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
-from views import about, sponsors, schedule, videos, faq
+from content.views import about, sponsors, schedule, videos, faq
 from filebrowser.sites import site as filebrowser_site
 
 

@@ -1,5 +1,5 @@
 {% load static from staticfiles %}
-{% load add_active set_background_img from custom_tags %}
+{% load add_active switch set_col_size from custom_tags %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -19,7 +19,7 @@
                         <span class="icon-bar"></span>
                     </button>
                     <a class="navbar-brand" href="/">
-                        <img class="header-logo" src={% static 'images/opendev-logo.svg' %} alt="OpenDev">
+                        <img class="header-logo" src="/media/images/opendev-logo.svg" alt="OpenDev">
                     </a>
                 </div>
 
@@ -53,16 +53,103 @@
     {% block content %}
         <!-- Begin Page Content -->
         {% for module in modules %}
-            {% if module.title == 'Intro' %}
-                <div class="{{ module.style.slug }}" style='background-image: url("{{ module.image.url }}")'>
+            {% if module.id == 10 %}
+                {% if module.image_on_background %}
+                    <div class="{{ module.style.slug }}" style='background-image: url("{{ module.image.url }}"); background-size: 450px'>
+                {% else %}
+                    <div class="{{ module.style.slug }}">
+                {% endif %}
                     <div class="container">
                         <div class="row">
-                            <div class="col-sm-12 col-md-12">
-                                {{ module.content | safe }}
-                            </div>
+                            <!-- Separate cases by Module's Type -->
+                            {% if module.type == 'BLOCK' %}
+                                        {% if module.block.layout == 'ONECOL' %}
+                                            {% if module.image and module.image_position == 'LEFT' and not module.image_on_background %}
+                                                <div class="col-sm-3 center">
+                                                    <img class="module-image" src="{{ module.image.url }}" alt>
+                                                </div>
+                                                <div class="col-sm-9 block">
+                                                    {% if module.display_title %}
+                                                        <h2>{{ module.title }}</h2>
+                                                    {% endif %}
+                                                    {{ module.content | safe }}
+                                                </div>
+                                            {% elif module.image and module.image_position == 'RIGHT' and not module.image_on_background %}
+                                                <div class="col-sm-9 block">
+                                                    {% if module.display_title %}
+                                                        <h2>{{ module.title }}</h2>
+                                                    {% endif %}
+                                                    {{ module.content | safe }}
+                                                </div>
+                                                <div class="col-sm-3 center">
+                                                    <img class="module-image" src="{{ module.image.url }}" alt>
+                                                </div>
+                                            {% else %}
+                                                {% if module.content_width == 'WIDE' %}
+                                                    < class="col-sm-12 col-md-12 block">
+                                                {% else %}
+                                                    <div class="col-sm-8 col-sm-push-2 block">
+                                                {% endif %}
+
+                                                        {% if module.display_title %}
+                                                            <h2>{{ module.title }}</h2>
+                                                        {% endif %}
+                                                        {{ module.content | safe }}
+                                                    </div>
+                                            {% endif %}
+                                        {% elif module.block.layout == 'TWOCOL' %}
+                                            <div class="col-sm-4">
+                                                <div class="left-side">
+                                                    {% if module.block.kicker %}
+                                                        <h5>{{ module.block.kicker }}</h5>
+                                                    {% endif %}
+                                                    <h2>{{ module.title }}</h2>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-8 center block">
+                                                {{ module.content | safe }}
+                                                {% if module.list_items.count %}
+                                                    <div class="right-bottom-side">
+                                                        <strong> {{ module.block.list_title }} </strong>
+                                                        <div class="row">
+                                                            {% for item in module.list_items.all %}
+                                                                <div class="{% set_col_size module.list_items.all.count 'xs' %}">
+                                                                    <img class="list-icon" src="{{ item.icon.url }}">
+                                                                    <p>{{ item.caption }}</p>
+                                                                </div>
+                                                            {% endfor %}
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                        {% endif %}
                         </div>
+
+<!--  ---------============= End Case Block ==============---------   -->
+                            {% elif module.type == 'IMAGEGALLERY' %}
+                                {% if module.display_title %}
+                                    <div class="row">
+                                        <div class="col-sm-12"><h2>{{ module.title }}</h2></div>
+                                    </div>
+                                {% endif %}
+                                    <div class="row">
+                                        {% for img in module.imagegallery.images.all %}
+                                            <div class="{% set_col_size module.imagegallery.images.count 'sm' %}">
+                                                <div class="headshot-wrapper">
+                                                    <img class="image-headshot" src="{{ img.image.url }}" alt>
+                                                </div>
+                                                <div class="image-caption">
+                                                    {{ img.caption }}
+                                                </div>
+                                            </div>
+
+                                        {% endfor %}
+                                    </div>
+<!--   -------------======== End Case ImageGallery ====-------------- -->
+                            {% endif %}
                     </div>
                 </div>
+            </div>
             {% endif %}
         {% endfor %}
 {#        <div class="intro-section">#}
@@ -249,7 +336,7 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <a href="/">
-                            <img class="footer-logo" src={% static "/images/opendev-logo.svg" %} alt="OpenDev">
+                            <img class="footer-logo" src="/media/images/opendev-logo.svg" alt="OpenDev">
                         </a>
                         <div class="footer-links">
                             <ul class="nav navbar-nav navbar-right">
