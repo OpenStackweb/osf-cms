@@ -195,12 +195,12 @@ class Button(models.Model):
 	url = models.URLField()
 
 	def __str__(self):
-		return "{} ({})".format(self.caption, self.url)
+		return "{}".format(self.caption)
 
 
 class ButtonInModule(models.Model):
-	button = models.ForeignKey(Button, on_delete=models.CASCADE)
-	module = models.ForeignKey(Module, on_delete=models.CASCADE)
+	button = models.ForeignKey(Button, on_delete=models.CASCADE, related_name='modules')
+	module = models.ForeignKey(Module, on_delete=models.CASCADE, related_name='buttons')
 	order = models.PositiveIntegerField('Order', default=0)
 
 	class Meta:

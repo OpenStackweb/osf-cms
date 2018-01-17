@@ -85,9 +85,17 @@ h2 {
 /* CUSTOM CSS ------------------------------------------------------------------*/
 
 .block{
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
+.sponsorship{
+  padding: 60px 0 0 0 !important;
+}
+
+div.sponsorship hr{
+  margin-bottom: 0 !important;
+  margin-top: 60px;
+}
 .block ul {
   padding: 0;
   margin: 40px 0 0; }
@@ -283,11 +291,27 @@ h2 {
   .white-light-blue h6 {
     font-weight: 300;
     font-size: 20px; }
+
+  .white-light-blue h5 {
+    color: #29606F;
+    text-transform: uppercase;
+    font-size: 17px; }
+
   .white-light-blue a {
     color: white;
     text-decoration: underline; }
+  .white-light-blue a.intro-btn {
+    text-decoration: none; }
   .white-light-blue .left-side {
-    border-right: 1px solid rgba(255, 255, 255, 0.3); }
+    border-right: 1px solid rgba(255,255, 255, 0.3); }
+  .white-light-blue .intro-btn {
+      background: #09647F;
+      margin-top: 10px;
+      display: inline-block;
+      padding-right: 40px;
+      padding-left: 40px; }
+      .white-light-blue .intro-btn:hover, .white-light-blue .intro-btn:focus {
+        background: #194755; }
 
 @media (max-width: 767px) {
   .white-light-blue .left-side {
@@ -308,6 +332,29 @@ h2 {
     text-align: center;
     display: block;
     margin: 10px 0 20px; }
+
+  h5.to-left{
+    text-align: left;
+  }
+
+  .left-side h2{
+    font-weight: 300;
+    font-size: 35px;
+  }
+
+  h2.to-left{
+    text-align: left;
+  }
+
+  .multicolumn {
+    column-count: 2;
+    column-gap: 45px;
+    break-inside: avoid-column;
+  }
+
+  .multicolumn ul > li{
+    display:inline-block;
+}
 /* ======================================================================================= */
 
 .intro-btn {
@@ -495,7 +542,7 @@ h2 {
 
 .sub-title {
   text-transform: uppercase;
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid #00000059;
   padding-bottom: 15px;
   margin: 50px 0;
   font-size: 14px; }

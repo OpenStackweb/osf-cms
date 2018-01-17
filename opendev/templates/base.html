@@ -53,11 +53,14 @@
     {% block content %}
         <!-- Begin Page Content -->
         {% for module in modules %}
-{#            {% if module.type == 'BLOCK' %}#}
                 {% if module.image_on_background %}
                     <div class="{{ module.style.slug }}" style='background-image: url("{{ module.image.url }}"); background-size: 450px'>
                 {% else %}
-                    <div class="{{ module.style.slug }}">
+                    {% if module.type == 'SPONSOR' %}
+                      <div class="{{ module.style.slug }} sponsorship">
+                    {% else %}
+                        <div class="{{ module.style.slug }}">
+                    {% endif %}
                 {% endif %}
                     <div class="container">
                         <div class="row">
@@ -119,9 +122,9 @@
                                             <div class="col-sm-4">
                                                 <div class="left-side">
                                                     {% if module.block.kicker %}
-                                                        <h5>{{ module.block.kicker }}</h5>
+                                                        <h5 class="to-left">{{ module.block.kicker }}</h5>
                                                     {% endif %}
-                                                    <h2>{{ module.title }}</h2>
+                                                    <h2 class="to-left">{{ module.title }}</h2>
                                                 </div>
                                             </div>
                                             <div class="col-sm-8 center block">
@@ -138,6 +141,11 @@
                                                             {% endfor %}
                                                         </div>
                                                     </div>
+                                                {% endif %}
+                                                {% if module.buttons.count %}
+                                                    {% for button in module.buttons.all %}
+                                                        <a href="{{ button.button.url }}" class="intro-btn">{{ button.button.caption }}</a>
+                                                    {% endfor %}
                                                 {% endif %}
                                             </div>
                                         {% endif %}
@@ -166,7 +174,15 @@
 <!--   -------------======== End Case ImageGallery ====-------------- -->
 <!--   -------------======== Case SPONSORSHIP ========---------------  -->
                             {% elif module.type == 'SPONSOR' %}
-                                caca
+                                <div class="col-sm-12">
+                                    <h2>{{ module.title }}</h2>
+                                    <span>{{ module.subtitle }}</span>
+                                    <div class="sub-title">What will you receive?</div>
+                                    <div class="multicolumn">{{ module.content | safe }}</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12"><hr style="border-color: #ddd;margin-bottom:60px;"></div>
+                                </div>
                             {% else %}
                                 <div class="row">Invalid module</div>
                             {% endif %}

@@ -7,6 +7,7 @@ from .models import Sponsorship, Page, Talk, Speaker, Block, Module, ImageInGall
 
 
 class ModuleInline(SortableInlineAdminMixin, TabularInline):
+	verbose_name_plural = "Modules"
 	model = ModuleInPage
 	fields = ('order', 'module')
 	sortable_field_name = "order"
@@ -14,6 +15,7 @@ class ModuleInline(SortableInlineAdminMixin, TabularInline):
 
 
 class ButtonInline(SortableInlineAdminMixin, TabularInline):
+	verbose_name_plural = "Buttons"
 	model = ButtonInModule
 	fields = ('order', 'button')
 	sortable_field_name = "order"
@@ -21,6 +23,7 @@ class ButtonInline(SortableInlineAdminMixin, TabularInline):
 
 
 class ImageInline(SortableInlineAdminMixin, TabularInline):
+	verbose_name_plural = "Images"
 	model = ImageInGallery
 	fields = ('image', 'order', 'caption')
 	sortable_field_name = "order"
@@ -70,7 +73,7 @@ class BlockAdmin(admin.ModelAdmin):
 			'fields': ('list_title', 'list_style' )
 		}),
 	)
-	inlines = [ListItemInline,]
+	inlines = [ListItemInline, ButtonInline]
 
 
 class TalkAdmin(admin.ModelAdmin):
