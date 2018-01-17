@@ -151,8 +151,15 @@ class ModuleInPage(models.Model):
 		return "{} ({})".format(self.module.title, self.page.title)
 
 
+class Icon(models.Model):
+	name = models.CharField(max_length=25, blank=False)
+	image = FileBrowseField(max_length=200, directory="images", format='Icon', blank=True, null=True)
+
+	def __str__(self):
+		return self.name
+
 class ListItem(models.Model):
-	icon = FileBrowseField(max_length=200, directory="images", format='Icon', blank=True, null=True)
+	icon = models.ForeignKey(Icon, on_delete=models.SET_NULL, null=True, blank=True)
 	caption = models.CharField(max_length=200, blank=True, null=True)
 	module = models.ForeignKey(Module, on_delete=models.CASCADE, related_name='list_items')
 	order = models.PositiveIntegerField('Order', default=0)
@@ -160,3 +167,6 @@ class ListItem(models.Model):
 	class Meta:
 		verbose_name_plural = 'List items'
 		ordering = ('order',)
+
+	def __str__(self):
+		return "{} ({})".format(self.caption, self.module.title)

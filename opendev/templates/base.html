@@ -114,7 +114,7 @@
                                                         <div class="row">
                                                             {% for item in module.list_items.all %}
                                                                 <div class="{% set_col_size module.list_items.all.count 'xs' %}">
-                                                                    <img class="list-icon" src="{{ item.icon.url }}">
+                                                                    <img class="list-icon" src="{{ item.icon.image.url }}">
                                                                     <p>{{ item.caption }}</p>
                                                                 </div>
                                                             {% endfor %}

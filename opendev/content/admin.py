@@ -3,7 +3,7 @@ from adminsortable2.admin import SortableInlineAdminMixin
 from django.contrib.admin.options import StackedInline, TabularInline
 
 from .models import Sponsorship, Page, Talk, Speaker, Block, Module, ImageInGallery, ImageGallery, ModuleInPage, Style, \
-	ListItem
+	ListItem, Icon
 
 
 class ModuleInline(SortableInlineAdminMixin, TabularInline):
@@ -99,3 +99,4 @@ admin.site.register(Page, PageAdmin)
 admin.site.register(Block, BlockAdmin)
 admin.site.register(ImageGallery, ImageGalleryAdmin)
 admin.site.register(Style, StyleAdmin)
+admin.site.register(Icon)
