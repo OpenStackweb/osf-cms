@@ -32,6 +32,7 @@ class Module(models.Model):
 	)
 	WIDTH_CHOICES = (
 		('WIDE', 'Wide'),
+		('SEMIWIDE', 'Semiwide'),
 		('NARROW', 'Narrow'),
 	)
 	TYPE_CHOICES = (
@@ -42,7 +43,7 @@ class Module(models.Model):
 	title = models.CharField(max_length=50)
 	display_title = models.BooleanField(default=True)
 	content = HTMLField(max_length=65535, blank=True)
-	content_width = models.CharField(max_length=6, choices=WIDTH_CHOICES, default='WIDE')
+	content_width = models.CharField(max_length=8, choices=WIDTH_CHOICES, default='WIDE')
 	style = models.ForeignKey(Style, on_delete=models.SET_NULL, null=True)
 	image = FileBrowseField(max_length=200, directory='assets', format='Image', blank=True, null=True)
 	image_position = models.CharField(max_length=6, choices=IMAGE_POSITION_CHOICES, default='LEFT')
@@ -66,13 +67,23 @@ class Block(Module):
 		('ONECOL', 'One column'),
 		('TWOCOL', 'Two columns'),
 	)
+	STYLE_CHOICES = (
+		('NONE', 'None'),
+		('VERTICALSEP', 'Vertical separators'),
+		('HORIZONTALSEP', 'Horizontal separator on top'),
+		('VERTICALHORIZONTAL', 'Vertical + horizontal separator'),
+	)
 	list_title = models.CharField(max_length=50, blank=True)
+	list_style = models.CharField(max_length=20, choices=STYLE_CHOICES, default='None')
 	kicker = models.CharField(max_length=50, blank=True)
 	layout = models.CharField(max_length=6, choices=LAYOUT_CHOICES, default='ONECOL')
 
 	def save(self, *args, **kwargs):
-		super(Block, self).save(*args, **kwargs)
+		is_new = False
 		if self.pk is None:
+			is_new = True
+		super(Block, self).save(*args, **kwargs)
+		if is_new:
 			module = self.module_ptr
 			module.type = 'BLOCK'
 			module.save()
@@ -83,8 +94,11 @@ class Sponsorship(Module):
 	price = models.FloatField(blank=False)
 
 	def save(self, *args, **kwargs):
-		super(Sponsorship, self).save(*args, **kwargs)
+		is_new = False
 		if self.pk is None:
+			is_new = True
+		super(Sponsorship, self).save(*args, **kwargs)
+		if is_new:
 			module = self.module_ptr
 			module.type = 'SPONSOR'
 			module.save()
@@ -93,8 +107,11 @@ class Sponsorship(Module):
 class ImageGallery(Module):
 
 	def save(self, *args, **kwargs):
-		super(ImageGallery, self).save(*args, **kwargs)
+		is_new = False
 		if self.pk is None:
+			is_new = True
+		super(ImageGallery, self).save(*args, **kwargs)
+		if is_new:
 			module = self.module_ptr
 			module.type = 'IMAGEGALLERY'
 			module.save()
@@ -103,7 +120,7 @@ class ImageGallery(Module):
 
 
 class ImageInGallery(models.Model):
-	image = models.ImageField()
+	image = FileBrowseField(max_length=200, directory='assets', format='Image', blank=True, null=True)
 	caption = models.CharField(max_length=50, blank=True, null=True)
 	gallery = models.ForeignKey(ImageGallery, on_delete=models.CASCADE, related_name='images')
 	order = models.PositiveIntegerField('Order', default=0)
@@ -116,7 +133,7 @@ class ImageInGallery(models.Model):
 class Speaker(models.Model):
 	name = models.CharField(max_length=50, blank=False)
 	bio = models.TextField()
-	photo = models.ImageField(blank=True)
+	image = FileBrowseField(max_length=200, directory='assets', format='Image', blank=True, null=True)
 
 	def __str__(self):
 		return self.name
@@ -128,7 +145,7 @@ class Talk(models.Model):
 	speakers = models.ManyToManyField(Speaker, related_name='talks')
 	room = models.CharField(max_length=30)
 	translation = models.BooleanField(default=False)
-	photo = models.ImageField(blank=True)
+	image = FileBrowseField(max_length=200, directory='assets', format='Image', blank=True, null=True)
 	# slideshare
 	# video
 	start_time = models.TimeField()
@@ -160,6 +177,7 @@ class Icon(models.Model):
 
 class ListItem(models.Model):
 	icon = models.ForeignKey(Icon, on_delete=models.SET_NULL, null=True, blank=True)
+	title = models.CharField(max_length=50, blank=True, null=True)
 	caption = models.CharField(max_length=200, blank=True, null=True)
 	module = models.ForeignKey(Module, on_delete=models.CASCADE, related_name='list_items')
 	order = models.PositiveIntegerField('Order', default=0)
@@ -170,3 +188,24 @@ class ListItem(models.Model):
 
 	def __str__(self):
 		return "{} ({})".format(self.caption, self.module.title)
+
+
+class Button(models.Model):
+	caption = models.CharField(max_length=40, blank=False)
+	url = models.URLField()
+
+	def __str__(self):
+		return "{} ({})".format(self.caption, self.url)
+
+
+class ButtonInModule(models.Model):
+	button = models.ForeignKey(Button, on_delete=models.CASCADE)
+	module = models.ForeignKey(Module, on_delete=models.CASCADE)
+	order = models.PositiveIntegerField('Order', default=0)
+
+	class Meta:
+		ordering = ['order',]
+		verbose_name = "Module"
+
+	def __str__(self):
+		return "{} ({})".format(self.button.caption, self.module.title)

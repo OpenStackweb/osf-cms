@@ -3,7 +3,7 @@ from adminsortable2.admin import SortableInlineAdminMixin
 from django.contrib.admin.options import StackedInline, TabularInline
 
 from .models import Sponsorship, Page, Talk, Speaker, Block, Module, ImageInGallery, ImageGallery, ModuleInPage, Style, \
-	ListItem, Icon
+	ListItem, Icon, ButtonInModule
 
 
 class ModuleInline(SortableInlineAdminMixin, TabularInline):
@@ -11,6 +11,13 @@ class ModuleInline(SortableInlineAdminMixin, TabularInline):
 	fields = ('order', 'module')
 	sortable_field_name = "order"
 	extra = 3
+
+
+class ButtonInline(SortableInlineAdminMixin, TabularInline):
+	model = ButtonInModule
+	fields = ('order', 'button')
+	sortable_field_name = "order"
+	extra = 1
 
 
 class ImageInline(SortableInlineAdminMixin, TabularInline):
@@ -23,7 +30,7 @@ class ImageInline(SortableInlineAdminMixin, TabularInline):
 
 class ListItemInline(SortableInlineAdminMixin, TabularInline):
 	model = ListItem
-	fields = ('icon', 'order', 'caption')
+	fields = ('icon', 'order', 'title', 'caption')
 	sortable_field_name = "order"
 	extra = 1
 	max_num = 8
@@ -60,7 +67,7 @@ class BlockAdmin(admin.ModelAdmin):
 			'fields': ('image', 'image_position', 'image_on_background')
 		}),
 		('List', {
-			'fields': ('list_title', )
+			'fields': ('list_title', 'list_style' )
 		}),
 	)
 	inlines = [ListItemInline,]

@@ -24,6 +24,35 @@ def add_active(request, name, by_path=False):
 
 	return ''
 
+@register.simple_tag(name='add_horizontal_separator')
+def add_horizontal_separator(list_style):
+	""" Return the string 'active' current request.path is same as name
+
+	Keyword aruguments:
+	request  -- Django request object
+	name     -- name of the url or the actual path
+	by_path  -- True if name contains a url instead of url name
+	"""
+	if list_style == 'HORIZONTALSEP' or list_style == 'VERTICALHORIZONTAL':
+		return ' top-side '
+
+	return ''\
+
+
+@register.simple_tag(name='add_vertical_separator')
+def add_vertical_separator(is_last ,list_style):
+	""" Return the string 'active' current request.path is same as name
+
+	Keyword aruguments:
+	request  -- Django request object
+	name     -- name of the url or the actual path
+	by_path  -- True if name contains a url instead of url name
+	"""
+	if (list_style == 'VERTICALSEP' or list_style == 'VERTICALHORIZONTAL') and not is_last:
+		return ' left-side '
+
+	return ''
+
 
 @register.simple_tag(name='set_col_size')
 def set_col_size(item_count, col_type):

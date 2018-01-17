@@ -84,6 +84,10 @@ h2 {
         color: #FEEBFF; }
 /* CUSTOM CSS ------------------------------------------------------------------*/
 
+.block{
+  margin-bottom: 20px;
+}
+
 .block ul {
   padding: 0;
   margin: 40px 0 0; }
@@ -119,6 +123,7 @@ h2 {
   background: #EE265E 90% center no-repeat;
 }
 
+
 .white-red .intro-cta {
     text-align: center;
     position: relative;
@@ -129,9 +134,17 @@ h2 {
   max-width: 100%;
   margin: 0 auto; }
 .white-red h2 {
+  text-align: center;
   font-weight: 400;
-  font-size: 40px;
-  margin-bottom: 20px; }
+  font-size: 30px;
+  margin-bottom: 50px; }
+
+.white-red a{
+  color: #ffffff;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
 .white-red .intro-cta .content {
   position: absolute;
   top: 50%;
@@ -255,6 +268,32 @@ h2 {
 @media (max-width: 767px) {
   .black-light-grey .who-cta {
     min-height: 70px; } }
+
+.white-light-blue {
+  background: #3BB7DB;
+  color: white;
+  padding: 60px;
+  text-align: center; }
+  .white-light-blue .top-side {
+    margin-bottom: 50px;
+    padding-bottom: 50px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3); }
+  .white-light-blue h2 {
+    margin-bottom: 30px; }
+  .white-light-blue h6 {
+    font-weight: 300;
+    font-size: 20px; }
+  .white-light-blue a {
+    color: white;
+    text-decoration: underline; }
+  .white-light-blue .left-side {
+    border-right: 1px solid rgba(255, 255, 255, 0.3); }
+
+@media (max-width: 767px) {
+  .white-light-blue .left-side {
+    border: 0;
+    margin-bottom: 40px; } }
+
 
 
 .headshot-wrapper {

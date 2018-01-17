@@ -1,5 +1,5 @@
 {% load static from staticfiles %}
-{% load add_active switch set_col_size from custom_tags %}
+{% load add_active switch set_col_size add_horizontal_separator add_vertical_separator from custom_tags %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -53,7 +53,7 @@
     {% block content %}
         <!-- Begin Page Content -->
         {% for module in modules %}
-            {% if module.id == 10 %}
+{#            {% if module.type == 'BLOCK' %}#}
                 {% if module.image_on_background %}
                     <div class="{{ module.style.slug }}" style='background-image: url("{{ module.image.url }}"); background-size: 450px'>
                 {% else %}
@@ -85,10 +85,12 @@
                                                     <img class="module-image" src="{{ module.image.url }}" alt>
                                                 </div>
                                             {% else %}
-                                                {% if module.content_width == 'WIDE' %}
-                                                    < class="col-sm-12 col-md-12 block">
-                                                {% else %}
-                                                    <div class="col-sm-8 col-sm-push-2 block">
+                                                {% if module.block.content_width == 'WIDE' %}
+                                                    <div class="col-sm-12 col-md-12 block {% add_horizontal_separator module.block.list_style %}">
+                                                {% elif module.block.content_width == 'SEMIWIDE' %}
+                                                    <div class="col-sm-10 col-sm-push-1 block {% add_horizontal_separator module.block.list_style %}">
+                                                {% elif module.block.content_width == 'NARROW' %}
+                                                    <div class="col-sm-8 col-sm-push-2 block {% add_horizontal_separator module.block.list_style %}">
                                                 {% endif %}
 
                                                         {% if module.display_title %}
@@ -96,6 +98,22 @@
                                                         {% endif %}
                                                         {{ module.content | safe }}
                                                     </div>
+                                                {% if module.list_items.count %}
+                                                    <div class="col-sm-10 col-sm-push-1">
+                                                            <div class="row">
+                                                                <strong> {{ module.block.list_title }} </strong>
+                                                                <div class="row">
+                                                                    {% for item in module.list_items.all %}
+                                                                        <div class="{% set_col_size module.list_items.all.count 'sm' %} {% add_vertical_separator forloop.last module.block.list_style%}">
+                                                                            <img class="list-icon" src="{{ item.icon.image.url }}">
+                                                                            <h6>{{ item.title }}</h6>
+                                                                            <p>{{ item.caption }}</p>
+                                                                        </div>
+                                                                    {% endfor %}
+                                                                </div>
+                                                            </div>
+                                                    </div>
+                                                {% endif %}
                                             {% endif %}
                                         {% elif module.block.layout == 'TWOCOL' %}
                                             <div class="col-sm-4">
@@ -113,7 +131,7 @@
                                                         <strong> {{ module.block.list_title }} </strong>
                                                         <div class="row">
                                                             {% for item in module.list_items.all %}
-                                                                <div class="{% set_col_size module.list_items.all.count 'xs' %}">
+                                                                <div class="{% set_col_size module.list_items.all.count 'xs' %} {% add_vertical_separator forloop.last module.block.list_style%}">
                                                                     <img class="list-icon" src="{{ item.icon.image.url }}">
                                                                     <p>{{ item.caption }}</p>
                                                                 </div>
@@ -146,11 +164,16 @@
                                         {% endfor %}
                                     </div>
 <!--   -------------======== End Case ImageGallery ====-------------- -->
+<!--   -------------======== Case SPONSORSHIP ========---------------  -->
+                            {% elif module.type == 'SPONSOR' %}
+                                caca
+                            {% else %}
+                                <div class="row">Invalid module</div>
                             {% endif %}
                     </div>
                 </div>
             </div>
-            {% endif %}
+{#            {% endif %}#}
         {% endfor %}
 {#        <div class="intro-section">#}
 {#            <div class="container">#}
