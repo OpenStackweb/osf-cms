@@ -18,7 +18,9 @@ from django.conf.urls import url
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
-from content.views import about, sponsors, schedule, videos, faq
+from django.views.generic import RedirectView
+
+from content.views import about, sponsors, schedule, videos
 from filebrowser.sites import site as filebrowser_site
 
 
@@ -30,5 +32,5 @@ urlpatterns = [
     url(r'^sponsors/', sponsors, name='sponsors'),
     url(r'^schedule/', schedule, name='schedule'),
     url(r'^videos/', videos, name='videos'),
-    url(r'^faq/', faq, name='faq'),
+    url(r'^faq/', RedirectView.as_view(url="/media/assets/opendev-faq_081617.pdf"), name='faq'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

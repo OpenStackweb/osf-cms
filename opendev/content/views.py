@@ -60,14 +60,3 @@ def videos(request):
 	}
 	return HttpResponse(template.render(context, request))
 
-
-def faq (request):
-	template = loader.get_template('base.html')
-	page = Page.objects.get(title='FAQ')
-	header_menus = BigHeaderMenu.objects.all().order_by('order')
-	context = {
-		'pages': header_menus,
-		'title': page.title,
-		'page' : page,
-	}
-	return HttpResponse(template.render(context, request))
