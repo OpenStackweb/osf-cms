@@ -39,10 +39,12 @@ def schedule(request):
 	template = loader.get_template('base.html')
 	page = Page.objects.get(title='Schedule')
 	header_menus = BigHeaderMenu.objects.all().order_by('order')
+	modules = Module.objects.filter(modules_in_page__page=page).order_by('modules_in_page__order')
 	context = {
 		'pages': header_menus,
 		'title': page.title,
 		'page' : page,
+		'modules' : modules,
 	}
 	return HttpResponse(template.render(context, request))
 

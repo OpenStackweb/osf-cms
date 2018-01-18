@@ -287,7 +287,8 @@ div.sponsorship hr{
     padding-bottom: 50px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.3); }
   .white-light-blue h2 {
-    margin-bottom: 30px; }
+    margin-bottom: 30px;
+  }
   .white-light-blue h6 {
     font-weight: 300;
     font-size: 20px; }
@@ -318,6 +319,19 @@ div.sponsorship hr{
     border: 0;
     margin-bottom: 40px; } }
 
+.title-only h2 {
+  font-size: 35px;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+div.title-only{
+  padding: 60px 0;
+}
+
+.title-only div{
+  margin-bottom: 0 !important;
+}
 
 
 .headshot-wrapper {
@@ -349,12 +363,17 @@ div.sponsorship hr{
   .multicolumn {
     column-count: 2;
     column-gap: 45px;
-    break-inside: avoid-column;
   }
 
-  .multicolumn ul > li{
-    display:inline-block;
-}
+.multicolumn section{
+  break-inside: avoid-column;
+  }
+
+  .multicolumn h3{
+    font-size: inherit;
+    font-weight: bold;
+    margin-top: 0;
+  }
 /* ======================================================================================= */
 
 .intro-btn {

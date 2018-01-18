@@ -150,7 +150,7 @@ TINYMCE_DEFAULT_CONFIG = {
 	'theme_advanced_toolbar_align': "left",
 	'theme_advanced_statusbar_location': "none",
 	'theme_advanced_buttons1': "formatselect,bold,italic,bullist,numlist,hr,link,unlink,anchor,image,separator,undo,redo,separator,removeformat,pastetext,code",
-	'theme_advanced_buttons2': "tablecontrols",
+	'theme_advanced_buttons2': "tablecontrols, indent, outdent, justifyleft, justifycenter, justifyright",
 	'theme_advanced_buttons3': "",
 	'theme_advanced_path': 'false',
 	'theme_advanced_resizing' : 'false',
@@ -185,7 +185,7 @@ DIRECTORY = ''
 FILEBROWSER_EXTENSIONS = {
     'Folder': [''],
     'Icon': ['.svg'],
-    'Image': ['.jpg','.jpeg','.gif','.png','.tif','.tiff'],
+    'Image': ['.jpg','.jpeg','.gif','.png','.tif','.tiff', '.svg'],
     'Document': ['.pdf','.doc','.rtf','.txt','.xls','.csv'],
     'Video': ['.mov','.wmv','.mpeg','.mpg','.avi','.rm'],
     'Audio': ['.mp3','.mp4','.wav','.aiff','.midi','.m4p']
