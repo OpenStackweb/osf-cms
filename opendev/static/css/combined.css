@@ -84,6 +84,10 @@ h2 {
         color: #FEEBFF; }
 /* CUSTOM CSS ------------------------------------------------------------------*/
 
+.gallery-title{
+  margin-bottom: 48px !important;
+}
+
 .block{
   margin-bottom: 10px;
 }
@@ -92,7 +96,7 @@ h2 {
   padding: 60px 0 0 0 !important;
 }
 
-div.sponsorship hr{
+.sponsorship hr{
   margin-bottom: 0 !important;
   margin-top: 60px;
 }

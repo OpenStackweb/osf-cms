@@ -97,7 +97,7 @@
                 {% else %}
                     {% if module.type == 'SPONSOR' %}
                       <div class="{{ module.style.slug }} sponsorship">
-                    {% elif not module.content %}
+                    {% elif not module.content and not module.type == 'IMAGEGALLERY' %}
                       <div class="{{ module.style.slug }} title-only">
 
                     {% else %}
@@ -197,7 +197,7 @@
                             {% elif module.type == 'IMAGEGALLERY' %}
                                 {% if module.display_title %}
                                     <div class="row">
-                                        <div class="col-sm-12"><h2>{{ module.title }}</h2></div>
+                                        <div class="col-sm-12"><h2 class="gallery-title">{{ module.title }}</h2></div>
                                     </div>
                                 {% endif %}
                                     <div class="row">
