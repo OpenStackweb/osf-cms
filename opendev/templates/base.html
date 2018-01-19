@@ -202,13 +202,25 @@
                                 {% endif %}
                                     <div class="row">
                                         {% for img in module.imagegallery.images.all %}
-                                            <div class="{% set_col_size module.imagegallery.images.count 'sm' %}">
-                                                <div class="headshot-wrapper">
-                                                    <img class="image-headshot" src="{{ img.image.url }}" alt>
-                                                </div>
-                                                <div class="image-caption">
-                                                    {{ img.caption }}
-                                                </div>
+                                            <div class="{% set_col_size module.imagegallery.images.count 'sm' %} center">
+                                                {% if img.as_circle %}
+                                                    <div class="headshot-wrapper">
+                                                        <img class="image-headshot" src="{{ img.image.url }}" alt>
+                                                    </div>
+                                                {% else %}
+                                                    {% if img.link %}
+                                                        <a href="{{ img.link }}">
+                                                    {% endif %}
+                                                    <img class="image-in-gallery" src="{{ img.image.url }}" alt>
+                                                    {% if img.link %}
+                                                        </a>
+                                                    {% endif %}
+                                                {% endif %}
+                                                {% if img.caption %}
+                                                    <div class="image-caption">
+                                                        {{ img.caption }}
+                                                    </div>
+                                                {% endif %}
                                             </div>
 
                                         {% endfor %}

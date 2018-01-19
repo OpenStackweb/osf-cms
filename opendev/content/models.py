@@ -45,7 +45,7 @@ class Module(models.Model):
 	content = HTMLField(max_length=65535, blank=True)
 	content_width = models.CharField(max_length=8, choices=WIDTH_CHOICES, default='WIDE')
 	style = models.ForeignKey(Style, on_delete=models.SET_NULL, null=True)
-	image = FileBrowseField(max_length=200, directory='assets', format='Image', blank=True, null=True)
+	image = FileBrowseField(max_length=200, directory='', format='Image', blank=True, null=True)
 	image_position = models.CharField(max_length=6, choices=IMAGE_POSITION_CHOICES, default='LEFT')
 	image_on_background = models.BooleanField(default=False)
 	created = models.DateTimeField(auto_now_add=True)
@@ -120,8 +120,10 @@ class ImageGallery(Module):
 
 
 class ImageInGallery(models.Model):
-	image = FileBrowseField(max_length=200, directory='assets', format='Image', blank=True, null=True)
+	image = FileBrowseField(max_length=200, directory='', format='Image', blank=True, null=True)
+	as_circle = models.BooleanField(default=False, blank=False, null=False)
 	caption = models.CharField(max_length=50, blank=True, null=True)
+	link = models.URLField(blank=True, null=True)
 	gallery = models.ForeignKey(ImageGallery, on_delete=models.CASCADE, related_name='images')
 	order = models.PositiveIntegerField('Order', default=0)
 
@@ -133,7 +135,7 @@ class ImageInGallery(models.Model):
 class Speaker(models.Model):
 	name = models.CharField(max_length=50, blank=False)
 	bio = models.TextField()
-	image = FileBrowseField(max_length=200, directory='assets', format='Image', blank=True, null=True)
+	image = FileBrowseField(max_length=200, directory='', format='Image', blank=True, null=True)
 
 	def __str__(self):
 		return self.name
@@ -145,7 +147,7 @@ class Talk(models.Model):
 	speakers = models.ManyToManyField(Speaker, related_name='talks')
 	room = models.CharField(max_length=30)
 	translation = models.BooleanField(default=False)
-	image = FileBrowseField(max_length=200, directory='assets', format='Image', blank=True, null=True)
+	image = FileBrowseField(max_length=200, directory='', format='Image', blank=True, null=True)
 	# slideshare
 	# video
 	start_time = models.TimeField()

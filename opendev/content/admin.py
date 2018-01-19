@@ -25,7 +25,7 @@ class ButtonInline(SortableInlineAdminMixin, TabularInline):
 class ImageInline(SortableInlineAdminMixin, TabularInline):
 	verbose_name_plural = "Images"
 	model = ImageInGallery
-	fields = ('image', 'order', 'caption')
+	fields = ('image', 'order', 'caption', 'as_circle', 'link')
 	sortable_field_name = "order"
 	extra = 1
 	max_num = 8
