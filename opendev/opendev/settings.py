@@ -174,7 +174,7 @@ TINYMCE_DEFAULT_CONFIG = {
 		"img[src|alt|width|height]," +
 		"br," +
 		"hr," +
-		"table,thead,tbody,tfoot,th,td,tr," +
+		"table,thead,tbody,tfoot,th[colspan|rowspan],td[colspan|rowspan],tr," +
 		"h3,h4,pre",
 }
 
