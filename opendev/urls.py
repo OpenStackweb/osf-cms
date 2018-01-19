@@ -33,4 +33,5 @@ urlpatterns = [
     url(r'^schedule/', schedule, name='schedule'),
     url(r'^videos/', videos, name='videos'),
     url(r'^faq/', RedirectView.as_view(url="/media/assets/opendev-faq_081617.pdf"), name='faq'),
+    url(r'^$', about, name='about'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
