@@ -1,5 +1,5 @@
 {% load static from staticfiles %}
-{% load add_active switch set_col_size add_horizontal_separator add_vertical_separator from custom_tags %}
+{% load add_active set_justify set_col_size add_horizontal_separator add_vertical_separator from custom_tags %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -93,15 +93,15 @@
         <!-- Begin Page Content -->
         {% for module in modules %}
                 {% if module.image_on_background %}
-                    <div class="{{ module.style.slug }}" style='background-image: url("{{ module.image.url }}"); background-size: 450px'>
+                    <div class="{{ module.style.slug }} {% set_justify module.block.content_justify %}" style='background-image: url("{{ module.image.url }}"); background-size: 450px'>
                 {% else %}
                     {% if module.type == 'SPONSOR' %}
-                      <div class="{{ module.style.slug }} sponsorship">
+                      <div class="{{ module.style.slug }} sponsorship {% set_justify module.block.content_justify %}">
                     {% elif not module.content and not module.type == 'IMAGEGALLERY' %}
-                      <div class="{{ module.style.slug }} title-only">
+                      <div class="{{ module.style.slug }} title-only ">
 
                     {% else %}
-                        <div class="{{ module.style.slug }}">
+                        <div class="{{ module.style.slug }} {% set_justify module.block.content_justify %}">
                     {% endif %}
                 {% endif %}
                     <div class="container">

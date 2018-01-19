@@ -3,7 +3,7 @@ from adminsortable2.admin import SortableInlineAdminMixin
 from django.contrib.admin.options import StackedInline, TabularInline
 
 from .models import Sponsorship, Page, Talk, Speaker, Block, Module, ImageInGallery, ImageGallery, ModuleInPage, Style, \
-	ListItem, Icon, ButtonInModule
+	ListItem, Icon, ButtonInModule, VideoInGallery, VideoGallery
 
 
 class ModuleInline(SortableInlineAdminMixin, TabularInline):
@@ -29,6 +29,15 @@ class ImageInline(SortableInlineAdminMixin, TabularInline):
 	sortable_field_name = "order"
 	extra = 1
 	max_num = 8
+
+
+class VideoInline(SortableInlineAdminMixin, TabularInline):
+	verbose_name_plural = "Videos"
+	model = VideoInGallery
+	fields = ('video_url', 'order', 'caption')
+	sortable_field_name = "order"
+	extra = 3
+	max_num = 12
 
 
 class ListItemInline(SortableInlineAdminMixin, TabularInline):
@@ -64,7 +73,7 @@ class BlockAdmin(admin.ModelAdmin):
 			'fields': ('kicker', 'title', 'display_title', 'content',)
 		}),
 		('Layout', {
-			'fields': ('layout', 'style', 'content_width')
+			'fields': ('layout', 'style', 'content_width', 'content_justify')
 		}),
 		('Media', {
 			'fields': ('image', 'image_position', 'image_on_background')
@@ -97,6 +106,18 @@ class ImageGalleryAdmin(admin.ModelAdmin):
 	inlines = (ImageInline, )
 
 
+class VideoGalleryAdmin(admin.ModelAdmin):
+	fieldsets = (
+		(None, {
+			'fields': ('title', 'display_title', )
+		}),
+		('Layout', {
+			'fields': ('style',)
+		}),
+	)
+	inlines = (VideoInline, )
+
+
 class StyleAdmin(admin.ModelAdmin):
 	fields = ('title', 'slug')
 	prepopulated_fields = {'slug': ('title',)}
@@ -108,5 +129,6 @@ admin.site.register(Speaker, SpeakerAdmin)
 admin.site.register(Page, PageAdmin)
 admin.site.register(Block, BlockAdmin)
 admin.site.register(ImageGallery, ImageGalleryAdmin)
+admin.site.register(VideoGallery, VideoGalleryAdmin)
 admin.site.register(Style, StyleAdmin)
 admin.site.register(Icon)

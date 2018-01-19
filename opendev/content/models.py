@@ -39,6 +39,7 @@ class Module(models.Model):
 		('BLOCK', 'Block'),
 		('SPONSOR', 'Sponsorship'),
 		('IMAGEGALLERY', 'Image gallery'),
+		('VIDEOGALLERY', 'Video gallery')
 	)
 	title = models.CharField(max_length=50)
 	display_title = models.BooleanField(default=True)
@@ -73,10 +74,17 @@ class Block(Module):
 		('HORIZONTALSEP', 'Horizontal separator on top'),
 		('VERTICALHORIZONTAL', 'Vertical + horizontal separator'),
 	)
+	JUSTIFY_CHOICES = (
+		('LEFT', 'Left'),
+		('CENTER', 'Center'),
+		('RIGHT', 'Right')
+	)
+
 	list_title = models.CharField(max_length=50, blank=True)
 	list_style = models.CharField(max_length=20, choices=STYLE_CHOICES, default='None')
 	kicker = models.CharField(max_length=50, blank=True)
 	layout = models.CharField(max_length=6, choices=LAYOUT_CHOICES, default='ONECOL')
+	content_justify = models.CharField(max_length=6, choices=JUSTIFY_CHOICES, default='LEFT')
 
 	def save(self, *args, **kwargs):
 		is_new = False
@@ -119,6 +127,21 @@ class ImageGallery(Module):
 		verbose_name_plural = 'Image galleries'
 
 
+class VideoGallery(Module):
+
+	def save(self, *args, **kwargs):
+		is_new = False
+		if self.pk is None:
+			is_new = True
+		super(VideoGallery, self).save(*args, **kwargs)
+		if is_new:
+			module = self.module_ptr
+			module.type = 'VIDEOGALLERY'
+			module.save()
+	class Meta:
+		verbose_name_plural = 'Video galleries'
+
+
 class ImageInGallery(models.Model):
 	image = FileBrowseField(max_length=200, directory='', format='Image', blank=True, null=True)
 	as_circle = models.BooleanField(default=False, blank=False, null=False)
@@ -129,6 +152,17 @@ class ImageInGallery(models.Model):
 
 	class Meta:
 		verbose_name_plural = 'Images in gallery'
+		ordering = ('order',)
+
+
+class VideoInGallery(models.Model):
+	video_url = models.URLField(blank=False, null=False)
+	caption = models.CharField(max_length=50, blank=True, null=True)
+	gallery = models.ForeignKey(VideoGallery, on_delete=models.CASCADE, related_name='videos')
+	order = models.PositiveIntegerField('Order', default=0)
+
+	class Meta:
+		verbose_name_plural = 'Videos in gallery'
 		ordering = ('order',)
 
 

@@ -163,8 +163,8 @@ TINYMCE_DEFAULT_CONFIG = {
 	'relative_urls': 'true',
 	'convert_urls' : 'true',
 	'valid_elements' : "" +
-		"-p," +
-		"a[href|title|id|class|target]," +
+		"-p[class|align]," +
+		"a[href|title|id|class|target|align]," +
 		"-strong/-b," +
 		"-em/-i," +
 		"-sup," +

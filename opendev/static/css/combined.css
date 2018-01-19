@@ -84,6 +84,19 @@ h2 {
         color: #FEEBFF; }
 /* CUSTOM CSS ------------------------------------------------------------------*/
 
+.align-right{
+  text-align: right;
+}
+
+.align-left{
+  text-align: left;
+}
+
+.align-center{
+  text-align: center;
+}
+
+
 .gallery-title{
   margin-bottom: 48px !important;
 }
