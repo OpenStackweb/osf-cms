@@ -26,7 +26,7 @@ SECRET_KEY = 'w1n%w0%+uq!#(a58hmi8@w-d!ksv_w07@@0(l=1$kcyr7rvxac'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['0.0.0.0', '127.0.0.1']
 
 
 # Application definition
@@ -199,3 +199,11 @@ FILEBROWSER_SELECT_FORMATS = {
     # 'document': ['Document'],
     'video': ['Video'],
 }
+
+
+
+# Import local settings
+try:
+    from .settings_local import *
+except ImportError:
+    print ("Notice: Didn't import settings_local.")

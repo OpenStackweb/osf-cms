@@ -1,0 +1,24 @@
+import os 
+
+# Override main configuration
+# For DEV work, just comment out the DATABASES block below, to use sqlite defaults.
+
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#        'NAME': 'opendev',
+#        'USER': 'opendev',
+#        'PASSWORD': 'some very secret password',
+#        'HOST': '',
+#        'PORT': '',
+#        'OPTIONS': {
+#        }        
+#    }
+#}
+
+# https://gist.github.com/ndarville/3452907#gistcomment-2321128
+SECRET_KEY = '.$Y?O?r:j@q+x@oRu<Rd3~9t'ZQ?GRRZNf``ove_^8u-[I8'
+
+# Production settings
+DEBUG = True
+ALLOWED_HOSTS = ['0.0.0.0', '127.0.0.1', 'localhost', '.opendevconf.com']
