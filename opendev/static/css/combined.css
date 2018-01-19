@@ -640,7 +640,8 @@ div.title-only{
     font-weight: 600; }
   .schedule-table > tbody > tr > td:nth-child(3), .schedule-table > tbody > tr > td:nth-child(5) {
     background: #e2e2e2; }
-  .schedule-table > tbody > tr:last-child > td:last-child {
+
+  .schedule-table > tfoot > tr:last-child > td:last-child {
     background: #EE265E;
     color: white;
     border-top-color: #EE265E; }
