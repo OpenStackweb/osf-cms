@@ -19,6 +19,10 @@ def add_active(request, name, by_path=False):
 	else:
 		path = reverse('page', kwargs={'slug': name})
 
+	# Adjustment for Home page
+	if path == '/%2F':
+		path = '/'
+
 	if request.path == path:
 		return ' active '
 

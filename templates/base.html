@@ -95,7 +95,7 @@
                 {% if module.image_on_background %}
                     <div class="{{ module.style.slug }} {% set_justify module.block.content_justify %}" style='background-image: url("{{ module.image.url }}"); background-size: 450px'>
                 {% else %}
-                    {% if module.type == 'SPONSOR' %}
+                    {% if module.type == 'SPONSORSHIP' %}
                       <div class="{{ module.style.slug }} sponsorship {% set_justify module.block.content_justify %}">
                     {% elif not module.content and not module.type == 'IMAGEGALLERY' %}
                       <div class="{{ module.style.slug }} title-only ">
@@ -227,7 +227,7 @@
                                     </div>
 <!--   -------------======== End Case ImageGallery ====-------------- -->
 <!--   -------------======== Case SPONSORSHIP ========---------------  -->
-                            {% elif module.type == 'SPONSOR' %}
+                            {% elif module.type == 'SPONSORSHIP' %}
                                 <div class="col-sm-12">
                                     <h2>{{ module.title }}</h2>
                                     <span>{{ module.subtitle }}</span>

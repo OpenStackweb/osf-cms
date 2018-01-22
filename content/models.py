@@ -1,7 +1,4 @@
-from django.core.exceptions import ValidationError
 from django.db import models
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 from django.urls import reverse
 from filebrowser.fields import FileBrowseField
 from tinymce.models import HTMLField
@@ -43,7 +40,7 @@ class Module(models.Model):
 	)
 	TYPE_CHOICES = (
 		('BLOCK', 'Block'),
-		('SPONSOR', 'Sponsorship'),
+		('SPONSORSHIP', 'Sponsorship'),
 		('IMAGEGALLERY', 'Image gallery'),
 		('VIDEOGALLERY', 'Video gallery')
 	)
@@ -59,11 +56,16 @@ class Module(models.Model):
 	modified = models.DateTimeField(auto_now=True)
 	type = models.CharField(max_length=12, choices=TYPE_CHOICES, null=True)
 
-	# def save(self, *args, **kwargs):
-	# 	if self.pk is None:
-	# 		page_modules = self.page.modules.all()
-	# 		self.order = page_modules.count() + 1
-	# 	super(Module, self).save(*args, **kwargs)
+	def save(self, *args, **kwargs):
+		is_new = False
+		if self.pk is None:
+			is_new = True
+		super(Module, self).save(*args, **kwargs)
+		if is_new:
+			module = self.module_ptr
+			module_type = type(self).__name__.upper()
+			module.type = module_type
+			module.save()
 
 	def __str__(self):
 		return self.title
@@ -92,58 +94,22 @@ class Block(Module):
 	layout = models.CharField(max_length=6, choices=LAYOUT_CHOICES, default='ONECOL')
 	content_justify = models.CharField(max_length=6, choices=JUSTIFY_CHOICES, default='LEFT')
 
-	def save(self, *args, **kwargs):
-		is_new = False
-		if self.pk is None:
-			is_new = True
-		super(Block, self).save(*args, **kwargs)
-		if is_new:
-			module = self.module_ptr
-			module.type = 'BLOCK'
-			module.save()
 
 
 class Sponsorship(Module):
 	subtitle = models.CharField(max_length=50, blank=True)
 	price = models.FloatField(blank=False)
 
-	def save(self, *args, **kwargs):
-		is_new = False
-		if self.pk is None:
-			is_new = True
-		super(Sponsorship, self).save(*args, **kwargs)
-		if is_new:
-			module = self.module_ptr
-			module.type = 'SPONSOR'
-			module.save()
 
 
 class ImageGallery(Module):
 
-	def save(self, *args, **kwargs):
-		is_new = False
-		if self.pk is None:
-			is_new = True
-		super(ImageGallery, self).save(*args, **kwargs)
-		if is_new:
-			module = self.module_ptr
-			module.type = 'IMAGEGALLERY'
-			module.save()
 	class Meta:
 		verbose_name_plural = 'Image galleries'
 
 
 class VideoGallery(Module):
 
-	def save(self, *args, **kwargs):
-		is_new = False
-		if self.pk is None:
-			is_new = True
-		super(VideoGallery, self).save(*args, **kwargs)
-		if is_new:
-			module = self.module_ptr
-			module.type = 'VIDEOGALLERY'
-			module.save()
 	class Meta:
 		verbose_name_plural = 'Video galleries'
 
