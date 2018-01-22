@@ -9,7 +9,6 @@ from tinymce.models import HTMLField
 class Page(models.Model):
 	title = models.CharField(max_length=50, blank=False)
 	slug = models.SlugField()
-	content = HTMLField(max_length=65535, blank=True)
 	created = models.DateTimeField(auto_now_add=True)
 	modified = models.DateTimeField(auto_now=True)
 
