@@ -9,11 +9,14 @@ from tinymce.models import HTMLField
 
 class Page(models.Model):
 	title = models.CharField(max_length=50, blank=False)
-	slug = models.SlugField()
+	slug = models.SlugField(unique=True, blank=True)
 	created = models.DateTimeField(auto_now_add=True)
 	modified = models.DateTimeField(auto_now=True)
 
 	def get_absolute_url(self):
+		if not self.slug:
+			return reverse('home')
+
 		return reverse('page', kwargs={'slug': self.slug})
 
 	def __str__(self):
