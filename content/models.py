@@ -2,6 +2,7 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.urls import reverse
 from filebrowser.fields import FileBrowseField
 from tinymce.models import HTMLField
 
@@ -11,6 +12,9 @@ class Page(models.Model):
 	slug = models.SlugField()
 	created = models.DateTimeField(auto_now_add=True)
 	modified = models.DateTimeField(auto_now=True)
+
+	def get_absolute_url(self):
+		return reverse('page', kwargs={'slug': self.slug})
 
 	def __str__(self):
 		return self.title

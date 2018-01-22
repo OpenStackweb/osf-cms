@@ -20,7 +20,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import RedirectView
 
-from content.views import about, sponsors, schedule, videos
+from content.views import PageView
 from filebrowser.sites import site as filebrowser_site
 
 
@@ -28,10 +28,8 @@ urlpatterns = [
     url(r'^admin/filebrowser/', filebrowser_site.urls), # filebrowser URLS
     path('admin/', admin.site.urls),
     url(r'^tinymce/', include('tinymce.urls')),
-    url(r'^about/', about, name='about'),
-    url(r'^sponsors/', sponsors, name='sponsors'),
-    url(r'^schedule/', schedule, name='schedule'),
-    url(r'^videos/', videos, name='videos'),
+
+    url(r'^(?P<slug>[-\w]+)/$', PageView.as_view(), name='page'),
+
     url(r'^faq/', RedirectView.as_view(url="/media/assets/opendev-faq_081617.pdf"), name='faq'),
-    url(r'^$', about, name='about'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

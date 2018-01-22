@@ -17,7 +17,7 @@ def add_active(request, name, by_path=False):
 	if by_path:
 		path = name
 	else:
-		path = reverse(name)
+		path = reverse('page', kwargs={'slug': name})
 
 	if request.path == path:
 		return ' active '
