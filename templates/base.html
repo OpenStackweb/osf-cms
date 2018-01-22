@@ -67,8 +67,13 @@
                     <ul class="nav navbar-nav navbar-right">
 
                         {% for page in pages %}
-                            <li class='{% add_active request page.page.slug %}'>
-                                <a href="{{ page.page.get_absolute_url }}">{{ page.display_name }}</a>
+                            {% if page.target_type == 'page' %}
+                                <li class='{% add_active request page.page.slug %}'>
+                                    <a href="{{ page.page.get_absolute_url }}">{{ page.display_name }}</a>
+                                {% else %}
+                                <li>
+                                    <a href="{{ page.url }}">{{ page.display_name }}</a>
+                                {% endif %}
                             </li>
                         {% endfor %}
 

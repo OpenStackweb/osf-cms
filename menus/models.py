@@ -9,8 +9,8 @@ class Menu(models.Model):
 	target_type = models.CharField('Link target', max_length=255, choices=[
 		('page', 'Page (select a page below)'), ('url', 'URL (enter one below)')
 		])
-	page = models.ForeignKey(Page, blank=True, null=True, on_delete=models.CASCADE)
-	url = models.URLField('URL', blank=True)
+	page = models.ForeignKey(Page, blank=True, null=True, on_delete=models.SET_NULL)
+	url = models.CharField(max_length=200, blank=True)
 	order = models.PositiveIntegerField(default=0, blank=False, null=False)
 
 	def clean(self):
