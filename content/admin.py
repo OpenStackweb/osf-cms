@@ -1,9 +1,9 @@
 from django.contrib import admin
-from adminsortable2.admin import SortableInlineAdminMixin
+from adminsortable2.admin import SortableInlineAdminMixin, SortableAdminMixin
 from django.contrib.admin.options import StackedInline, TabularInline
 
 from .models import Sponsorship, Page, Talk, Speaker, Block, Module, ImageInGallery, ImageGallery, ModuleInPage, Style, \
-	ListItem, Icon, ButtonInModule, VideoInGallery, VideoGallery
+	ListItem, Icon, ButtonInModule, VideoInGallery, VideoGallery, Room, Language
 
 
 class ModuleInline(SortableInlineAdminMixin, TabularInline):
@@ -85,13 +85,16 @@ class BlockAdmin(admin.ModelAdmin):
 	inlines = [ListItemInline, ButtonInline]
 
 
-class TalkAdmin(admin.ModelAdmin):
-	fields = ('title', 'content', 'language', 'translation', 'speakers', 'room', 'photo', 'start_time', 'end_time' )
-	list_display = ('title', 'language', 'room')
+class TalkAdmin(SortableAdminMixin, admin.ModelAdmin):
+	fields = ('title', 'slug', 'content', 'language', 'translation', 'speakers', 'room', 'image', 'video', 'start', 'end' )
+	ordering = ('order',)
+	prepopulated_fields = {'slug': ('title',)}
+	list_display = ('title', )
 
 
 class SpeakerAdmin(admin.ModelAdmin):
-	fields = ('name', 'bio')
+	fields = ('name', 'bio', 'email', 'workplace', 'image')
+	list_display = ('name', 'email', 'workplace')
 
 
 class ImageGalleryAdmin(admin.ModelAdmin):
@@ -132,3 +135,5 @@ admin.site.register(ImageGallery, ImageGalleryAdmin)
 admin.site.register(VideoGallery, VideoGalleryAdmin)
 admin.site.register(Style, StyleAdmin)
 admin.site.register(Icon)
+admin.site.register(Language)
+admin.site.register(Room)

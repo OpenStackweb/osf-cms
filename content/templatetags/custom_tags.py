@@ -2,6 +2,8 @@ from django import template
 from django.template import VariableDoesNotExist, Node
 from django.urls import reverse
 
+from content.models import Talk
+
 register = template.Library()
 
 
@@ -75,3 +77,20 @@ def set_justify(justify):
 	elif justify == 'RIGHT':
 		return ' align-right '
 	return ' align-left '
+
+
+@register.simple_tag(name='get_next_talk')
+def get_next_talk(talk):
+	order = talk.order
+	next = Talk.objects.filter(order=order + 1).first()
+	if next:
+		return next.get_absolute_url()
+	return False
+
+@register.simple_tag(name='get_prev_talk')
+def get_prev_talk(talk):
+	order = talk.order
+	prev = Talk.objects.filter(order=order - 1).first()
+	if prev:
+		return prev.get_absolute_url()
+	return False

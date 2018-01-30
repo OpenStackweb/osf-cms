@@ -20,7 +20,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import RedirectView
 
-from content.views import PageView, HomeView
+from content.views import PageView, HomeView, TalkView
 from filebrowser.sites import site as filebrowser_site
 
 
@@ -31,6 +31,7 @@ urlpatterns = [
 
     url(r'^$', HomeView.as_view(), name='home'),
     url(r'^(?P<slug>[-\w]+)?/$', PageView.as_view(), name='page'),
+    url(r'^talk/(?P<slug>[-\w]+)?/$', TalkView.as_view(), name='talk'),
 
     url(r'^faq/', RedirectView.as_view(url="/media/assets/opendev-faq_081617.pdf"), name='faq'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

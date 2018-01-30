@@ -140,24 +140,51 @@ class VideoInGallery(models.Model):
 
 class Speaker(models.Model):
 	name = models.CharField(max_length=50, blank=False)
-	bio = models.TextField()
+	bio = HTMLField(max_length=65535, blank=True)
+	workplace = models.CharField(max_length=50, blank=True)
+	email = models.EmailField(max_length=100, blank=True)
 	image = FileBrowseField(max_length=200, directory='', format='Image', blank=True, null=True)
+
+	def __str__(self):
+		return self.name
+
+
+class Room(models.Model):
+	name = models.CharField(max_length=50, blank=False)
+
+	def __str__(self):
+		return self.name
+
+class Language(models.Model):
+	name = models.CharField(max_length=50, blank=False)
 
 	def __str__(self):
 		return self.name
 
 class Talk(models.Model):
 	title = models.CharField(max_length=50, blank=False)
-	content = models.TextField()
-	language = models.CharField(max_length=20)
+	slug = models.SlugField(unique=True, blank=False, null=True)
+	content = HTMLField(max_length=65535, blank=True)
+	language = models.ForeignKey(Language, on_delete=models.SET_NULL, null=True)
 	speakers = models.ManyToManyField(Speaker, related_name='talks')
-	room = models.CharField(max_length=30)
+	room = models.ForeignKey(Room, on_delete=models.SET_NULL, null=True)
 	translation = models.BooleanField(default=False)
 	image = FileBrowseField(max_length=200, directory='', format='Image', blank=True, null=True)
 	# slideshare
-	# video
-	start_time = models.TimeField()
-	end_time = models.TimeField()
+	video = models.URLField(blank=True, null=True)
+	start = models.DateTimeField()
+	end = models.DateTimeField()
+	order = models.PositiveIntegerField('Order', default=0)
+
+	class Meta:
+		ordering = ['order',]
+
+	def get_absolute_url(self):
+		if not self.slug:
+			return reverse('talk')
+
+		return reverse('talk', kwargs={'slug': self.slug})
+
 
 	def __str__(self):
 		return self.title
