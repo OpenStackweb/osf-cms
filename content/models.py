@@ -164,7 +164,7 @@ class Language(models.Model):
 class Talk(models.Model):
 	title = models.CharField(max_length=50, blank=False)
 	slug = models.SlugField(unique=True, blank=False, null=True)
-	content = HTMLField(max_length=65535, blank=True)
+	content = HTMLField(max_length=65535, blank=False )
 	language = models.ForeignKey(Language, on_delete=models.SET_NULL, null=True)
 	speakers = models.ManyToManyField(Speaker, related_name='talks')
 	room = models.ForeignKey(Room, on_delete=models.SET_NULL, null=True)
