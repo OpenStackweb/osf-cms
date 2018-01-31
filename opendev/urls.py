@@ -20,11 +20,20 @@ from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import RedirectView
 
-from content.views import PageView, HomeView, TalkView
+from content.views import PageView, HomeView, TalkView, filebrowser_browse, filebrowser_base
 from filebrowser.sites import site as filebrowser_site
 
+filebrowser_url = [
+    url(r'^admin/filebrowser/browse/$', filebrowser_browse, name="fb_browse"),
+    url(r'^admin/filebrowser/upload/$', filebrowser_base('upload'), name="fb_upload"),
+    url(r'^admin/filebrowser/createdir/$',filebrowser_base('createdir'), name="fb_createdir"),
+    url(r'^admin/filebrowser/delete_confirm/$', filebrowser_base('delete_confirm'), name="fb_delete_confirm"),
+    url(r'^admin/filebrowser/delete/$', filebrowser_base('delete'), name="fb_delete"),
+    url(r'^admin/filebrowser/detail/$', filebrowser_base('detail'), name="fb_detail"),
+    url(r'^admin/filebrowser/version/$', filebrowser_base('version'), name="fb_version"),
+]
 
-urlpatterns = [
+urlpatterns = filebrowser_url + [
     url(r'^admin/filebrowser/', filebrowser_site.urls), # filebrowser URLS
     path('admin/', admin.site.urls),
     url(r'^tinymce/', include('tinymce.urls')),

@@ -1,7 +1,14 @@
+import os
+
+from django.apps import apps
+from django.conf import settings
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.template import loader
 from django.views.generic import DetailView, TemplateView
+
+from filebrowser.decorators import path_exists, get_path
+from filebrowser.sites import filebrowser_view, site as filebrowser_site
 
 from menus.models import BigHeaderMenu
 from content.models import Page, Module, Talk
@@ -65,3 +72,41 @@ class TalkView(PageView):
 			'talk' : talk,
 		})
 		return context
+
+
+def filebrowser_browse(request):
+	slug = request.META['HTTP_HOST'].split('.')[0]
+	filebrowser_site.directory = "uploads/%s/" % slug
+	# Check and create folder named as the hotel id number
+	asd = get_path('', site=filebrowser_site)
+	dsa = os.path.exists(settings.MEDIA_ROOT + '/' + filebrowser_site.directory)
+	if asd is None and \
+			not dsa:
+		dir = settings.MEDIA_ROOT + '/' + filebrowser_site.directory
+		os.makedirs(dir)
+
+	# Check and create folders named as modelname/fieldname
+	# url_dir = request.GET.get('dir', '')
+	# if get_path(url_dir, site=filebrowser_site) is None and \
+	# 		not os.path.exists(settings.MEDIA_ROOT + '/' + filebrowser_site.directory + url_dir):
+		# Here goes the folders (assets, images, icons) creation.
+	# 	if len(models_fields)>0:
+	# 		dir = settings.MEDIA_ROOT + '/' + filebrowser_site.directory + models_fields[0]
+	# 		if models_fields[0] in [key.lower() for key, model in apps.all_models['content'].iteritems()]:
+	# 			if not os.path.exists(dir):
+	# 				os.makedirs(dir)
+	# 			if len(models_fields)>1:
+	# 				dir = settings.MEDIA_ROOT + '/' + filebrowser_site.directory + models_fields[0] + '/' + models_fields[1]
+	# 				if models_fields[1] in [field.name for field in apps.get_model('content', models_fields[0])._meta.fields] and \
+	# 				not os.path.exists(dir):
+	# 					os.makedirs(dir)
+
+	return path_exists(filebrowser_site, filebrowser_view(filebrowser_site.browse))(request)
+
+
+def filebrowser_base(f_name):
+	def f(request):
+		slug = request.META['HTTP_HOST'].split('.')[0]
+		filebrowser_site.directory = "uploads/%s/" % slug
+		return path_exists(filebrowser_site, filebrowser_view(getattr(globals()['filebrowser_site'], f_name)))(request)
+	return f
