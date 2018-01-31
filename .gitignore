@@ -1,4 +1,4 @@
-*.pyc
+*.pyccontent
 __pycache__
 .idea
 .env

@@ -2,9 +2,9 @@ from django.db import models
 from django.urls import reverse
 from filebrowser.fields import FileBrowseField
 from tinymce.models import HTMLField
+from events.models import BaseEventModel
 
-
-class Page(models.Model):
+class Page(BaseEventModel):
 	title = models.CharField(max_length=50, blank=False)
 	slug = models.SlugField(unique=True, blank=True)
 	created = models.DateTimeField(auto_now_add=True)
@@ -20,7 +20,7 @@ class Page(models.Model):
 		return self.title
 
 
-class Style(models.Model):
+class Style(BaseEventModel):
 	title = models.CharField(max_length=50, blank=False)
 	slug = models.SlugField(blank=False, null=False)
 
@@ -28,7 +28,7 @@ class Style(models.Model):
 		return self.title
 
 
-class Module(models.Model):
+class Module(BaseEventModel):
 	IMAGE_POSITION_CHOICES = (
 		('LEFT', 'Left'),
 		('RIGHT', 'Right'),
@@ -114,7 +114,7 @@ class VideoGallery(Module):
 		verbose_name_plural = 'Video galleries'
 
 
-class ImageInGallery(models.Model):
+class ImageInGallery(BaseEventModel):
 	image = FileBrowseField(max_length=200, directory='', format='Image', blank=True, null=True)
 	as_circle = models.BooleanField(default=False, blank=False, null=False)
 	caption = models.CharField(max_length=50, blank=True, null=True)
@@ -127,7 +127,7 @@ class ImageInGallery(models.Model):
 		ordering = ('order',)
 
 
-class VideoInGallery(models.Model):
+class VideoInGallery(BaseEventModel):
 	video_url = models.URLField(blank=False, null=False)
 	caption = models.CharField(max_length=50, blank=True, null=True)
 	gallery = models.ForeignKey(VideoGallery, on_delete=models.CASCADE, related_name='videos')
@@ -138,7 +138,7 @@ class VideoInGallery(models.Model):
 		ordering = ('order',)
 
 
-class Speaker(models.Model):
+class Speaker(BaseEventModel):
 	name = models.CharField(max_length=50, blank=False)
 	bio = HTMLField(max_length=65535, blank=True)
 	workplace = models.CharField(max_length=50, blank=True)
@@ -149,19 +149,19 @@ class Speaker(models.Model):
 		return self.name
 
 
-class Room(models.Model):
+class Room(BaseEventModel):
 	name = models.CharField(max_length=50, blank=False)
 
 	def __str__(self):
 		return self.name
 
-class Language(models.Model):
+class Language(BaseEventModel):
 	name = models.CharField(max_length=50, blank=False)
 
 	def __str__(self):
 		return self.name
 
-class Talk(models.Model):
+class Talk(BaseEventModel):
 	title = models.CharField(max_length=50, blank=False)
 	slug = models.SlugField(unique=True, blank=False, null=True)
 	content = HTMLField(max_length=65535, blank=False )
@@ -190,7 +190,7 @@ class Talk(models.Model):
 		return self.title
 
 
-class ModuleInPage(models.Model):
+class ModuleInPage(BaseEventModel):
 	module = models.ForeignKey(Module, on_delete=models.CASCADE, related_name='modules_in_page')
 	page = models.ForeignKey(Page, on_delete=models.CASCADE, related_name='modules_in_page')
 	order = models.PositiveIntegerField('Order', default=0)
@@ -203,14 +203,14 @@ class ModuleInPage(models.Model):
 		return "{} ({})".format(self.module.title, self.page.title)
 
 
-class Icon(models.Model):
+class Icon(BaseEventModel):
 	name = models.CharField(max_length=25, blank=False)
 	image = FileBrowseField(max_length=200, directory="images", format='Icon', blank=True, null=True)
 
 	def __str__(self):
 		return self.name
 
-class ListItem(models.Model):
+class ListItem(BaseEventModel):
 	icon = models.ForeignKey(Icon, on_delete=models.SET_NULL, null=True, blank=True)
 	title = models.CharField(max_length=50, blank=True, null=True)
 	caption = models.CharField(max_length=200, blank=True, null=True)
@@ -225,7 +225,7 @@ class ListItem(models.Model):
 		return "{} ({})".format(self.caption, self.module.title)
 
 
-class Button(models.Model):
+class Button(BaseEventModel):
 	caption = models.CharField(max_length=40, blank=False)
 	url = models.URLField()
 
@@ -233,7 +233,7 @@ class Button(models.Model):
 		return "{}".format(self.caption)
 
 
-class ButtonInModule(models.Model):
+class ButtonInModule(BaseEventModel):
 	button = models.ForeignKey(Button, on_delete=models.CASCADE, related_name='modules')
 	module = models.ForeignKey(Module, on_delete=models.CASCADE, related_name='buttons')
 	order = models.PositiveIntegerField('Order', default=0)

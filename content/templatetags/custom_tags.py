@@ -1,8 +1,10 @@
 from django import template
+from django.shortcuts import get_object_or_404
 from django.template import VariableDoesNotExist, Node
 from django.urls import reverse
 
 from content.models import Talk
+from events.models import Event
 
 register = template.Library()
 
@@ -94,3 +96,13 @@ def get_prev_talk(talk):
 	if prev:
 		return prev.get_absolute_url()
 	return False
+
+@register.simple_tag(name='get_events')
+def get_events():
+	return Event.objects.all()
+
+@register.simple_tag(name='get_current_event')
+def get_current_event(request):
+	slug = request.META['HTTP_HOST'].split('.')[0]
+	event = get_object_or_404(Event, slug=slug)
+	return event

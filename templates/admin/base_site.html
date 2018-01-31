@@ -1,0 +1,27 @@
+{% extends "admin/base_site.html" %}
+{% load staticfiles %}
+{% load get_events get_current_event from custom_tags %}
+{% block extrastyle %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'content/admin/css/style.css' %}">
+{% endblock %}
+
+{% block branding %}
+<a href="{% url 'admin:index' %}"><img class="opendev-logo" src="{% static "content/admin/images/opendev-logo.svg" %}" alt="Opendev"></a>
+{% endblock %}
+
+{% block userlinks %}
+    {% if user.is_superuser  %}
+        {% get_events as events %}
+        {% get_current_event request as current_event %}
+        <select onChange="window.location.href=this.value">
+        {% for event in events %}
+            <option  {% if event.slug == current_event.slug %}selected{% endif %}  value="http://{{ event.slug }}.opendevconf.com:8000/admin">{{ event.title }}</option>
+{#            <a href="{% url 'admin:auth_user_change' user.pk %}?hotel#profile-group">#}
+        {% endfor %}
+        </select>
+    {% endif %}
+{#    {{ user.hotel }}{% if user.is_superuser  %}</a>{% endif %}#}
+        /
+    {{ block.super }}
+{% endblock %}

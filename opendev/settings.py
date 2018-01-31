@@ -41,6 +41,7 @@ INSTALLED_APPS = [
 	'django.contrib.staticfiles',
 	'content',
 	'menus',
+	'events',
 	'adminsortable2',
 	'tinymce',
 ]

@@ -5,6 +5,8 @@ from django.contrib.admin.options import StackedInline, TabularInline
 from .models import Sponsorship, Page, Talk, Speaker, Block, Module, ImageInGallery, ImageGallery, ModuleInPage, Style, \
 	ListItem, Icon, ButtonInModule, VideoInGallery, VideoGallery, Room, Language
 
+from events.admin import EventModelAdmin
+
 
 class ModuleInline(SortableInlineAdminMixin, TabularInline):
 	verbose_name_plural = "Modules"
@@ -48,13 +50,13 @@ class ListItemInline(SortableInlineAdminMixin, TabularInline):
 	max_num = 8
 
 
-class PageAdmin(admin.ModelAdmin):
+class PageAdmin(EventModelAdmin):
 	prepopulated_fields = {'slug': ('title',)}
 	list_display = ('title', 'slug', 'created', 'modified')
 	inlines = [ModuleInline, ]
 
 
-class SponsorshipAdmin(admin.ModelAdmin):
+class SponsorshipAdmin(EventModelAdmin):
 	fieldsets = (
 		(None, {
 			'fields': ('title', 'display_title', 'subtitle', 'price', 'content',)
@@ -67,7 +69,7 @@ class SponsorshipAdmin(admin.ModelAdmin):
 		}),
 	)
 
-class BlockAdmin(admin.ModelAdmin):
+class BlockAdmin(EventModelAdmin):
 	fieldsets = (
 		(None, {
 			'fields': ('kicker', 'title', 'display_title', 'content',)
@@ -85,19 +87,19 @@ class BlockAdmin(admin.ModelAdmin):
 	inlines = [ListItemInline, ButtonInline]
 
 
-class TalkAdmin(SortableAdminMixin, admin.ModelAdmin):
+class TalkAdmin(SortableAdminMixin, EventModelAdmin):
 	fields = ('title', 'slug', 'content', 'language', 'translation', 'speakers', 'room', 'image', 'video', 'start', 'end' )
 	ordering = ('order',)
 	prepopulated_fields = {'slug': ('title',)}
 	list_display = ('title', )
 
 
-class SpeakerAdmin(admin.ModelAdmin):
+class SpeakerAdmin(EventModelAdmin):
 	fields = ('name', 'bio', 'email', 'workplace', 'image')
 	list_display = ('name', 'email', 'workplace')
 
 
-class ImageGalleryAdmin(admin.ModelAdmin):
+class ImageGalleryAdmin(EventModelAdmin):
 	fieldsets = (
 		(None, {
 			'fields': ('title', 'display_title', )
@@ -109,7 +111,7 @@ class ImageGalleryAdmin(admin.ModelAdmin):
 	inlines = (ImageInline, )
 
 
-class VideoGalleryAdmin(admin.ModelAdmin):
+class VideoGalleryAdmin(EventModelAdmin):
 	fieldsets = (
 		(None, {
 			'fields': ('title', 'display_title', )
@@ -121,7 +123,7 @@ class VideoGalleryAdmin(admin.ModelAdmin):
 	inlines = (VideoInline, )
 
 
-class StyleAdmin(admin.ModelAdmin):
+class StyleAdmin(EventModelAdmin):
 	fields = ('title', 'slug')
 	prepopulated_fields = {'slug': ('title',)}
 
