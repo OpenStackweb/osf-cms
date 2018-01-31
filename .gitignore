@@ -5,4 +5,4 @@ __pycache__
 db.sqlite3
 media
 opendev/settings_local.py
-static/
+/static/
