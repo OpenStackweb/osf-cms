@@ -4,6 +4,7 @@
 {% block extrastyle %}
     {{ block.super }}
     <link rel="stylesheet" href="{% static 'content/admin/css/style.css' %}">
+
 {% endblock %}
 
 {% block branding %}
@@ -14,14 +15,27 @@
     {% if user.is_superuser  %}
         {% get_events as events %}
         {% get_current_event request as current_event %}
-        <select onChange="window.location.href=this.value">
-        {% for event in events %}
-            <option  {% if event.slug == current_event.slug %}selected{% endif %}  value="http://{{ event.slug }}.opendevconf.com:8000/admin">{{ event.title }}</option>
-{#            <a href="{% url 'admin:auth_user_change' user.pk %}?hotel#profile-group">#}
-        {% endfor %}
-        </select>
+        <form id="slug-form">
+            <select name="header-select">
+            {% for event in events %}
+                <option  {% if event.slug == current_event.slug %}selected{% endif %}  value="http://{{ event.slug }}.opendevconf.com:8000/admin">{{ event.title }}</option>
+    {#            <a href="{% url 'admin:auth_user_change' user.pk %}?hotel#profile-group">#}
+            {% endfor %}
+            </select>
+            <button class="btn btn-primary" type="submit">Go</button>
+        </form>
+
     {% endif %}
 {#    {{ user.hotel }}{% if user.is_superuser  %}</a>{% endif %}#}
         /
     {{ block.super }}
+{% endblock %}
+
+{% block footer %}
+    {{ block.super }}
+    <!-- jQuery -->
+    <script src={% static '/js/jquery.js' %}></script>
+
+    <script src={% static '/content/admin/js/scripts.js' %}></script>
+
 {% endblock %}
