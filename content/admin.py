@@ -5,10 +5,10 @@ from django.contrib.admin.options import StackedInline, TabularInline
 from .models import Sponsorship, Page, Talk, Speaker, Block, Module, ImageInGallery, ImageGallery, ModuleInPage, Style, \
 	ListItem, Icon, ButtonInModule, VideoInGallery, VideoGallery, Room, Language
 
-from events.admin import EventModelAdmin
+from events.admin import EventModelAdmin, EventTabularInline
 
 
-class ModuleInline(SortableInlineAdminMixin, TabularInline):
+class ModuleInline(SortableInlineAdminMixin, EventTabularInline):
 	verbose_name_plural = "Modules"
 	model = ModuleInPage
 	fields = ('order', 'module')
@@ -16,7 +16,7 @@ class ModuleInline(SortableInlineAdminMixin, TabularInline):
 	extra = 3
 
 
-class ButtonInline(SortableInlineAdminMixin, TabularInline):
+class ButtonInline(SortableInlineAdminMixin, EventTabularInline):
 	verbose_name_plural = "Buttons"
 	model = ButtonInModule
 	fields = ('order', 'button')
@@ -24,7 +24,7 @@ class ButtonInline(SortableInlineAdminMixin, TabularInline):
 	extra = 1
 
 
-class ImageInline(SortableInlineAdminMixin, TabularInline):
+class ImageInline(SortableInlineAdminMixin, EventTabularInline):
 	verbose_name_plural = "Images"
 	model = ImageInGallery
 	fields = ('image', 'order', 'caption', 'as_circle', 'link')
@@ -33,7 +33,7 @@ class ImageInline(SortableInlineAdminMixin, TabularInline):
 	max_num = 8
 
 
-class VideoInline(SortableInlineAdminMixin, TabularInline):
+class VideoInline(SortableInlineAdminMixin, EventTabularInline):
 	verbose_name_plural = "Videos"
 	model = VideoInGallery
 	fields = ('video_url', 'order', 'caption')
@@ -42,7 +42,7 @@ class VideoInline(SortableInlineAdminMixin, TabularInline):
 	max_num = 12
 
 
-class ListItemInline(SortableInlineAdminMixin, TabularInline):
+class ListItemInline(SortableInlineAdminMixin, EventTabularInline):
 	model = ListItem
 	fields = ('icon', 'order', 'title', 'caption')
 	sortable_field_name = "order"
@@ -68,6 +68,7 @@ class SponsorshipAdmin(EventModelAdmin):
 			'fields': ('image', 'image_position', 'image_on_background')
 		}),
 	)
+
 
 class BlockAdmin(EventModelAdmin):
 	fieldsets = (

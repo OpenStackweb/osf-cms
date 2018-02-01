@@ -1,10 +1,11 @@
 from adminsortable2.admin import SortableAdminMixin
 from django.contrib import admin
 
+from events.admin import EventModelAdmin
 from .models import BigHeaderMenu, FooterMenu
 
 
-class MenuSortableAdmin(SortableAdminMixin, admin.ModelAdmin):
+class MenuSortableAdmin(SortableAdminMixin, EventModelAdmin):
     list_display = ('display_name', 'get_target')
     ordering=('order', )
 

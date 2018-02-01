@@ -6,7 +6,7 @@ from events.models import BaseEventModel
 
 class Page(BaseEventModel):
 	title = models.CharField(max_length=50, blank=False)
-	slug = models.SlugField(unique=True, blank=True)
+	slug = models.SlugField(unique=False, blank=True)
 	created = models.DateTimeField(auto_now_add=True)
 	modified = models.DateTimeField(auto_now=True)
 

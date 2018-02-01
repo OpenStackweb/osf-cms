@@ -2,9 +2,10 @@ from django.core.exceptions import ValidationError
 from django.db import models
 
 from content.models import Page
+from events.models import BaseEventModel
 
 
-class Menu(models.Model):
+class Menu(BaseEventModel):
 	display_name = models.CharField('Label', max_length=255)
 	target_type = models.CharField('Link target', max_length=255, choices=[
 		('page', 'Page (select a page below)'), ('url', 'URL (enter one below)')

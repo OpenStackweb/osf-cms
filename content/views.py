@@ -2,7 +2,7 @@ import os
 
 from django.apps import apps
 from django.conf import settings
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.shortcuts import render
 from django.template import loader
 from django.views.generic import DetailView, TemplateView
@@ -20,12 +20,15 @@ class HomeView(TemplateView):
 
 	def get_context_data(self, **kwargs):
 		context = super(HomeView, self).get_context_data(**kwargs)
+		event_slug = self.request.META['HTTP_HOST'].split('.')[0]
 		try:
-			page = Page.objects.get(slug='')
+			page = Page.objects.get(slug='', event__slug=event_slug)
 		except:
-			page = Page.objects.all().first()
-		header_menus = BigHeaderMenu.objects.all().order_by('order')
-		modules = Module.objects.filter(modules_in_page__page=page).order_by('modules_in_page__order')
+			page = Page.objects.filter(event__slug=event_slug).first()
+		if not page.event.slug == event_slug:
+			raise Http404("Requested page doesn't exist")
+		header_menus = BigHeaderMenu.objects.filter(event__slug=event_slug).order_by('order')
+		modules = Module.objects.filter(modules_in_page__page=page, event__slug=event_slug).order_by('modules_in_page__order')
 		context.update({
 			'pages': header_menus,
 			'title': page.title,
@@ -40,14 +43,17 @@ class PageView(DetailView):
 	model = Page
 	context_object_name = "page"
 
-	def get_menus(self):
-		return BigHeaderMenu.objects.all().order_by('order')
+	def get_menus(self, event_slug):
+		return BigHeaderMenu.objects.filter(event__slug=event_slug).order_by('order')
 
 	def get_context_data(self, **kwargs):
 		context = super(PageView, self).get_context_data(**kwargs)
+		event_slug = self.request.META['HTTP_HOST'].split('.')[0]
 		page = kwargs['object']
-		header_menus = self.get_menus()
-		modules = Module.objects.filter(modules_in_page__page=page).order_by('modules_in_page__order')
+		if not page.event.slug == event_slug:
+			raise Http404("Requested page doesn't exist")
+		header_menus = self.get_menus(event_slug)
+		modules = Module.objects.filter(modules_in_page__page=page, event__slug=event_slug).order_by('modules_in_page__order')
 		context.update({
 			'pages': header_menus,
 			'title': page.title,
@@ -64,8 +70,11 @@ class TalkView(PageView):
 
 	def get_context_data(self, **kwargs):
 		context = super(PageView, self).get_context_data(**kwargs)
+		event_slug = self.request.META['HTTP_HOST'].split('.')[0]
 		talk = kwargs['object']
-		header_menus = self.get_menus()
+		if not talk.event.slug == event_slug:
+			raise Http404("Requested page doesn't exist")
+		header_menus = self.get_menus(event_slug)
 		context.update({
 			'pages': header_menus,
 			'title': talk.title,
@@ -78,10 +87,9 @@ def filebrowser_browse(request):
 	slug = request.META['HTTP_HOST'].split('.')[0]
 	filebrowser_site.directory = "uploads/%s/" % slug
 	# Check and create folder named as the hotel id number
-	asd = get_path('', site=filebrowser_site)
-	dsa = os.path.exists(settings.MEDIA_ROOT + '/' + filebrowser_site.directory)
-	if asd is None and \
-			not dsa:
+
+	if get_path('', site=filebrowser_site) is None and \
+			not os.path.exists(settings.MEDIA_ROOT + '/' + filebrowser_site.directory):
 		dir = settings.MEDIA_ROOT + '/' + filebrowser_site.directory
 		os.makedirs(dir)
 
