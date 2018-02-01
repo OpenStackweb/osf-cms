@@ -49,7 +49,7 @@ class Module(BaseEventModel):
 	content = HTMLField(max_length=65535, blank=True)
 	content_width = models.CharField(max_length=8, choices=WIDTH_CHOICES, default='WIDE')
 	style = models.ForeignKey(Style, on_delete=models.SET_NULL, null=True)
-	image = FileBrowseField(max_length=200, directory='', format='Image', blank=True, null=True)
+	image = FileBrowseField(max_length=200, directory='images', format='Image', blank=True, null=True)
 	image_position = models.CharField(max_length=6, choices=IMAGE_POSITION_CHOICES, default='LEFT')
 	image_on_background = models.BooleanField(default=False)
 	created = models.DateTimeField(auto_now_add=True)

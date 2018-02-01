@@ -86,20 +86,10 @@ def filebrowser_browse(request):
 		os.makedirs(dir)
 
 	# Check and create folders named as modelname/fieldname
-	# url_dir = request.GET.get('dir', '')
-	# if get_path(url_dir, site=filebrowser_site) is None and \
-	# 		not os.path.exists(settings.MEDIA_ROOT + '/' + filebrowser_site.directory + url_dir):
-		# Here goes the folders (assets, images, icons) creation.
-	# 	if len(models_fields)>0:
-	# 		dir = settings.MEDIA_ROOT + '/' + filebrowser_site.directory + models_fields[0]
-	# 		if models_fields[0] in [key.lower() for key, model in apps.all_models['content'].iteritems()]:
-	# 			if not os.path.exists(dir):
-	# 				os.makedirs(dir)
-	# 			if len(models_fields)>1:
-	# 				dir = settings.MEDIA_ROOT + '/' + filebrowser_site.directory + models_fields[0] + '/' + models_fields[1]
-	# 				if models_fields[1] in [field.name for field in apps.get_model('content', models_fields[0])._meta.fields] and \
-	# 				not os.path.exists(dir):
-	# 					os.makedirs(dir)
+	url_dir = request.GET.get('dir', '')
+	dir = settings.MEDIA_ROOT + '/' + filebrowser_site.directory + url_dir
+	if get_path(url_dir, site=filebrowser_site) is None and not os.path.exists(dir):
+		os.makedirs(dir)
 
 	return path_exists(filebrowser_site, filebrowser_view(filebrowser_site.browse))(request)
 
