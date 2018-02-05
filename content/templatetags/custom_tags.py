@@ -106,3 +106,10 @@ def get_current_event(request):
 	slug = request.META['HTTP_HOST'].split('.')[0]
 	event = get_object_or_404(Event, slug=slug)
 	return event
+
+@register.simple_tag(name='get_videos_row')
+def get_videos_row(per_row, videos):
+	rows = int(videos) // int(per_row)
+	if int(videos) % int(per_row):
+		rows += 1
+	return range(rows)

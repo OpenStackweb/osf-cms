@@ -115,7 +115,7 @@ class ImageGalleryAdmin(EventModelAdmin):
 class VideoGalleryAdmin(EventModelAdmin):
 	fieldsets = (
 		(None, {
-			'fields': ('title', 'display_title', )
+			'fields': ('title', 'display_title', 'videos_per_row' )
 		}),
 		('Layout', {
 			'fields': ('style',)

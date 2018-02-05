@@ -741,6 +741,12 @@ div.title-only{
     color: white;
     border-top-color: #EE265E; }
 
+  .schedule-table > tbody > tr > td:nth-child(2){
+    font-weight: bold !important;
+  }
+
+
+
 @media (max-width: 767px) {
   .schedule-table {
     table-layout: auto; }

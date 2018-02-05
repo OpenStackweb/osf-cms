@@ -94,6 +94,8 @@ class Block(Module):
 	layout = models.CharField(max_length=6, choices=LAYOUT_CHOICES, default='ONECOL')
 	content_justify = models.CharField(max_length=6, choices=JUSTIFY_CHOICES, default='LEFT')
 
+	def __str__(self):
+		return "{} {}".format(self.kicker, self.title)
 
 
 class Sponsorship(Module):
@@ -109,6 +111,8 @@ class ImageGallery(Module):
 
 
 class VideoGallery(Module):
+
+	videos_per_row = models.IntegerField(default=3, blank=False, null=False)
 
 	class Meta:
 		verbose_name_plural = 'Video galleries'

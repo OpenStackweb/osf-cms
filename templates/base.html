@@ -1,5 +1,5 @@
 {% load static from staticfiles %}
-{% load add_active set_justify set_col_size add_horizontal_separator add_vertical_separator from custom_tags %}
+{% load get_videos_row add_active set_justify set_col_size add_horizontal_separator add_vertical_separator from custom_tags %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -243,6 +243,16 @@
                                 <div class="row">
                                     <div class="col-sm-12"><hr style="border-color: #ddd;margin-bottom:60px;"></div>
                                 </div>
+<!--   -------------======== End Case Sponsorship ====-------------- -->
+<!--   -------------======== Case VideoGallery ========---------------  -->
+                            {% elif module.type == 'VIDEOGALLERY' %}
+                                <h2>{{ module.title }}</h2>
+                                {% get_videos_row module.videogallery.videos_per_row module.videogallery.videos.count as range %}
+                                {% for row in range %}
+                                    <div class="row">
+                                        caca
+                                    </div>
+                                {% endfor %}
                             {% else %}
                                 <div class="row">Invalid module</div>
                             {% endif %}
