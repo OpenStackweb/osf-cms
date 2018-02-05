@@ -1,4 +1,8 @@
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
+from events.cloneevent import CloneViewSet
 
 
 class Event(models.Model):
@@ -16,3 +20,9 @@ class BaseEventModel(models.Model):
 
 	class Meta:
 		abstract = True
+
+@receiver(post_save, sender=Event)
+def clone_hotel(sender, **kwargs):
+	if kwargs['created']:
+		cvs = CloneViewSet(kwargs['instance'].base_event, kwargs['instance'])
+		cvs.main()

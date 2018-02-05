@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 
 from content.models import Module
@@ -13,6 +14,7 @@ class EventAdmin(admin.ModelAdmin):
 
 
 class BaseEventAdmin(admin.ModelAdmin):
+
 	exclude = ('event',)
 
 	def get_queryset(self, request):

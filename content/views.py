@@ -46,6 +46,16 @@ class PageView(DetailView):
 	def get_menus(self, event_slug):
 		return BigHeaderMenu.objects.filter(event__slug=event_slug).order_by('order')
 
+	def get_object(self, queryset=None):
+		if queryset is None:
+			queryset = self.get_queryset()
+
+		slug = self.kwargs.get(self.slug_url_kwarg)
+
+		event_slug = self.request.META['HTTP_HOST'].split('.')[0]
+		obj = queryset.filter(event__slug=event_slug, slug=slug).get()
+		return obj
+
 	def get_context_data(self, **kwargs):
 		context = super(PageView, self).get_context_data(**kwargs)
 		event_slug = self.request.META['HTTP_HOST'].split('.')[0]

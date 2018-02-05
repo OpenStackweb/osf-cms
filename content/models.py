@@ -22,7 +22,7 @@ class Page(BaseEventModel):
 
 class Style(BaseEventModel):
 	title = models.CharField(max_length=50, blank=False)
-	slug = models.SlugField(blank=False, null=False)
+	slug = models.SlugField(unique=False, blank=False, null=False)
 
 	def __str__(self):
 		return self.title
@@ -61,7 +61,7 @@ class Module(BaseEventModel):
 		if self.pk is None:
 			is_new = True
 		super(Module, self).save(*args, **kwargs)
-		if is_new:
+		if is_new and not self.type:
 			module = self.module_ptr
 			module_type = type(self).__name__.upper()
 			module.type = module_type
@@ -163,7 +163,7 @@ class Language(BaseEventModel):
 
 class Talk(BaseEventModel):
 	title = models.CharField(max_length=50, blank=False)
-	slug = models.SlugField(unique=True, blank=False, null=True)
+	slug = models.SlugField(unique=False, blank=False, null=True)
 	content = HTMLField(max_length=65535, blank=False )
 	language = models.ForeignKey(Language, on_delete=models.SET_NULL, null=True)
 	speakers = models.ManyToManyField(Speaker, related_name='talks')
