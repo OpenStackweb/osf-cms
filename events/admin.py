@@ -56,18 +56,16 @@ class EventModelAdmin(BaseEventAdmin):
 		super(EventModelAdmin, self).save_model(request, obj, form, change)
 
 
-class BaseEventInline():
-
-	def formfield_for_foreignkey(self, db_field, request, **kwargs):
-		kwargs["queryset"] = Module.objects.filter(event__slug=request.META['HTTP_HOST'].split('.')[0])
-		return super().formfield_for_foreignkey(db_field, request, **kwargs)
-
-class EventTabularInline(BaseEventInline, admin.TabularInline):
-	pass
+class EventTabularInline(admin.TabularInline):
+	def get_queryset(self, request):
+		qs = super(EventTabularInline, self).get_queryset(request)
+		return qs.filter(event__slug=request.META['HTTP_HOST'].split('.')[0])
 
 
-class EventStackedInline(BaseEventInline, admin.StackedInline):
-	pass
+class EventStackedInline(admin.StackedInline):
+	def get_queryset(self, request):
+		qs = super(EventStackedInline, self).get_queryset(request)
+		return qs.filter(event__slug=request.META['HTTP_HOST'].split('.')[0])
 
 
 admin.site.register(Event, EventAdmin)

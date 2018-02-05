@@ -3,7 +3,7 @@ from adminsortable2.admin import SortableInlineAdminMixin, SortableAdminMixin
 from django.contrib.admin.options import StackedInline, TabularInline
 
 from .models import Sponsorship, Page, Talk, Speaker, Block, Module, ImageInGallery, ImageGallery, ModuleInPage, Style, \
-	ListItem, Icon, ButtonInModule, VideoInGallery, VideoGallery, Room, Language
+	ListItem, Icon, ButtonInModule, VideoInGallery, VideoGallery, Room, Language, Button
 
 from events.admin import EventModelAdmin, EventTabularInline
 
@@ -46,7 +46,7 @@ class ListItemInline(SortableInlineAdminMixin, EventTabularInline):
 	model = ListItem
 	fields = ('icon', 'order', 'title', 'caption')
 	sortable_field_name = "order"
-	extra = 1
+	extra = 3
 	max_num = 8
 
 
@@ -129,6 +129,20 @@ class StyleAdmin(EventModelAdmin):
 	prepopulated_fields = {'slug': ('title',)}
 
 
+class IconAdmin(EventModelAdmin):
+	exclude = ('event',)
+
+
+class LanguageAdmin(EventModelAdmin):
+	exclude = ('event',)
+
+
+class RoomAdmin(EventModelAdmin):
+	exclude = ('event',)
+
+class ButtonAdmin(EventModelAdmin):
+	exclude = ('event',)
+
 admin.site.register(Sponsorship, SponsorshipAdmin)
 admin.site.register(Talk, TalkAdmin)
 admin.site.register(Speaker, SpeakerAdmin)
@@ -137,6 +151,7 @@ admin.site.register(Block, BlockAdmin)
 admin.site.register(ImageGallery, ImageGalleryAdmin)
 admin.site.register(VideoGallery, VideoGalleryAdmin)
 admin.site.register(Style, StyleAdmin)
-admin.site.register(Icon)
-admin.site.register(Language)
-admin.site.register(Room)
+admin.site.register(Icon, IconAdmin)
+admin.site.register(Language, LanguageAdmin)
+admin.site.register(Room, RoomAdmin)
+admin.site.register(Button, ButtonAdmin)
