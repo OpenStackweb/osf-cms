@@ -115,7 +115,7 @@ class VideoGallery(Module):
 
 
 class ImageInGallery(BaseEventModel):
-	image = FileBrowseField(max_length=200, directory='', format='Image', blank=True, null=True)
+	image = FileBrowseField(max_length=200, directory='images', format='Image', blank=True, null=True)
 	as_circle = models.BooleanField(default=False, blank=False, null=False)
 	caption = models.CharField(max_length=50, blank=True, null=True)
 	link = models.URLField(blank=True, null=True)
@@ -143,7 +143,7 @@ class Speaker(BaseEventModel):
 	bio = HTMLField(max_length=65535, blank=True)
 	workplace = models.CharField(max_length=50, blank=True)
 	email = models.EmailField(max_length=100, blank=True)
-	image = FileBrowseField(max_length=200, directory='', format='Image', blank=True, null=True)
+	image = FileBrowseField(max_length=200, directory='images/speakers', format='Image', blank=True, null=True)
 
 	def __str__(self):
 		return self.name
@@ -169,7 +169,7 @@ class Talk(BaseEventModel):
 	speakers = models.ManyToManyField(Speaker, related_name='talks')
 	room = models.ForeignKey(Room, on_delete=models.SET_NULL, null=True)
 	translation = models.BooleanField(default=False)
-	image = FileBrowseField(max_length=200, directory='', format='Image', blank=True, null=True)
+	image = FileBrowseField(max_length=200, directory='images/talks', format='Image', blank=True, null=True)
 	# slideshare
 	video = models.URLField(blank=True, null=True)
 	start = models.DateTimeField()
@@ -205,7 +205,7 @@ class ModuleInPage(BaseEventModel):
 
 class Icon(BaseEventModel):
 	name = models.CharField(max_length=25, blank=False)
-	image = FileBrowseField(max_length=200, directory="images", format='Icon', blank=True, null=True)
+	image = FileBrowseField(max_length=200, directory="images/icons", format='Icon', blank=True, null=True)
 
 	def __str__(self):
 		return self.name
