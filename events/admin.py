@@ -57,15 +57,27 @@ class EventModelAdmin(BaseEventAdmin):
 
 
 class EventTabularInline(admin.TabularInline):
-	def get_queryset(self, request):
-		qs = super(EventTabularInline, self).get_queryset(request)
-		return qs.filter(event__slug=request.META['HTTP_HOST'].split('.')[0])
+
+	def formfield_for_foreignkey(self, db_field, request=None, **kwargs):
+		field = super(EventTabularInline, self).formfield_for_foreignkey(db_field, request, **kwargs)
+
+		field.queryset = field.queryset.filter(event__slug=request.META['HTTP_HOST'].split('.')[0])
+		if not field.queryset:
+			field.queryset = field.queryset.all()
+
+		return field
 
 
 class EventStackedInline(admin.StackedInline):
-	def get_queryset(self, request):
-		qs = super(EventStackedInline, self).get_queryset(request)
-		return qs.filter(event__slug=request.META['HTTP_HOST'].split('.')[0])
+
+	def formfield_for_foreignkey(self, db_field, request=None, **kwargs):
+		field = super(EventStackedInline, self).formfield_for_foreignkey(db_field, request, **kwargs)
+
+		field.queryset = field.queryset.filter(event__slug=request.META['HTTP_HOST'].split('.')[0])
+		if not field.queryset:
+			field.queryset = field.queryset.all()
+
+		return field
 
 
 admin.site.register(Event, EventAdmin)
