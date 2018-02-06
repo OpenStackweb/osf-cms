@@ -10,6 +10,7 @@ class Event(models.Model):
 	slug = models.SlugField(unique=True)
 	start_date = models.DateField(blank=False)
 	public = models.BooleanField(default=True)
+	custom_css = models.TextField(blank=True, null=True)
 	base_event = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Clone from')
 
 	def __str__(self):

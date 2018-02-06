@@ -43,6 +43,12 @@
     {% block extrahead %}{% endblock %}
 </head>
 
+<style>
+    {{ page.event.custom_css }}
+</style>
+
+{% block extrastyle %}{% endblock %}
+
 <body id="page-top" class="index">
 
 {% block header %}

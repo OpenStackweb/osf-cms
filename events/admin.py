@@ -8,7 +8,7 @@ from filebrowser.sites import site as filebrowser_site
 
 
 class EventAdmin(admin.ModelAdmin):
-	fields = ('title', 'slug', 'start_date', 'public', 'base_event')
+	fields = ('title', 'slug', 'start_date', 'public', 'custom_css', 'base_event')
 	prepopulated_fields = {'slug': ('title',)}
 	list_display = ('title', 'slug', 'start_date', 'public' )
 
