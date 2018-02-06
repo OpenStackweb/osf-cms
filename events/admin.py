@@ -12,6 +12,10 @@ class EventAdmin(admin.ModelAdmin):
 	prepopulated_fields = {'slug': ('title',)}
 	list_display = ('title', 'slug', 'start_date', 'public' )
 
+	def get_readonly_fields(self, request, obj=None):
+		if obj:
+			return ['base_event',]
+		return []
 
 class BaseEventAdmin(admin.ModelAdmin):
 
