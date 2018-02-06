@@ -8,3 +8,5 @@ opendev/settings_local.py
 /static/
 
 *.sqlite3
+
+*.sqlite3-journal
