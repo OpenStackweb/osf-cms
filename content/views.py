@@ -10,13 +10,16 @@ from django.views.generic import DetailView, TemplateView
 from filebrowser.decorators import path_exists, get_path
 from filebrowser.sites import filebrowser_view, site as filebrowser_site
 
-from menus.models import BigHeaderMenu
+from menus.models import BigHeaderMenu, FooterMenu
 from content.models import Page, Module, Talk
 
 
 class HomeView(TemplateView):
 	template_name = 'base.html'
 	model = Page
+
+	def get_footer_menus(self, event_slug):
+		return FooterMenu.objects.filter(event__slug=event_slug).order_by('order')
 
 	def get_context_data(self, **kwargs):
 		context = super(HomeView, self).get_context_data(**kwargs)
@@ -28,10 +31,13 @@ class HomeView(TemplateView):
 		if not page.event.slug == event_slug:
 			raise Http404("Requested page doesn't exist")
 		header_menus = BigHeaderMenu.objects.filter(event__slug=event_slug).order_by('order')
+		footer_menus = self.get_footer_menus(event_slug)
+
 		modules = Module.objects.filter(modules_in_page__page=page, event__slug=event_slug).order_by('modules_in_page__order')
 		context.update({
 			'pages': header_menus,
 			'title': page.title,
+			'footer_menus': footer_menus,
 			'page' : page,
 			'modules' : modules
 		})
@@ -45,6 +51,9 @@ class PageView(DetailView):
 
 	def get_menus(self, event_slug):
 		return BigHeaderMenu.objects.filter(event__slug=event_slug).order_by('order')
+
+	def get_footer_menus(self, event_slug):
+		return FooterMenu.objects.filter(event__slug=event_slug).order_by('order')
 
 	def get_object(self, queryset=None):
 		if queryset is None:
@@ -63,9 +72,11 @@ class PageView(DetailView):
 		if not page.event.slug == event_slug:
 			raise Http404("Requested page doesn't exist")
 		header_menus = self.get_menus(event_slug)
+		footer_menus = self.get_footer_menus(event_slug)
 		modules = Module.objects.filter(modules_in_page__page=page, event__slug=event_slug).order_by('modules_in_page__order')
 		context.update({
 			'pages': header_menus,
+			'footer_menus' : footer_menus,
 			'title': page.title,
 			'page' : page,
 			'modules' : modules
@@ -85,8 +96,11 @@ class TalkView(PageView):
 		if not talk.event.slug == event_slug:
 			raise Http404("Requested page doesn't exist")
 		header_menus = self.get_menus(event_slug)
+		footer_menus = self.get_footer_menus(event_slug)
+
 		context.update({
 			'pages': header_menus,
+			'footer_menus': footer_menus,
 			'title': talk.title,
 			'talk' : talk,
 		})

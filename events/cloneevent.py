@@ -32,7 +32,7 @@ class CloneViewSet:
 
 	def clone_and_update_object(self, obj, model, fields):
 		old_pk = obj.pk
-		
+
 		obj = self.fix_filebrowser_fields(obj)
 
 		if obj.__class__.__name__.lower() in ['videogallery', 'imagegallery', 'block', 'sponsorship']:
