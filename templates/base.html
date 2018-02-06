@@ -103,7 +103,7 @@
                 {% else %}
                     {% if module.type == 'SPONSORSHIP' %}
                       <div class="{{ module.style.slug }} sponsorship {% set_justify module.block.content_justify %}">
-                    {% elif not module.content and not module.type == 'IMAGEGALLERY' %}
+                    {% elif not module.content and not module.type == 'IMAGEGALLERY' and not module.type == 'VIDEOGALLERY' %}
                       <div class="{{ module.style.slug }} title-only ">
 
                     {% else %}
@@ -247,11 +247,14 @@
 <!--   -------------======== Case VideoGallery ========---------------  -->
                             {% elif module.type == 'VIDEOGALLERY' %}
                                 <h2>{{ module.title }}</h2>
-                                {% get_videos_row module.videogallery.videos_per_row module.videogallery.videos.count as range %}
-                                {% for row in range %}
-                                    <div class="row">
-                                        caca
-                                    </div>
+                                {% get_videos_row module.videogallery.videos_per_row module.videogallery.videos.count as rows  %}
+                                {% for video in module.videogallery.videos.all %}
+                                        <div class="{% set_col_size module.videogallery.videos_per_row 'sm' %} single-video">
+                                            <div class="embed-responsive embed-responsive-16by9">
+                                                <iframe class="embed-responsive-item" width="560" height="315" src="{{ video.video_url }}" frameborder="0" allowfullscreen=""></iframe>
+                                            </div>
+                                        <p class="video-title">{{ video.caption }}</p>
+                                        </div>
                                 {% endfor %}
                             {% else %}
                                 <div class="row">Invalid module</div>

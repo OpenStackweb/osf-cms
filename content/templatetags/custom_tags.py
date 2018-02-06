@@ -112,4 +112,4 @@ def get_videos_row(per_row, videos):
 	rows = int(videos) // int(per_row)
 	if int(videos) % int(per_row):
 		rows += 1
-	return range(rows)
+	return rows
