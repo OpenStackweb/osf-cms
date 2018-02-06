@@ -2,10 +2,13 @@ import os
 
 from django.apps import apps
 from django.conf import settings
+from django.contrib import messages
+from django.core.cache import cache
 from django.http import HttpResponse, Http404
 from django.shortcuts import render
 from django.template import loader
-from django.views.generic import DetailView, TemplateView
+from django.urls import reverse
+from django.views.generic import DetailView, TemplateView, RedirectView
 
 from filebrowser.decorators import path_exists, get_path
 from filebrowser.sites import filebrowser_view, site as filebrowser_site
@@ -106,6 +109,16 @@ class TalkView(PageView):
 		})
 		return context
 
+
+class ClearCache(RedirectView): # TODO: move to admin.py?
+
+	permanent = False
+	query_string = True
+
+	def get_redirect_url(self, *args, **kwargs):
+		cache.clear()
+		messages.success(self.request, 'The site cache was cleared successfully.')
+		return self.request.META.get('HTTP_REFERER') or reverse('admin:index') #TOFIX: use slugs
 
 def filebrowser_browse(request):
 	slug = request.META['HTTP_HOST'].split('.')[0]

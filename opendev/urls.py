@@ -17,10 +17,11 @@ from django.conf import settings
 from django.conf.urls import url
 from django.conf.urls.static import static
 from django.contrib import admin
+from django.contrib.admin.views.decorators import staff_member_required
 from django.urls import path, include
 from django.views.generic import RedirectView
 
-from content.views import PageView, HomeView, TalkView, filebrowser_browse, filebrowser_base
+from content.views import PageView, HomeView, TalkView, filebrowser_browse, filebrowser_base, ClearCache
 from filebrowser.sites import site as filebrowser_site
 
 filebrowser_url = [
@@ -41,6 +42,8 @@ urlpatterns = filebrowser_url + [
     url(r'^$', HomeView.as_view(), name='home'),
     url(r'^(?P<slug>[-\w]+)?/$', PageView.as_view(), name='page'),
     url(r'^talk/(?P<slug>[-\w]+)?/$', TalkView.as_view(), name='talk'),
+
+    url(r'^admin/clear-cache/', staff_member_required(ClearCache.as_view()), name='clear-cache'),
 
     url(r'^faq/', RedirectView.as_view(url="/media/assets/opendev-faq_081617.pdf"), name='faq'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -19,17 +19,17 @@
             <select name="header-select">
             {% for event in events %}
                 <option  {% if event.slug == current_event.slug %}selected{% endif %}  value="http://{{ event.slug }}.opendevconf.com:8000/admin">{{ event.title }}</option>
-    {#            <a href="{% url 'admin:auth_user_change' user.pk %}?hotel#profile-group">#}
             {% endfor %}
             </select>
             <button class="btn btn-primary" type="submit">Go</button>
         </form>
 
     {% endif %}
-{#    {{ user.hotel }}{% if user.is_superuser  %}</a>{% endif %}#}
         /
     {{ block.super }}
 {% endblock %}
+
+{% block nav-global %}<div id="nav-global"><a href="{% url 'clear-cache' %}">Clear cache</a></div>{% endblock %}
 
 {% block footer %}
     {{ block.super }}

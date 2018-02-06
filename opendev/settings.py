@@ -49,7 +49,9 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
 	'django.middleware.security.SecurityMiddleware',
 	'django.contrib.sessions.middleware.SessionMiddleware',
+	'django.middleware.cache.UpdateCacheMiddleware',
 	'django.middleware.common.CommonMiddleware',
+	'django.middleware.cache.FetchFromCacheMiddleware',
 	'django.middleware.csrf.CsrfViewMiddleware',
 	'django.contrib.auth.middleware.AuthenticationMiddleware',
 	'django.contrib.messages.middleware.MessageMiddleware',
@@ -197,6 +199,15 @@ FILEBROWSER_SELECT_FORMATS = {
     'video': ['Video'],
 }
 
+CACHES = { # FXIME use STATIC_path
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': os.path.normpath(os.path.join(os.path.abspath(os.path.dirname(__file__)), '../static/CACHE')),
+    }
+}
+
+CACHE_MIDDLEWARE_ALIAS = 'default'
+CACHE_MIDDLEWARE_SECONDS = 1800
 
 
 # Import local settings
