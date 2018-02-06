@@ -123,7 +123,7 @@ class ImageInGallery(BaseEventModel):
 	as_circle = models.BooleanField(default=False, blank=False, null=False)
 	caption = models.CharField(max_length=50, blank=True, null=True)
 	link = models.URLField(blank=True, null=True)
-	gallery = models.ForeignKey(ImageGallery, on_delete=models.CASCADE, related_name='images')
+	imagegallery = models.ForeignKey(ImageGallery, on_delete=models.CASCADE, related_name='images')
 	order = models.PositiveIntegerField('Order', default=0)
 
 	class Meta:
@@ -134,7 +134,7 @@ class ImageInGallery(BaseEventModel):
 class VideoInGallery(BaseEventModel):
 	video_url = models.URLField(blank=False, null=False)
 	caption = models.CharField(max_length=50, blank=True, null=True)
-	gallery = models.ForeignKey(VideoGallery, on_delete=models.CASCADE, related_name='videos')
+	videogallery = models.ForeignKey(VideoGallery, on_delete=models.CASCADE, related_name='videos')
 	order = models.PositiveIntegerField('Order', default=0)
 
 	class Meta:

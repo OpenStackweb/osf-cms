@@ -2,6 +2,8 @@ import shutil
 from itertools import chain
 
 from django.apps import apps
+from filebrowser.fields import FileBrowseField
+
 import opendev.settings as settings
 
 class CloneViewSet:
@@ -18,8 +20,20 @@ class CloneViewSet:
 		except OSError:
 			pass
 
+	def fix_filebrowser_fields(self, obj):
+		for field in obj._meta.fields:
+			try:
+				if isinstance(field, FileBrowseField):
+					attr = obj.__dict__[field.name]
+					attr.path = attr.path.replace('/{}/'.format(self.og_event.slug), '/{}/'.format(self.new_event.slug))
+			except:
+				pass
+		return obj
+
 	def clone_and_update_object(self, obj, model, fields):
 		old_pk = obj.pk
+		
+		obj = self.fix_filebrowser_fields(obj)
 
 		if obj.__class__.__name__.lower() in ['videogallery', 'imagegallery', 'block', 'sponsorship']:
 			module_model = apps.get_model('content', 'module')
