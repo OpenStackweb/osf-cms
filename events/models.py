@@ -1,6 +1,7 @@
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from filebrowser.fields import FileBrowseField
 
 from events.cloneevent import CloneViewSet
 
@@ -8,6 +9,7 @@ from events.cloneevent import CloneViewSet
 class Event(models.Model):
 	title = models.CharField(max_length=50, blank=False)
 	slug = models.SlugField(unique=True)
+	logo = FileBrowseField(max_length=200, directory='logos', format='Image', blank=True, null=True)
 	start_date = models.DateField(blank=False)
 	public = models.BooleanField(default=True)
 	custom_css = models.TextField(blank=True, null=True)
