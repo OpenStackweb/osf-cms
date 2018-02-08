@@ -45,5 +45,4 @@ urlpatterns = filebrowser_url + [
 
     url(r'^admin/clear-cache/', staff_member_required(ClearCache.as_view()), name='clear-cache'),
 
-    url(r'^faq/', RedirectView.as_view(url="/media/assets/opendev-faq_081617.pdf"), name='faq'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
