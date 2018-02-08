@@ -73,7 +73,7 @@
                 <div class="collapse navbar-collapse" id="mobile-nav">
                     <ul class="nav navbar-nav navbar-right">
 
-                        {% for page in pages %}
+                        {% for page in header_menus %}
                             {% if page.target_type == 'page' %}
                                 <li class='{% add_active request page.page.slug %}'>
                                     <a href="{{ page.page.get_absolute_url }}">{{ page.display_name }}</a>
