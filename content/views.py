@@ -44,7 +44,9 @@ class BaseEventView(DetailView):
 		return FooterMenu.objects.filter(event__slug=event_slug).order_by('order')
 
 	def dispatch(self, request, *args, **kwargs):
-		self.event_slug = re.match(r'(www.)?(\w+)\.(' + re.escape(settings.SITE_HOST) + ')', self.request.META['HTTP_HOST']).group(2)
+		regex_slug = re.match(r'(www.)?(\w+)?\.?(' + re.escape(settings.SITE_HOST) + ')', self.request.META['HTTP_HOST'])
+		if regex_slug:
+			self.event_slug = regex_slug.group(2)
 		if not self.event_slug:
 			last_event_slug = Event.objects.all().last().slug
 			return redirect('http://{}.{}'.format(last_event_slug, settings.SITE_HOST))
