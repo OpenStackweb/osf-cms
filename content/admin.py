@@ -1,155 +1,189 @@
 from django.contrib import admin
 from adminsortable2.admin import SortableInlineAdminMixin, SortableAdminMixin
-from django.contrib.admin.options import StackedInline, TabularInline
-from django.urls import reverse
 from django.utils.html import format_html
 
+from content.context import ContextManager
 from .models import Sponsorship, Page, Talk, Speaker, Block, Module, ImageInGallery, ImageGallery, ModuleInPage, Style, \
-	ListItem, Icon, ButtonInModule, VideoInGallery, VideoGallery, Room, Language, Button
+    ListItem, Icon, ButtonInModule, VideoInGallery, VideoGallery, Room, Language, Button
 
 from events.admin import EventModelAdmin, EventTabularInline
 
+from django.utils.safestring import mark_safe
 
 class ModuleInline(SortableInlineAdminMixin, EventTabularInline):
-	verbose_name_plural = "Modules"
-	model = ModuleInPage
-	fields = ('order', 'module', 'actions')
-	sortable_field_name = "order"
-	extra = 3
+    verbose_name_plural = "Modules"
+    model = ModuleInPage
+    fields = ('order', 'module', 'actions')
+    sortable_field_name = "order"
+    extra = 3
 
-	def actions(self, instance):
-		url = instance.module.get_admin_url()
-		return format_html(u'<a class="changelink" href="{}">Change</a>', url)
+    def actions(self, instance):
+        url = instance.module.get_admin_url()
+        return format_html(u'<a class="changelink" href="{}">Change</a>', url)
 
-	readonly_fields = ('actions',)
+    readonly_fields = ('actions',)
 
 
 class ButtonInline(SortableInlineAdminMixin, EventTabularInline):
-	verbose_name_plural = "Buttons"
-	model = ButtonInModule
-	fields = ('order', 'button',)
-	sortable_field_name = "order"
-	extra = 1
+    verbose_name_plural = "Buttons"
+    model = ButtonInModule
+    fields = ('order', 'button',)
+    sortable_field_name = "order"
+    extra = 1
 
 
 class ImageInline(SortableInlineAdminMixin, EventTabularInline):
-	verbose_name_plural = "Images"
-	model = ImageInGallery
-	fields = ('image', 'order', 'caption', 'as_circle', 'link')
-	sortable_field_name = "order"
-	extra = 1
-	max_num = 8
+    verbose_name_plural = "Images"
+    model = ImageInGallery
+    fields = ('image', 'order', 'caption', 'as_circle', 'link')
+    sortable_field_name = "order"
+    extra = 1
+    max_num = 8
 
 
 class VideoInline(SortableInlineAdminMixin, EventTabularInline):
-	verbose_name_plural = "Videos"
-	model = VideoInGallery
-	fields = ('video_url', 'order', 'talk')
-	sortable_field_name = "order"
-	extra = 3
-	max_num = 12
+    verbose_name_plural = "Videos"
+    model = VideoInGallery
+    fields = ('video_url', 'order', 'talk')
+    sortable_field_name = "order"
+    extra = 3
+    max_num = 12
 
 
 class ListItemInline(SortableInlineAdminMixin, EventTabularInline):
-	model = ListItem
-	fields = ('icon', 'order', 'title', 'caption')
-	sortable_field_name = "order"
-	extra = 3
-	max_num = 8
+    model = ListItem
+    fields = ('icon', 'order', 'title', 'caption')
+    sortable_field_name = "order"
+    extra = 3
+    max_num = 8
 
 
 class PageAdmin(EventModelAdmin):
-	prepopulated_fields = {'slug': ('title',)}
-	list_display = ('title', 'slug', 'created', 'modified')
-	inlines = [ModuleInline, ]
+    prepopulated_fields = {'slug': ('title',)}
+    list_display = ('title', 'slug', 'created', 'modified')
+    inlines = [ModuleInline, ]
 
 
 class SponsorshipAdmin(EventModelAdmin):
-	fieldsets = (
-		(None, {
-			'fields': ('title', 'display_title', 'subtitle', 'price', 'content',)
-		}),
-		('Layout', {
-			'fields': ('style', 'content_width')
-		}),
-		('Media', {
-			'fields': ('image', 'image_position', 'image_on_background')
-		}),
-	)
+    fieldsets = (
+        (None, {
+            'fields': ('context', 'title', 'display_title', 'subtitle', 'price', 'content',)
+        }),
+        ('Layout', {
+            'fields': ('style', 'content_width')
+        }),
+        ('Media', {
+            'fields': ('image', 'image_position', 'image_on_background')
+        }),
+    )
+    inlines = [ListItemInline, ButtonInline]
+    
+    readonly_fields = ['context', ]
+    
+    def context(self, instance):
+        cm = ContextManager
+        pages_str_list = cm.generate_pages_string(instance)
+        return format_html(cm.generate_context(pages_str_list))
 
+    context.allow_tags = True
 
 class BlockAdmin(EventModelAdmin):
-	fieldsets = (
-		(None, {
-			'fields': ('kicker', 'title', 'display_title', 'content',)
-		}),
-		('Layout', {
-			'fields': ('layout', 'style', 'content_width', 'content_justify')
-		}),
-		('Media', {
-			'fields': ('image', 'image_position', 'image_on_background')
-		}),
-		('List', {
-			'fields': ('list_title', 'list_style' )
-		}),
-	)
-	inlines = [ListItemInline, ButtonInline]
 
+
+    fieldsets = (
+        (None, {
+            'fields': ('context', 'kicker', 'title', 'display_title', 'content',)
+        }),
+        ('Layout', {
+            'fields': ('layout', 'style', 'content_width', 'content_justify')
+        }),
+        ('Media', {
+            'fields': ('image', 'image_position', 'image_on_background')
+        }),
+        ('List', {
+            'fields': ('list_title', 'list_style' )
+        }),
+    )
+    inlines = [ListItemInline, ButtonInline]
+    
+    readonly_fields = ['context', ]
+
+    def context(self, instance):
+        cm = ContextManager
+        pages_str_list = cm.generate_pages_string(instance)
+        return format_html(cm.generate_context(pages_str_list))
+    context.allow_tags = True
 
 class TalkAdmin(SortableAdminMixin, EventModelAdmin):
-	fields = ('title', 'slug', 'content', 'language', 'translation', 'speakers', 'room', 'image', 'video', 'start', 'end' )
-	ordering = ('order',)
-	prepopulated_fields = {'slug': ('title',)}
-	list_display = ('title', )
+    fields = ('title', 'slug', 'content', 'language', 'translation', 'speakers', 'room', 'image', 'video', 'start', 'end' )
+    ordering = ('order',)
+    prepopulated_fields = {'slug': ('title',)}
+    list_display = ('title', )
 
 
 class SpeakerAdmin(EventModelAdmin):
-	fields = ('name', 'bio', 'email', 'workplace', 'image')
-	list_display = ('name', 'email', 'workplace')
+    fields = ('name', 'bio', 'email', 'workplace', 'image')
+    list_display = ('name', 'email', 'workplace')
 
 
 class ImageGalleryAdmin(EventModelAdmin):
-	fieldsets = (
-		(None, {
-			'fields': ('title', 'display_title', )
-		}),
-		('Layout', {
-			'fields': ('style',)
-		}),
-	)
-	inlines = (ImageInline, )
+    fieldsets = (
+        (None, {
+            'fields': ('context', 'title', 'display_title', )
+        }),
+        ('Layout', {
+            'fields': ('style',)
+        }),
+    )
+    inlines = (ImageInline, )
 
+    readonly_fields = ['context', ]
+
+    def context(self, instance):
+        cm = ContextManager
+        pages_str_list = cm.generate_pages_string(instance)
+        return format_html(cm.generate_context(pages_str_list))
+
+    context.allow_tags = True
 
 class VideoGalleryAdmin(EventModelAdmin):
-	fieldsets = (
-		(None, {
-			'fields': ('title', 'display_title', 'videos_per_row' )
-		}),
-		('Layout', {
-			'fields': ('style',)
-		}),
-	)
-	inlines = (VideoInline, )
+    fieldsets = (
+        (None, {
+            'fields': ('context', 'title', 'display_title', 'videos_per_row' )
+        }),
+        ('Layout', {
+            'fields': ('style',)
+        }),
+    )
+    inlines = (VideoInline, )
 
+    readonly_fields = ['context', ]
+
+    def context(self, instance):
+        cm = ContextManager
+        pages_str_list = cm.generate_pages_string(instance)
+        return format_html(cm.generate_context(pages_str_list))
+
+    context.allow_tags = True
 
 class StyleAdmin(EventModelAdmin):
-	fields = ('title', 'slug')
-	prepopulated_fields = {'slug': ('title',)}
+    fields = ('title', 'slug')
+    prepopulated_fields = {'slug': ('title',)}
 
 
 class IconAdmin(EventModelAdmin):
-	exclude = ('event',)
+    exclude = ('event',)
 
 
 class LanguageAdmin(EventModelAdmin):
-	exclude = ('event',)
+    exclude = ('event',)
 
 
 class RoomAdmin(EventModelAdmin):
-	exclude = ('event',)
+    exclude = ('event',)
 
 class ButtonAdmin(EventModelAdmin):
-	exclude = ('event',)
+    exclude = ('event',)
 
 admin.site.register(Sponsorship, SponsorshipAdmin)
 admin.site.register(Talk, TalkAdmin)
