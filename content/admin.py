@@ -179,8 +179,8 @@ class VideoGalleryAdmin(EventModelAdmin):
     context.allow_tags = True
 
 class StyleAdmin(EventModelAdmin):
-	fields = ('title', 'slug')
-	list_display = ('title', 'slug')
+    fields = ('title', 'slug')
+    list_display = ('title', 'slug')
     prepopulated_fields = {'slug': ('title',)}
 
 
