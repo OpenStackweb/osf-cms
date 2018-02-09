@@ -28,34 +28,38 @@ class Style(BaseEventModel):
     def __str__(self):
         return self.title
 
+	class Meta:
+		ordering = ('title',)
+
+
 
 class Module(BaseEventModel):
-    IMAGE_POSITION_CHOICES = (
-        ('LEFT', 'Left'),
-        ('RIGHT', 'Right'),
-    )
-    WIDTH_CHOICES = (
-        ('WIDE', 'Wide'),
-        ('SEMIWIDE', 'Semiwide'),
-        ('NARROW', 'Narrow'),
-    )
-    TYPE_CHOICES = (
-        ('BLOCK', 'Block'),
-        ('SPONSORSHIP', 'Sponsorship'),
-        ('IMAGEGALLERY', 'Image gallery'),
-        ('VIDEOGALLERY', 'Video gallery')
-    )
-    title = models.CharField(max_length=50)
-    display_title = models.BooleanField(default=True)
-    content = HTMLField(max_length=65535, blank=True)
-    content_width = models.CharField(max_length=8, choices=WIDTH_CHOICES, default='WIDE')
-    style = models.ForeignKey(Style, on_delete=models.SET_NULL, null=True)
-    image = FileBrowseField(max_length=200, directory='images', format='Image', blank=True, null=True)
-    image_position = models.CharField(max_length=6, choices=IMAGE_POSITION_CHOICES, default='LEFT')
-    image_on_background = models.BooleanField(default=False)
-    created = models.DateTimeField(auto_now_add=True)
-    modified = models.DateTimeField(auto_now=True)
-    type = models.CharField(max_length=12, choices=TYPE_CHOICES, null=True)
+	IMAGE_POSITION_CHOICES = (
+		('LEFT', '◧ Left'),
+		('RIGHT', '◨ Right'),
+	)
+	WIDTH_CHOICES = (
+		('WIDE', '█ Wide'),
+		('SEMIWIDE', '▌ Semi wide'),
+		('NARROW', '▎ Narrow'),
+	)
+	TYPE_CHOICES = (
+		('BLOCK', 'Block'),
+		('SPONSORSHIP', 'Sponsorship'),
+		('IMAGEGALLERY', 'Image gallery'),
+		('VIDEOGALLERY', 'Video gallery')
+	)
+	title = models.CharField(max_length=50)
+	display_title = models.BooleanField(default=True)
+	content = HTMLField(max_length=65535, blank=True)
+	content_width = models.CharField(max_length=8, choices=WIDTH_CHOICES, default='WIDE')
+	style = models.ForeignKey(Style, on_delete=models.SET_NULL, null=True)
+	image = FileBrowseField(max_length=200, directory='images', format='Image', blank=True, null=True)
+	image_position = models.CharField(max_length=6, choices=IMAGE_POSITION_CHOICES, default='LEFT')
+	image_on_background = models.BooleanField(default=False)
+	created = models.DateTimeField(auto_now_add=True)
+	modified = models.DateTimeField(auto_now=True)
+	type = models.CharField(max_length=12, choices=TYPE_CHOICES, null=True)
 
     def in_pages(self):  # For admin
         return ", ".join(Page.objects.filter(modules_in_page__module=self).values_list('title', flat=True))
@@ -81,27 +85,27 @@ class Module(BaseEventModel):
 
 
 class Block(Module):
-    LAYOUT_CHOICES = (
-        ('ONECOL', 'One column'),
-        ('TWOCOL', 'Two columns'),
-    )
-    STYLE_CHOICES = (
-        ('NONE', 'None'),
-        ('VERTICALSEP', 'Vertical separators'),
-        ('HORIZONTALSEP', 'Horizontal separator on top'),
-        ('VERTICALHORIZONTAL', 'Vertical + horizontal separator'),
-    )
-    JUSTIFY_CHOICES = (
-        ('LEFT', 'Left'),
-        ('CENTER', 'Center'),
-        ('RIGHT', 'Right')
-    )
+	LAYOUT_CHOICES = (
+		('ONECOL', '□ One column'),
+		('TWOCOL', '◫ Two columns'),
+	)
+	STYLE_CHOICES = (
+		('NONE', 'None'),
+		('VERTICALSEP', 'Vertical separators'),
+		('HORIZONTALSEP', 'Horizontal separator on top'),
+		('VERTICALHORIZONTAL', 'Vertical + horizontal separator'),
+	)
+	ALIGN_CHOICES = (
+		('LEFT', '⯇ Left'),
+		('CENTER', '￭ Center'),
+		('RIGHT', '⯈ Right')
+	)
 
-    list_title = models.CharField(max_length=50, blank=True)
-    list_style = models.CharField(max_length=20, choices=STYLE_CHOICES, default='None')
-    kicker = models.CharField(max_length=50, blank=True)
-    layout = models.CharField(max_length=6, choices=LAYOUT_CHOICES, default='ONECOL')
-    content_justify = models.CharField(max_length=6, choices=JUSTIFY_CHOICES, default='LEFT')
+	list_title = models.CharField(max_length=50, blank=True)
+	list_style = models.CharField(max_length=20, choices=STYLE_CHOICES, default='None')
+	kicker = models.CharField(max_length=50, blank=True)
+	layout = models.CharField(max_length=6, choices=LAYOUT_CHOICES, default='ONECOL')
+	content_justify = models.CharField('Content align', max_length=6, choices=ALIGN_CHOICES, default='LEFT')
 
     def __str__(self):
         return "{} {}".format(self.kicker, self.title)

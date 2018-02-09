@@ -77,11 +77,11 @@ class SponsorshipAdmin(EventModelAdmin):
         }),
     )
     inlines = [ListItemInline, ButtonInline]
-    
+
     list_display = ('title', 'display_title', 'in_pages', 'modified')
-    
+
     readonly_fields = ['context', ]
-    
+
     def context(self, instance):
         cm = ContextManager
         pages_str_list = cm.generate_pages_string(instance)
@@ -106,11 +106,11 @@ class BlockAdmin(EventModelAdmin):
             'fields': ('list_title', 'list_style' )
         }),
     )
-    
+
     list_display = ('title', 'display_title', 'in_pages', 'modified')
-    
+
     inlines = [ListItemInline, ButtonInline]
-    
+
     readonly_fields = ['context', ]
 
     def context(self, instance):
@@ -140,9 +140,9 @@ class ImageGalleryAdmin(EventModelAdmin):
             'fields': ('style',)
         }),
     )
-    
+
     list_display = ('title', 'display_title', 'in_pages', 'modified')
-    
+
     inlines = (ImageInline, )
 
     readonly_fields = ['context', ]
@@ -164,7 +164,7 @@ class VideoGalleryAdmin(EventModelAdmin):
             'fields': ('style',)
         }),
     )
-    
+
     list_display = ('title', 'display_title', 'in_pages', 'modified')
 
     inlines = (VideoInline, )
@@ -179,7 +179,8 @@ class VideoGalleryAdmin(EventModelAdmin):
     context.allow_tags = True
 
 class StyleAdmin(EventModelAdmin):
-    fields = ('title', 'slug')
+	fields = ('title', 'slug')
+	list_display = ('title', 'slug')
     prepopulated_fields = {'slug': ('title',)}
 
 

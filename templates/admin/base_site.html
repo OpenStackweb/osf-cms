@@ -16,7 +16,7 @@
         {% get_events as events %}
         {% get_current_event request as current_event %}
         <form id="slug-form">
-            <select name="header-select">
+            <select name="header-select" id="header-select">
             {% for event in events %}
                 <option  {% if event.slug == current_event.slug %}selected{% endif %}  value="http://{{ event.slug }}.opendevconf.com:8000/admin">{{ event.title }}</option>
             {% endfor %}

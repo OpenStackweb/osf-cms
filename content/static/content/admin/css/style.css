@@ -3,20 +3,72 @@
     margin-left: -1px;
 }
 
-#header{ background-color: #333940 !important; border-bottom: solid 3px #999; }
+.login .opendev-logo{
+    margin-top: 16px;
+}
 
-#branding h1{ color: #fff; }
-#content caption{ background-color: #666666; }
+#header{ 
+    background-color: #101010; 
+    color: #fff;
+}
+
+#branding h1{ 
+    color: #fff;
+}
+
+
+#user-tools a:focus, #user-tools a:hover {
+    color: #fff;
+    border-bottom-color: #fff;
+    text-shadow: 0 0 1px #fff;
+}
 
 #header-select{
-    background-color: #333940;
+    cursor: pointer;
+    background-color: rgba(255,255,255,.2);
     color: white;
     border-color: #696d73;
+    transition: background-color .2s ease;    
+    /* Custom down arrow */
+    padding-right: 1.8em;
+    -webkit-appearance: none;
+    -moz-appearance: none;    
+    background-image:
+      linear-gradient(45deg, transparent 50%, gray 50%),
+      linear-gradient(135deg, gray 50%, transparent 50%);
+    background-position:
+      calc(100% - 15px) calc(.9em + 2px),
+      calc(100% - 10px) calc(.9em + 2px);
+    background-size:
+      5px 5px,
+      5px 5px;
+    background-repeat: no-repeat;    
 }
 
 #header-select:hover{
-    background-color: whitesmoke;
+    background-color: #fff;
     color: black;
+    background-image:
+      linear-gradient(45deg, transparent 50%, black 50%),
+      linear-gradient(135deg, black 50%, transparent 50%);    
+}
+
+#header .btn-primary{
+    padding: 7px 12px 8px;
+    font-size: 12px;    
+    cursor: pointer;
+    border-radius: 5px;
+    color: #fff;
+    background-color: rgba(46, 109, 164, .4);
+    border: 1px solid #2e6da4;
+    transition: background-color .2s ease;
+    text-transform: uppercase;
+}
+
+#header .btn-primary:hover, #header .btn-primary:focus {
+    color: #fff;
+    background-color: #337ab7;
+    border-color: #2f8de0;
 }
 
 #slug-form{
@@ -40,30 +92,6 @@
 
 }
 
-.btn{
-    display: inline-block;
-    padding: 4px 12px;
-    margin-bottom: 0;
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 1.42857143;
-    text-align: center;
-    white-space: nowrap;
-    vertical-align: middle;
-    -ms-touch-action: manipulation;
-    touch-action: manipulation;
-    cursor: pointer;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    background-image: none;
-    border: 1px solid transparent;
-    border-radius: 4px;
-}
 
-.btn-primary{
-    color: #fff;
-    background-color: #337ab7;
-    border-color: #2e6da4;
-}
+
+
