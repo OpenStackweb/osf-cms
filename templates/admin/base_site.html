@@ -24,17 +24,13 @@
             <button class="btn btn-primary" type="submit">Go</button>
         </form>
 
+        / <a href="{% url 'clear-cache' %}">Clear cache</a>
+
     {% endif %}
         /
     {{ block.super }}
 {% endblock %}
 
-{% block nav-global %}
-    {% url 'admin:index' as index %}
-    {% if request.path == index %}
-        <div id="nav-global"><a href="{% url 'clear-cache' %}">Clear cache</a></div>
-    {% endif %}
-{% endblock %}
 
 {% block footer %}
     {{ block.super }}
