@@ -131,17 +131,6 @@ class ImageInGallery(BaseEventModel):
 		ordering = ('order',)
 
 
-class VideoInGallery(BaseEventModel):
-	video_url = models.URLField(blank=False, null=False)
-	caption = models.CharField(max_length=50, blank=True, null=True)
-	videogallery = models.ForeignKey(VideoGallery, on_delete=models.CASCADE, related_name='videos')
-	order = models.PositiveIntegerField('Order', default=0)
-
-	class Meta:
-		verbose_name_plural = 'Videos in gallery'
-		ordering = ('order',)
-
-
 class Speaker(BaseEventModel):
 	name = models.CharField(max_length=50, blank=False)
 	bio = HTMLField(max_length=65535, blank=True)
@@ -193,6 +182,16 @@ class Talk(BaseEventModel):
 	def __str__(self):
 		return self.title
 
+
+class VideoInGallery(BaseEventModel):
+	video_url = models.URLField(blank=False, null=False)
+	videogallery = models.ForeignKey(VideoGallery, on_delete=models.CASCADE, related_name='videos')
+	talk = models.ForeignKey(Talk, on_delete=models.CASCADE, related_name='videos', null=True, blank=True)
+	order = models.PositiveIntegerField('Order', default=0)
+
+	class Meta:
+		verbose_name_plural = 'Videos in gallery'
+		ordering = ('order',)
 
 class ModuleInPage(BaseEventModel):
 	module = models.ForeignKey(Module, on_delete=models.CASCADE, related_name='modules_in_page')

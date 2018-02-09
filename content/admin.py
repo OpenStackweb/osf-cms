@@ -36,7 +36,7 @@ class ImageInline(SortableInlineAdminMixin, EventTabularInline):
 class VideoInline(SortableInlineAdminMixin, EventTabularInline):
 	verbose_name_plural = "Videos"
 	model = VideoInGallery
-	fields = ('video_url', 'order', 'caption')
+	fields = ('video_url', 'order', 'talk')
 	sortable_field_name = "order"
 	extra = 3
 	max_num = 12

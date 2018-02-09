@@ -1,5 +1,10 @@
 {% extends 'base.html' %}
 {% load get_next_talk get_prev_talk from custom_tags %}
+{% block navigation %}
+    {% with talk as page %}
+        {{ block.super }}
+    {% endwith %}
+{% endblock %}
 {% block extrahead %}
     {% get_prev_talk talk as prev %}
     {% get_next_talk talk as next %}
@@ -70,4 +75,10 @@
         {% endif %}
     </div>
     <!-- END navigation -->
+{% endblock %}
+
+{% block footer %}
+    {% with talk as page %}
+        {{ block.super }}
+    {% endwith %}
 {% endblock %}

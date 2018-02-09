@@ -464,7 +464,7 @@ div.title-only{
 
 .multicolumn section{
   -webkit-column-break-inside: avoid;
-          break-inside: avoid-column;
+          break-inside: avoid;
           page-break-inside: avoid;
   }
 

@@ -19,12 +19,12 @@ from menus.models import BigHeaderMenu, FooterMenu
 from content.models import Page, Module, Talk
 
 
-class BaseEventView(DetailView):
+class BaseEventPageView(DetailView):
 	template_name = 'base.html'
 	model = Page
 
 	def __init__(self):
-		super(BaseEventView, self).__init__()
+		super(BaseEventPageView, self).__init__()
 		self.page = None
 
 	def get_object(self, queryset=None):
@@ -33,8 +33,7 @@ class BaseEventView(DetailView):
 
 		slug = self.kwargs.get(self.slug_url_kwarg)
 
-		event_slug = self.request.META['HTTP_HOST'].split('.')[0]
-		obj = queryset.filter(event__slug=event_slug, slug=slug).get()
+		obj = queryset.filter(event__slug=self.event_slug, slug=slug).get()
 		return obj
 
 	def get_menus(self, event_slug):
@@ -51,10 +50,10 @@ class BaseEventView(DetailView):
 			last_event_slug = Event.objects.all().last().slug
 			return redirect('http://{}.{}'.format(last_event_slug, settings.SITE_HOST))
 
-		return super(BaseEventView, self).dispatch(request, *args, **kwargs)
+		return super(BaseEventPageView, self).dispatch(request, *args, **kwargs)
 
 	def get_context_data(self, **kwargs):
-		context = super(BaseEventView, self).get_context_data(**kwargs)
+		context = super(BaseEventPageView, self).get_context_data(**kwargs)
 		if not self.page.event.slug == self.event_slug:
 			raise Http404("Requested page doesn't exist")
 		header_menus = BigHeaderMenu.objects.filter(event__slug=self.event_slug).order_by('order')
@@ -71,7 +70,7 @@ class BaseEventView(DetailView):
 		return context
 
 
-class HomeView(BaseEventView):
+class HomeView(BaseEventPageView):
 
 	def get_object(self, queryset=None):
 		try:
@@ -81,7 +80,7 @@ class HomeView(BaseEventView):
 		return self.page
 
 
-class PageView(BaseEventView):
+class PageView(BaseEventPageView):
 
 	context_object_name = "page"
 
@@ -91,25 +90,25 @@ class PageView(BaseEventView):
 		return super(PageView, self).get_context_data(**kwargs)
 
 
-class TalkView(PageView):
+class TalkView(BaseEventPageView):
 	template_name = "talk_detail.html"
 	model = Talk
 	context_object_name = "talk"
 
 	def get_context_data(self, **kwargs):
-		context = super(PageView, self).get_context_data(**kwargs)
-		event_slug = self.request.META['HTTP_HOST'].split('.')[0]
-		talk = kwargs['object']
-		if not talk.event.slug == event_slug:
+		context = super(BaseEventPageView, self).get_context_data(**kwargs)
+
+		self.talk = kwargs['object']
+		if not self.talk.event.slug == self.event_slug:
 			raise Http404("Requested page doesn't exist")
-		header_menus = self.get_menus(event_slug)
-		footer_menus = self.get_footer_menus(event_slug)
+		header_menus = BigHeaderMenu.objects.filter(event__slug=self.event_slug).order_by('order')
+		footer_menus = self.get_footer_menus(self.event_slug)
 
 		context.update({
-			'pages': header_menus,
+			'header_menus': header_menus,
+			'title': self.talk.title,
 			'footer_menus': footer_menus,
-			'title': talk.title,
-			'talk' : talk,
+			'talk': self.talk,
 		})
 		return context
 

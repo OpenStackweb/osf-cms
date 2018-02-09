@@ -40,8 +40,8 @@ urlpatterns = filebrowser_url + [
     url(r'^tinymce/', include('tinymce.urls')),
 
     url(r'^$', HomeView.as_view(), name='home'),
-    url(r'^(?P<slug>[-\w]+)?/$', PageView.as_view(), name='page'),
     url(r'^talk/(?P<slug>[-\w]+)?/$', TalkView.as_view(), name='talk'),
+    url(r'^(?P<slug>[-\w]+)?/$', PageView.as_view(), name='page'),
 
     url(r'^admin/clear-cache/', staff_member_required(ClearCache.as_view()), name='clear-cache'),
 

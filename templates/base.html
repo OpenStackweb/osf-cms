@@ -259,7 +259,7 @@
                                             <div class="embed-responsive embed-responsive-16by9">
                                                 <iframe class="embed-responsive-item" width="560" height="315" src="{{ video.video_url }}" frameborder="0" allowfullscreen=""></iframe>
                                             </div>
-                                        <p class="video-title">{{ video.caption }}</p>
+                                        <p class="video-title"><a href="{{ video.talk.get_absolute_url }}">{{ video.talk.title }}</a></p>
                                         </div>
                                 {% endfor %}
                             {% else %}
