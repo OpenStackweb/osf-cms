@@ -57,6 +57,9 @@ class Module(BaseEventModel):
     modified = models.DateTimeField(auto_now=True)
     type = models.CharField(max_length=12, choices=TYPE_CHOICES, null=True)
 
+    def in_pages(self):  # For admin
+        return ", ".join(Page.objects.filter(modules_in_page__module=self).values_list('title', flat=True))
+
     def get_admin_url(self):
         """the url to the Django admin interface for the model instance"""
         return reverse('admin:%s_%s_change' % (self._meta.app_label,

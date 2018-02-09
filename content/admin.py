@@ -78,6 +78,8 @@ class SponsorshipAdmin(EventModelAdmin):
     )
     inlines = [ListItemInline, ButtonInline]
     
+    list_display = ('title', 'display_title', 'in_pages', 'modified')
+    
     readonly_fields = ['context', ]
     
     def context(self, instance):
@@ -104,6 +106,9 @@ class BlockAdmin(EventModelAdmin):
             'fields': ('list_title', 'list_style' )
         }),
     )
+    
+    list_display = ('title', 'display_title', 'in_pages', 'modified')
+    
     inlines = [ListItemInline, ButtonInline]
     
     readonly_fields = ['context', ]
@@ -135,6 +140,9 @@ class ImageGalleryAdmin(EventModelAdmin):
             'fields': ('style',)
         }),
     )
+    
+    list_display = ('title', 'display_title', 'in_pages', 'modified')
+    
     inlines = (ImageInline, )
 
     readonly_fields = ['context', ]
@@ -146,6 +154,7 @@ class ImageGalleryAdmin(EventModelAdmin):
 
     context.allow_tags = True
 
+
 class VideoGalleryAdmin(EventModelAdmin):
     fieldsets = (
         (None, {
@@ -155,6 +164,9 @@ class VideoGalleryAdmin(EventModelAdmin):
             'fields': ('style',)
         }),
     )
+    
+    list_display = ('title', 'display_title', 'in_pages', 'modified')
+
     inlines = (VideoInline, )
 
     readonly_fields = ['context', ]
