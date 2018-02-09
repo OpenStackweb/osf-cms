@@ -1,8 +1,5 @@
 from django.contrib import admin
-from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
-
-from content.models import Module
 from events.models import Event
 from filebrowser.sites import site as filebrowser_site
 

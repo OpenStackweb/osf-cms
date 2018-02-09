@@ -1,6 +1,8 @@
 from django.contrib import admin
 from adminsortable2.admin import SortableInlineAdminMixin, SortableAdminMixin
 from django.contrib.admin.options import StackedInline, TabularInline
+from django.urls import reverse
+from django.utils.html import format_html
 
 from .models import Sponsorship, Page, Talk, Speaker, Block, Module, ImageInGallery, ImageGallery, ModuleInPage, Style, \
 	ListItem, Icon, ButtonInModule, VideoInGallery, VideoGallery, Room, Language, Button
@@ -11,15 +13,21 @@ from events.admin import EventModelAdmin, EventTabularInline
 class ModuleInline(SortableInlineAdminMixin, EventTabularInline):
 	verbose_name_plural = "Modules"
 	model = ModuleInPage
-	fields = ('order', 'module')
+	fields = ('order', 'module', 'actions')
 	sortable_field_name = "order"
 	extra = 3
+
+	def actions(self, instance):
+		url = instance.module.get_admin_url()
+		return format_html(u'<a class="changelink" href="{}">Change</a>', url)
+
+	readonly_fields = ('actions',)
 
 
 class ButtonInline(SortableInlineAdminMixin, EventTabularInline):
 	verbose_name_plural = "Buttons"
 	model = ButtonInModule
-	fields = ('order', 'button')
+	fields = ('order', 'button',)
 	sortable_field_name = "order"
 	extra = 1
 

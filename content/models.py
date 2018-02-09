@@ -1,3 +1,4 @@
+from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.urls import reverse
 from filebrowser.fields import FileBrowseField
@@ -56,6 +57,11 @@ class Module(BaseEventModel):
 	modified = models.DateTimeField(auto_now=True)
 	type = models.CharField(max_length=12, choices=TYPE_CHOICES, null=True)
 
+	def get_admin_url(self):
+		"""the url to the Django admin interface for the model instance"""
+		return reverse('admin:%s_%s_change' % (self._meta.app_label,
+											  self.type.lower()),
+					  							args=(self.id,))
 	def save(self, *args, **kwargs):
 		is_new = False
 		if self.pk is None:
