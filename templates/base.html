@@ -1,5 +1,5 @@
 {% load static from staticfiles %}
-{% load get_videos_row add_active set_justify set_col_size add_horizontal_separator add_vertical_separator from custom_tags %}
+{% load get_videos_row add_active set_justify set_col_size add_horizontal_separator add_vertical_separator parse_youtube_link from custom_tags %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -257,7 +257,7 @@
                                 {% for video in module.videogallery.videos.all %}
                                         <div class="{% set_col_size module.videogallery.videos_per_row 'sm' %} single-video">
                                             <div class="embed-responsive embed-responsive-16by9">
-                                                <iframe class="embed-responsive-item" width="560" height="315" src="{{ video.video_url }}" frameborder="0" allowfullscreen=""></iframe>
+                                                <iframe class="embed-responsive-item" width="560" height="315" src="{% parse_youtube_link video.video_url %}" frameborder="0" allowfullscreen=""></iframe>
                                             </div>
                                         <p class="video-title"><a href="{{ video.talk.get_absolute_url }}">{{ video.talk.title }}</a></p>
                                         </div>
