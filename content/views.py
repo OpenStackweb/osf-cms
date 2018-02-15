@@ -54,7 +54,10 @@ class BaseEventPageView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(BaseEventPageView, self).get_context_data(**kwargs)
-        if not self.page.event.slug == self.event_slug:
+        
+        #Checking slugs and if page is public. If it's not, user has to be staff to see it.
+        if (not self.page.event.slug == self.event_slug) \
+                or (not self.page.public and not self.request.user.is_staff):
             raise Http404("Requested page doesn't exist")
         header_menus = BigHeaderMenu.objects.filter(event__slug=self.event_slug).order_by('order')
         footer_menus = self.get_footer_menus(self.event_slug)

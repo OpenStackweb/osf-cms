@@ -8,7 +8,6 @@ from .models import Sponsorship, Page, Talk, Speaker, Block, Module, ImageInGall
 
 from events.admin import EventModelAdmin, EventTabularInline
 
-from django.utils.safestring import mark_safe
 
 class ModuleInline(SortableInlineAdminMixin, EventTabularInline):
     verbose_name_plural = "Modules"
@@ -67,7 +66,7 @@ class PageAdmin(EventModelAdmin):
 class SponsorshipAdmin(EventModelAdmin):
     fieldsets = (
         (None, {
-            'fields': ('context', 'title', 'display_title', 'subtitle', 'price', 'content',)
+            'fields': ('context', 'title', 'display_title', 'public', 'subtitle', 'price', 'content',)
         }),
         ('Layout', {
             'fields': ('style', 'content_width')
@@ -94,7 +93,7 @@ class BlockAdmin(EventModelAdmin):
 
     fieldsets = (
         (None, {
-            'fields': ('context', 'kicker', 'title', 'display_title', 'content',)
+            'fields': ('context', 'kicker', 'title', 'display_title', 'public', 'content',)
         }),
         ('Layout', {
             'fields': ('layout', 'style', 'content_width', 'content_justify')
@@ -134,7 +133,7 @@ class SpeakerAdmin(EventModelAdmin):
 class ImageGalleryAdmin(EventModelAdmin):
     fieldsets = (
         (None, {
-            'fields': ('context', 'title', 'display_title', )
+            'fields': ('context', 'title', 'display_title', 'public')
         }),
         ('Layout', {
             'fields': ('style',)
@@ -158,7 +157,7 @@ class ImageGalleryAdmin(EventModelAdmin):
 class VideoGalleryAdmin(EventModelAdmin):
     fieldsets = (
         (None, {
-            'fields': ('context', 'title', 'display_title', 'videos_per_row' )
+            'fields': ('context', 'title', 'display_title', 'public', 'videos_per_row' )
         }),
         ('Layout', {
             'fields': ('style',)

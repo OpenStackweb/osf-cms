@@ -8,6 +8,7 @@ from events.models import BaseEventModel
 class Page(BaseEventModel):
     title = models.CharField(max_length=50, blank=False)
     slug = models.SlugField(unique=False, blank=True)
+    public = models.BooleanField(default=True, help_text="If unchecked, only logged-in users can see this page")
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
 
@@ -51,6 +52,7 @@ class Module(BaseEventModel):
     )
     title = models.CharField(max_length=50)
     display_title = models.BooleanField(default=True)
+    public = models.BooleanField(default=True, help_text="If unchecked, only logged-in users can see this module")
     content = HTMLField(max_length=65535, blank=True)
     content_width = models.CharField(max_length=8, choices=WIDTH_CHOICES, default='WIDE')
     style = models.ForeignKey(Style, on_delete=models.SET_NULL, null=True)

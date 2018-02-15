@@ -74,14 +74,16 @@
                     <ul class="nav navbar-nav navbar-right">
 
                         {% for page in header_menus %}
-                            {% if page.target_type == 'page' %}
-                                <li class='{% add_active request page.page.slug %}'>
-                                    <a href="{{ page.page.get_absolute_url }}">{{ page.display_name }}</a>
-                                {% else %}
-                                <li>
-                                    <a href="{{ page.url }}">{{ page.display_name }}</a>
-                                {% endif %}
-                            </li>
+                            {% if page.page.public or request.user.is_staff %}
+                                {% if page.target_type == 'page' %}
+                                    <li class='{% add_active request page.page.slug %}'>
+                                        <a href="{{ page.page.get_absolute_url }}">{{ page.display_name }}</a>
+                                    {% else %}
+                                    <li>
+                                        <a href="{{ page.url }}">{{ page.display_name }}</a>
+                                    {% endif %}
+                                </li>
+                            {% endif %}
                         {% endfor %}
 
 
@@ -104,6 +106,7 @@
     {% block content %}
         <!-- Begin Page Content -->
         {% for module in modules %}
+            {% if module.public or request.user.is_staff %}
                 {% if module.image_on_background %}
                     <div class="{{ module.style.slug }} {% set_justify module.block.content_justify %}" style='background-image: url("{{ module.image.url }}"); background-size: 450px'>
                 {% else %}
@@ -268,7 +271,7 @@
                     </div>
                 </div>
             </div>
-{#            {% endif %}#}
+            {% endif %}
         {% endfor %}
         <!-- End Page Content -->
     {% endblock %}
