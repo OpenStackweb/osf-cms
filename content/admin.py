@@ -127,8 +127,8 @@ class TalkAdmin(SortableAdminMixin, EventModelAdmin):
 
 
 class SpeakerAdmin(EventModelAdmin):
-    fields = ('name', 'bio', 'email', 'workplace', 'image')
-    list_display = ('name', 'email', 'workplace')
+    fields = ('name', 'bio', 'workplace')
+    list_display = ('name', 'workplace')
 
 
 class ImageGalleryAdmin(EventModelAdmin):

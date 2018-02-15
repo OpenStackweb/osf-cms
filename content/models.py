@@ -148,8 +148,6 @@ class Speaker(BaseEventModel):
     name = models.CharField(max_length=50, blank=False)
     bio = HTMLField(max_length=65535, blank=True)
     workplace = models.CharField(max_length=50, blank=True)
-    email = models.EmailField(max_length=100, blank=True)
-    image = FileBrowseField(max_length=200, directory='images/speakers', format='Image', blank=True, null=True)
 
     def __str__(self):
         return self.name
