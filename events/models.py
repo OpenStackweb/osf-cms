@@ -26,6 +26,6 @@ class BaseEventModel(models.Model):
 
 @receiver(post_save, sender=Event)
 def clone_hotel(sender, **kwargs):
-	if kwargs['created']:
+	if kwargs['created'] and kwargs['instance'].base_event:
 		cvs = CloneViewSet(kwargs['instance'].base_event, kwargs['instance'])
 		cvs.main()
