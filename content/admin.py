@@ -4,7 +4,7 @@ from django.utils.html import format_html
 
 from content.context import ContextManager
 from .models import Sponsorship, Page, Talk, Speaker, Block, Module, ImageInGallery, ImageGallery, ModuleInPage, Style, \
-    ListItem, Icon, ButtonInModule, VideoInGallery, VideoGallery, Room, Language, Button
+    ListItem, Icon, ButtonInModule, VideoGallery, Room, Language, Button, TalkInGallery
 
 from events.admin import EventModelAdmin, EventTabularInline
 
@@ -41,10 +41,10 @@ class ImageInline(SortableInlineAdminMixin, EventTabularInline):
     max_num = 8
 
 
-class VideoInline(SortableInlineAdminMixin, EventTabularInline):
-    verbose_name_plural = "Videos"
-    model = VideoInGallery
-    fields = ('video_url', 'order', 'talk')
+class TalkInline(SortableInlineAdminMixin, EventTabularInline):
+    verbose_name_plural = "Talks"
+    model = TalkInGallery
+    fields = ('order', 'talk')
     sortable_field_name = "order"
     extra = 3
     max_num = 12
@@ -167,7 +167,7 @@ class VideoGalleryAdmin(EventModelAdmin):
 
     list_display = ('title', 'display_title', 'in_pages', 'modified')
 
-    inlines = (VideoInline, )
+    inlines = (TalkInline, )
 
     readonly_fields = ['context', ]
 

@@ -194,14 +194,13 @@ class Talk(BaseEventModel):
         return self.title
 
 
-class VideoInGallery(BaseEventModel):
-    video_url = models.URLField(blank=False, null=False)
-    videogallery = models.ForeignKey(VideoGallery, on_delete=models.CASCADE, related_name='videos')
-    talk = models.ForeignKey(Talk, on_delete=models.CASCADE, related_name='videos', null=True, blank=True)
+class TalkInGallery(BaseEventModel):
+    videogallery = models.ForeignKey(VideoGallery, on_delete=models.CASCADE, related_name='talks')
+    talk = models.ForeignKey(Talk, on_delete=models.CASCADE, related_name='talks', null=True, blank=True)
     order = models.PositiveIntegerField('Order', default=0)
 
     class Meta:
-        verbose_name_plural = 'Videos in gallery'
+        verbose_name_plural = 'Talks in gallery'
         ordering = ('order',)
 
 class ModuleInPage(BaseEventModel):

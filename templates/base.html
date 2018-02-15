@@ -253,13 +253,13 @@
 <!--   -------------======== Case VideoGallery ========---------------  -->
                             {% elif module.type == 'VIDEOGALLERY' %}
                                 <h2>{{ module.title }}</h2>
-                                {% get_videos_row module.videogallery.videos_per_row module.videogallery.videos.count as rows  %}
-                                {% for video in module.videogallery.videos.all %}
+                                {% get_videos_row module.videogallery.videos_per_row module.videogallery.talks.count as rows  %}
+                                {% for talk_in_gallery in module.videogallery.talks.all %}
                                         <div class="{% set_col_size module.videogallery.videos_per_row 'sm' %} single-video">
                                             <div class="embed-responsive embed-responsive-16by9">
-                                                <iframe class="embed-responsive-item" width="560" height="315" src="{% parse_youtube_link video.video_url %}" frameborder="0" allowfullscreen=""></iframe>
+                                                <iframe class="embed-responsive-item" width="560" height="315" src="{% parse_youtube_link talk_in_gallery.talk.video %}" frameborder="0" allowfullscreen=""></iframe>
                                             </div>
-                                        <p class="video-title"><a href="{{ video.talk.get_absolute_url }}">{{ video.talk.title }}</a></p>
+                                        <p class="video-title"><a href="{{ talk_in_gallery.talk.get_absolute_url }}">{{ talk_in_gallery.talk.title }}</a></p>
                                         </div>
                                 {% endfor %}
                             {% else %}
