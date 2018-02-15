@@ -5,21 +5,12 @@
         {{ block.super }}
     {% endwith %}
 {% endblock %}
-{% block extrahead %}
-    {% get_prev_talk talk as prev %}
-    {% get_next_talk talk as next %}
 
-    {% if prev %}
-        <link rel="prev" href="{{ prev }}">
-    {% endif %}
-    {% if next %}
-        <link rel="next" href="{{ next }}">
-    {% endif %}
-{% endblock %}
 {% block content %}
     <!-- Talk block info -->
     <div class="black-light-grey">
         <div class="container">
+            <span class="back-schedule"><a href="{{ back_url }}"> < Schedule</a></span>
             <div class="row">
                 <div class="col-sm-5 center" style="margin-top:23px;">
                     {% if talk.image %}
@@ -29,7 +20,7 @@
                     {% endif %}
                     <div class="talk-img-caption">
                         <p><b>{{ talk.start | date:"l j - H:i"}}</b>{{ talk.room }}</p>
-                        <p><b>{{ talk.language }} LANGUAGE</b>{% if talk.translation %}NO SIMULTANEOUS TRANSLATION{% else %}WITH SIMULTANEOUS TRANSLATION{% endif %}</p>
+                        <p><b>{{ talk.language }} LANGUAGE</b>{% if not talk.translation %}NO SIMULTANEOUS TRANSLATION{% else %}WITH SIMULTANEOUS TRANSLATION{% endif %}</p>
                     </div>
                 </div>
                 <div class="col-sm-7 block">

@@ -143,6 +143,10 @@ h2 {
   float: left;
 }
 
+.back-schedule{
+  font-size: 17px;
+}
+
 .divisor-line{
   border-top: 1px solid #ccc;
 }
