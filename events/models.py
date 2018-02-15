@@ -12,7 +12,7 @@ class Event(models.Model):
 	logo = FileBrowseField(max_length=200, directory='logos', format='Image', blank=True, null=True)
 	start_date = models.DateField(blank=False)
 	public = models.BooleanField(default=True)
-	custom_css = models.TextField(blank=True, null=True)
+	custom_css = models.TextField(blank=True, null=True, verbose_name='Custom CSS')
 	base_event = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Clone from')
 
 	def __str__(self):
