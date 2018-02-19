@@ -1,12 +1,15 @@
-from django.contrib import admin
+from django.contrib.admin import site
 from adminsortable2.admin import SortableInlineAdminMixin, SortableAdminMixin
 from django.utils.html import format_html
 
 from content.context import ContextManager
-from .models import Sponsorship, Page, Talk, Speaker, Block, Module, ImageInGallery, ImageGallery, ModuleInPage, Style, \
-    ListItem, Icon, ButtonInModule, VideoGallery, Room, Language, Button, TalkInGallery
+from .models import Sponsorship, Page, Block, Module, ImageInGallery, ImageGallery, ModuleInPage, Style, \
+    ListItem, Icon, ButtonInModule, VideoGallery, Button, CustomHTML
 
-from events.admin import EventModelAdmin, EventTabularInline
+# TOFIX: Single site fixing
+# from events.admin import EventModelAdmin, EventTabularInline
+from django.contrib.admin import TabularInline as EventTabularInline
+from django.contrib.admin import ModelAdmin as EventModelAdmin
 
 
 class ModuleInline(SortableInlineAdminMixin, EventTabularInline):
@@ -40,13 +43,13 @@ class ImageInline(SortableInlineAdminMixin, EventTabularInline):
     max_num = 8
 
 
-class TalkInline(SortableInlineAdminMixin, EventTabularInline):
-    verbose_name_plural = "Talks"
-    model = TalkInGallery
-    fields = ('order', 'talk')
-    sortable_field_name = "order"
-    extra = 3
-    max_num = 12
+# class TalkInline(SortableInlineAdminMixin, EventTabularInline):
+#     verbose_name_plural = "Talks"
+#     model = TalkInGallery
+#     fields = ('order', 'talk')
+#     sortable_field_name = "order"
+#     extra = 3
+#     max_num = 12
 
 
 class ListItemInline(SortableInlineAdminMixin, EventTabularInline):
@@ -88,8 +91,8 @@ class SponsorshipAdmin(EventModelAdmin):
 
     context.allow_tags = True
 
-class BlockAdmin(EventModelAdmin):
 
+class BlockAdmin(EventModelAdmin):
 
     fieldsets = (
         (None, {
@@ -118,16 +121,12 @@ class BlockAdmin(EventModelAdmin):
         return format_html(cm.generate_context(pages_str_list))
     context.allow_tags = True
 
+
 class TalkAdmin(SortableAdminMixin, EventModelAdmin):
     fields = ('title', 'slug', 'content', 'language', 'translation', 'speakers', 'room', 'image', 'video', 'start', 'end' )
     ordering = ('order',)
     prepopulated_fields = {'slug': ('title',)}
     list_display = ('title', )
-
-
-class SpeakerAdmin(EventModelAdmin):
-    fields = ('name', 'bio', 'workplace')
-    list_display = ('name', 'workplace')
 
 
 class ImageGalleryAdmin(EventModelAdmin):
@@ -154,10 +153,10 @@ class ImageGalleryAdmin(EventModelAdmin):
     context.allow_tags = True
 
 
-class VideoGalleryAdmin(EventModelAdmin):
+class CustomHTMLAdmin(EventModelAdmin):
     fieldsets = (
         (None, {
-            'fields': ('context', 'title', 'display_title', 'public', 'videos_per_row' )
+            'fields': ('context', 'kicker', 'title', 'display_title', 'public', 'html_block')
         }),
         ('Layout', {
             'fields': ('style',)
@@ -165,8 +164,6 @@ class VideoGalleryAdmin(EventModelAdmin):
     )
 
     list_display = ('title', 'display_title', 'in_pages', 'modified')
-
-    inlines = (TalkInline, )
 
     readonly_fields = ['context', ]
 
@@ -176,6 +173,29 @@ class VideoGalleryAdmin(EventModelAdmin):
         return format_html(cm.generate_context(pages_str_list))
 
     context.allow_tags = True
+
+# class VideoGalleryAdmin(EventModelAdmin):
+#     fieldsets = (
+#         (None, {
+#             'fields': ('context', 'title', 'display_title', 'public', 'videos_per_row' )
+#         }),
+#         ('Layout', {
+#             'fields': ('style',)
+#         }),
+#     )
+#
+#     list_display = ('title', 'display_title', 'in_pages', 'modified')
+#
+#     inlines = (TalkInline, )
+#
+#     readonly_fields = ['context', ]
+#
+#     def context(self, instance):
+#         cm = ContextManager
+#         pages_str_list = cm.generate_pages_string(instance)
+#         return format_html(cm.generate_context(pages_str_list))
+#
+#     context.allow_tags = True
 
 class StyleAdmin(EventModelAdmin):
     fields = ('title', 'slug')
@@ -197,15 +217,11 @@ class RoomAdmin(EventModelAdmin):
 class ButtonAdmin(EventModelAdmin):
     exclude = ('event',)
 
-admin.site.register(Sponsorship, SponsorshipAdmin)
-admin.site.register(Talk, TalkAdmin)
-admin.site.register(Speaker, SpeakerAdmin)
-admin.site.register(Page, PageAdmin)
-admin.site.register(Block, BlockAdmin)
-admin.site.register(ImageGallery, ImageGalleryAdmin)
-admin.site.register(VideoGallery, VideoGalleryAdmin)
-admin.site.register(Style, StyleAdmin)
-admin.site.register(Icon, IconAdmin)
-admin.site.register(Language, LanguageAdmin)
-admin.site.register(Room, RoomAdmin)
-admin.site.register(Button, ButtonAdmin)
+site.register(Sponsorship, SponsorshipAdmin)
+site.register(Page, PageAdmin)
+site.register(Block, BlockAdmin)
+site.register(ImageGallery, ImageGalleryAdmin)
+site.register(CustomHTML, CustomHTMLAdmin)
+site.register(Style, StyleAdmin)
+site.register(Icon, IconAdmin)
+site.register(Button, ButtonAdmin)
