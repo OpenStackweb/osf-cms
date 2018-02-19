@@ -83,4 +83,4 @@ class EventStackedInline(admin.StackedInline):
         return field
 
 
-admin.site.register(Event, EventAdmin)
+# admin.site.register(Event, EventAdmin)

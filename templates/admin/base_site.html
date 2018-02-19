@@ -8,28 +8,28 @@
 {% endblock %}
 
 {% block branding %}
-<a href="{% url 'admin:index' %}"><img class="opendev-logo" src="{% static "content/admin/images/opendev-logo.svg" %}" alt="Opendev"></a>
+<a href="{% url 'admin:index' %}"><img class="opendev-logo" src="{% static "content/admin/images/opendev-logo.svg" %}" alt="Kata Container"></a>
 {% endblock %}
 
-{% block userlinks %}
-    {% if user.is_superuser  %}
-        {% get_events as events %}
-        {% get_current_event request as current_event %}
-        <form id="slug-form">
-            <select name="header-select" id="header-select">
-            {% for event in events %}
-                <option  {% if event.slug == current_event.slug %}selected{% endif %}  value="http://{{ event.slug }}.opendevconf.com:8000/admin">{{ event.title }}</option>
-            {% endfor %}
-            </select>
-            <button class="btn btn-primary" type="submit">Go</button>
-        </form>
-
-        / <a href="{% url 'clear-cache' %}">Clear cache</a>
-
-    {% endif %}
-        /
-    {{ block.super }}
-{% endblock %}
+{#{% block userlinks %}#}
+{#    {% if user.is_superuser  %}#}
+{#        {% get_events as events %}#}
+{#        {% get_current_event request as current_event %}#}
+{#        <form id="slug-form">#}
+{#            <select name="header-select" id="header-select">#}
+{#            {% for event in events %}#}
+{#                <option  {% if event.slug == current_event.slug %}selected{% endif %}  value="http://{{ event.slug }}.opendevconf.com:8000/admin">{{ event.title }}</option>#}
+{#            {% endfor %}#}
+{#            </select>#}
+{#            <button class="btn btn-primary" type="submit">Go</button>#}
+{#        </form>#}
+{##}
+{#        / <a href="{% url 'clear-cache' %}">Clear cache</a>#}
+{##}
+{#    {% endif %}#}
+{#        /#}
+{#    {{ block.super }}#}
+{#{% endblock %}#}
 
 
 {% block footer %}

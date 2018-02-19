@@ -16,7 +16,7 @@ from filebrowser.sites import filebrowser_view, site as filebrowser_site
 
 from events.models import Event
 from menus.models import BigHeaderMenu, FooterMenu
-from content.models import Page, Module, Talk
+from content.models import Page, Module
 
 
 class BaseEventPageView(DetailView):
@@ -93,28 +93,28 @@ class PageView(BaseEventPageView):
         return super(PageView, self).get_context_data(**kwargs)
 
 
-class TalkView(BaseEventPageView):
-    template_name = "talk_detail.html"
-    model = Talk
-    context_object_name = "talk"
-
-    def get_context_data(self, **kwargs):
-        context = super(BaseEventPageView, self).get_context_data(**kwargs)
-
-        self.talk = kwargs['object']
-        if not self.talk.event.slug == self.event_slug:
-            raise Http404("Requested page doesn't exist")
-        header_menus = BigHeaderMenu.objects.filter(event__slug=self.event_slug).order_by('order')
-        footer_menus = self.get_footer_menus(self.event_slug)
-        back_url = Page.objects.get(title='Schedule').get_absolute_url()
-        context.update({
-            'header_menus': header_menus,
-            'title': self.talk.title,
-            'footer_menus': footer_menus,
-            'talk': self.talk,
-            'back_url' : back_url
-        })
-        return context
+# class TalkView(BaseEventPageView):
+#     template_name = "talk_detail.html"
+#     model = Talk
+#     context_object_name = "talk"
+#
+#     def get_context_data(self, **kwargs):
+#         context = super(BaseEventPageView, self).get_context_data(**kwargs)
+#
+#         self.talk = kwargs['object']
+#         if not self.talk.event.slug == self.event_slug:
+#             raise Http404("Requested page doesn't exist")
+#         header_menus = BigHeaderMenu.objects.filter(event__slug=self.event_slug).order_by('order')
+#         footer_menus = self.get_footer_menus(self.event_slug)
+#         back_url = Page.objects.get(title='Schedule').get_absolute_url()
+#         context.update({
+#             'header_menus': header_menus,
+#             'title': self.talk.title,
+#             'footer_menus': footer_menus,
+#             'talk': self.talk,
+#             'back_url' : back_url
+#         })
+#         return context
 
 
 class ClearCache(RedirectView): # TODO: move to admin.py?

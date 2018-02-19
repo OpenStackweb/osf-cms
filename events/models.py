@@ -29,10 +29,10 @@ def clone_hotel(sender, **kwargs):
     if kwargs['created'] and kwargs['instance'].base_event:
         cvs = CloneViewSet(kwargs['instance'].base_event, kwargs['instance'])
         cvs.main()
-        # if not kwargs['instance'].logo:
-        #     base_event_slug = kwargs['instance'].base_event.slug
-        #     slug = kwargs['instance'].slug
-        #     base_logo = kwargs['instance'].base_event.logo
-        #     base_logo.path = base_logo.path.replace(base_event_slug, slug)
-        #     kwargs['instance'].logo = base_logo
-        #     kwargs['instance'].save()
+        if not kwargs['instance'].logo:
+            base_event_slug = kwargs['instance'].base_event.slug
+            slug = kwargs['instance'].slug
+            base_logo = kwargs['instance'].base_event.logo
+            base_logo.path = base_logo.path.replace(base_event_slug, slug)
+            kwargs['instance'].logo = base_logo
+            kwargs['instance'].save()
