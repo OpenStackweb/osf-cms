@@ -2,10 +2,10 @@ from adminsortable2.admin import SortableAdminMixin
 from django.contrib import admin
 
 from events.admin import EventModelAdmin
-from .models import BigHeaderMenu, FooterMenu
+from .models import BigHeaderMenu, FooterMenu, SocialMediaMenu
 
-
-class MenuSortableAdmin(SortableAdminMixin, EventModelAdmin):
+# TOFIX implement EventModelAdmin as SiteModelAdmin instead of admin.ModelAdmin
+class MenuSortableAdmin(SortableAdminMixin, admin.ModelAdmin):
     list_display = ('display_name', 'get_target')
     ordering=('order', )
 
@@ -19,6 +19,13 @@ class MenuSortableAdmin(SortableAdminMixin, EventModelAdmin):
 
     get_target.short_description = 'target'
 
+class SocialMediaMenuSortableAdmin(SortableAdminMixin, admin.ModelAdmin):
+    fields = ('display_name', 'url', 'icon')
+    list_display = ('display_name', 'url')
+    ordering=('order', )
+
+    
 
 admin.site.register(BigHeaderMenu, MenuSortableAdmin)
 admin.site.register(FooterMenu, MenuSortableAdmin)
+admin.site.register(SocialMediaMenu, SocialMediaMenuSortableAdmin)
