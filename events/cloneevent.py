@@ -67,11 +67,11 @@ class CloneViewSet:
 
         operations = {
 
-            1: ['speaker', 'room', 'language', 'button', 'icon', 'page', 'style'],
-            2: ['talk', 'bigheadermenu', 'footermenu'],
-            3: ['videogallery', 'imagegallery', 'block', 'sponsorship'],
+            1: ['button', 'icon', 'page', 'style'],
+            2: ['post', 'bigheadermenu', 'footermenu', 'socialmediamenu'],
+            3: ['postgallery', 'videogallery', 'imagegallery', 'block', 'sponsorship'],
             4: ['buttoninmodule', 'listitem', 'moduleinpage', ],
-            5: ['talkingallery', 'imageingallery',]
+            5: ['talkingallery', 'imageingallery', 'postingallery']
 
         }
         fields = []
