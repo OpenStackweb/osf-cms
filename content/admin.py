@@ -4,7 +4,7 @@ from django.utils.html import format_html
 
 from content.context import ContextManager
 from .models import Sponsorship, Page, Block, Module, ImageInGallery, ImageGallery, ModuleInPage, Style, \
-    ListItem, Icon, ButtonInModule, VideoGallery, Button, CustomHTML
+    ListItem, Icon, ButtonInModule, VideoGallery, Button, CustomHTML, PostInGallery, PostGallery, Post
 
 # TOFIX: Single site fixing
 # from events.admin import EventModelAdmin, EventTabularInline
@@ -39,6 +39,14 @@ class ImageInline(SortableInlineAdminMixin, EventTabularInline):
     model = ImageInGallery
     fields = ('image', 'order', 'caption', 'as_circle', 'link')
     sortable_field_name = "order"
+    extra = 1
+    max_num = 8
+    
+
+class PostInline(EventTabularInline):
+    verbose_name_plural = "Posts"
+    model = PostInGallery
+    fields = ('post',)
     extra = 1
     max_num = 8
 
@@ -151,6 +159,30 @@ class ImageGalleryAdmin(EventModelAdmin):
         return format_html(cm.generate_context(pages_str_list))
 
     context.allow_tags = True
+    
+
+class PostGalleryAdmin(EventModelAdmin):
+    fieldsets = (
+        (None, {
+            'fields': ('context', 'title', 'display_title', 'public')
+        }),
+        ('Layout', {
+            'fields': ('style',)
+        }),
+    )
+
+    list_display = ('title', 'display_title', 'in_pages', 'modified',)
+
+    inlines = (PostInline, )
+
+    readonly_fields = ['context', ]
+
+    def context(self, instance):
+        cm = ContextManager
+        pages_str_list = cm.generate_pages_string(instance)
+        return format_html(cm.generate_context(pages_str_list))
+
+    context.allow_tags = True
 
 
 class CustomHTMLAdmin(EventModelAdmin):
@@ -201,6 +233,11 @@ class StyleAdmin(EventModelAdmin):
     fields = ('title', 'slug')
     list_display = ('title', 'slug')
     prepopulated_fields = {'slug': ('title',)}
+    
+class PostAdmin(EventModelAdmin):
+    fields = ('title', 'slug', 'author', 'image', 'content')
+    list_display = ('title', 'slug', 'author', 'date')
+    prepopulated_fields = {'slug': ('title',)}
 
 
 class IconAdmin(EventModelAdmin):
@@ -221,7 +258,9 @@ site.register(Sponsorship, SponsorshipAdmin)
 site.register(Page, PageAdmin)
 site.register(Block, BlockAdmin)
 site.register(ImageGallery, ImageGalleryAdmin)
+site.register(PostGallery, PostGalleryAdmin)
 site.register(CustomHTML, CustomHTMLAdmin)
 site.register(Style, StyleAdmin)
 site.register(Icon, IconAdmin)
 site.register(Button, ButtonAdmin)
+site.register(Post, PostAdmin)

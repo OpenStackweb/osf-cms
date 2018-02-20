@@ -47,7 +47,8 @@ class Module(models.Model):
         ('BLOCK', 'Block'),
         ('SPONSORSHIP', 'Sponsorship'),
         ('IMAGEGALLERY', 'Image gallery'),
-        ('VIDEOGALLERY', 'Video gallery')
+        ('VIDEOGALLERY', 'Video gallery'),
+        ('POSTS', 'Post gallery')
     )
     title = models.CharField(max_length=50)
     display_title = models.BooleanField(default=True)
@@ -132,6 +133,11 @@ class VideoGallery(Module):
     class Meta:
         verbose_name_plural = 'Video galleries'
         
+class PostGallery(Module):
+    
+    class Meta:
+        verbose_name_plural = 'Post galleries'
+        
 class CustomHTML(Module):
     html_block = models.TextField()
     kicker = models.CharField(max_length=50, blank=True)
@@ -206,3 +212,35 @@ class ButtonInModule(models.Model):
 
     def __str__(self):
         return "{} ({})".format(self.button.caption, self.module.title)
+    
+
+class Post(models.Model):
+    title = models.CharField(max_length=50, blank=False)
+    slug = models.SlugField()
+    author = models.CharField(max_length=50, blank=False)
+    date = models.DateField(auto_now_add=True)
+    image = FileBrowseField(max_length=200, directory="images/posts", format='Image', blank=True, null=True)
+    content = HTMLField(max_length=65535, blank=False)
+    
+    class Meta:
+        ordering = ['date', ]
+    
+    def __str__(self):
+        return "{}, by {}".format(self.title, self.author)
+    
+    def get_absolute_url(self):
+        if not self.slug:
+            return reverse('home')
+
+        return reverse('blog', kwargs={'slug': self.slug, 'year': self.date.year})
+
+
+class PostInGallery(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='postingallery')
+    postgallery = models.ForeignKey(PostGallery, on_delete=models.CASCADE, related_name='postingallery')
+
+    class Meta:
+        verbose_name_plural = 'Posts in gallery'
+    
+    def __str__(self):
+        return ''
