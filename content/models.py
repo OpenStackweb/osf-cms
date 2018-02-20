@@ -218,7 +218,7 @@ class Post(models.Model):
     title = models.CharField(max_length=50, blank=False)
     slug = models.SlugField()
     author = models.CharField(max_length=50, blank=False)
-    date = models.DateField(auto_now_add=True)
+    date = models.DateField()
     image = FileBrowseField(max_length=200, directory="images/posts", format='Image', blank=True, null=True)
     content = HTMLField(max_length=65535, blank=False)
     
@@ -227,12 +227,6 @@ class Post(models.Model):
     
     def __str__(self):
         return "{}, by {}".format(self.title, self.author)
-    
-    def get_absolute_url(self):
-        if not self.slug:
-            return reverse('home')
-
-        return reverse('blog', kwargs={'slug': self.slug, 'year': self.date.year})
 
 
 class PostInGallery(models.Model):

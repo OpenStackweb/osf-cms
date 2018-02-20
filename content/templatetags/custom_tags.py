@@ -4,6 +4,7 @@ from django.shortcuts import get_object_or_404
 from django.template import VariableDoesNotExist, Node
 from django.urls import reverse
 
+from content.models import Post
 from events.models import Event
 
 register = template.Library()
@@ -100,7 +101,15 @@ def set_justify(justify):
 
 @register.simple_tag(name='get_events')
 def get_events():
-    return Event.objects.all()
+    return Event.objects.all()\
+    
+@register.simple_tag(name='get_posts_for_module')
+def get_posts_for_module(module, year):
+    postsingallery = module.postgallery.postingallery.all()
+    posts = Post.objects.filter(postingallery__in=postsingallery)
+    if year:
+        posts = posts.filter(date__year=year)
+    return posts
 
 
 @register.simple_tag(name='get_current_event')

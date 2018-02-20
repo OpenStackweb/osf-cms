@@ -21,7 +21,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.urls import path, include
 from django.views.generic import RedirectView
 
-from content.views import PageView, HomeView, filebrowser_browse, filebrowser_base, ClearCache
+from content.views import PageView, HomeView, filebrowser_browse, filebrowser_base, ClearCache, PostView
 from filebrowser.sites import site as filebrowser_site
 
 filebrowser_url = [
@@ -40,9 +40,10 @@ urlpatterns = filebrowser_url + [
     url(r'^tinymce/', include('tinymce.urls')),
 
     url(r'^$', HomeView.as_view(), name='home'),
-    # url(r'^talk/(?P<slug>[-\w]+)?/$', TalkView.as_view(), name='talk'),
     url(r'^(?P<slug>[-\w]+)?/$', PageView.as_view(), name='page'),
-
+    url(r'^(?P<slug>[-\w]+)/(?P<year>[-\w]+)?/$', PageView.as_view(), name='posts_year'),
+    url(r'^(?P<slug>[-\w]+)/(?P<year>[-\w]+)/(?P<post_slug>[-\w]+)?/$', PostView.as_view(), name='post'),
+    
     url(r'^admin/clear-cache/', staff_member_required(ClearCache.as_view()), name='clear-cache'),
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

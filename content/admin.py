@@ -235,7 +235,7 @@ class StyleAdmin(EventModelAdmin):
     prepopulated_fields = {'slug': ('title',)}
     
 class PostAdmin(EventModelAdmin):
-    fields = ('title', 'slug', 'author', 'image', 'content')
+    fields = ('title', 'slug', 'author', 'date', 'image', 'content')
     list_display = ('title', 'slug', 'author', 'date')
     prepopulated_fields = {'slug': ('title',)}
 

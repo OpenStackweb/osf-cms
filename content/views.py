@@ -16,7 +16,7 @@ from filebrowser.sites import filebrowser_view, site as filebrowser_site
 
 from events.models import Event
 from menus.models import BigHeaderMenu, FooterMenu
-from content.models import Page, Module
+from content.models import Page, Module, Post
 
 
 class BaseEventPageView(DetailView):
@@ -33,7 +33,8 @@ class BaseEventPageView(DetailView):
 
         slug = self.kwargs.get(self.slug_url_kwarg)
 
-        obj = queryset.filter(event__slug=self.event_slug, slug=slug).get()
+        # obj = queryset.filter(event__slug=self.event_slug, slug=slug).get()
+        obj = queryset.filter(slug=slug).get()
         return obj
 
     def get_menus(self, event_slug):
@@ -43,12 +44,12 @@ class BaseEventPageView(DetailView):
         return FooterMenu.objects.filter(event__slug=event_slug).order_by('order')
 
     def dispatch(self, request, *args, **kwargs):
-        regex_slug = re.match(r'(www.)?(\w+)?\.?(' + re.escape(settings.SITE_HOST) + ')', self.request.META['HTTP_HOST'])
-        if regex_slug:
-            self.event_slug = regex_slug.group(2)
-        if not self.event_slug:
-            last_event_slug = Event.objects.all().last().slug
-            return redirect('http://{}.{}'.format(last_event_slug, settings.SITE_HOST))
+        # regex_slug = re.match(r'(www.)?(\w+)?\.?(' + re.escape(settings.SITE_HOST) + ')', self.request.META['HTTP_HOST'])
+        # if regex_slug:
+        #     self.event_slug = regex_slug.group(2)
+        # if not self.event_slug:
+        #     last_event_slug = Event.objects.all().last().slug
+        #     return redirect('http://{}.{}'.format(last_event_slug, settings.SITE_HOST))
 
         return super(BaseEventPageView, self).dispatch(request, *args, **kwargs)
 
@@ -56,20 +57,24 @@ class BaseEventPageView(DetailView):
         context = super(BaseEventPageView, self).get_context_data(**kwargs)
         
         #Checking slugs and if page is public. If it's not, user has to be staff to see it.
-        if (not self.page.event.slug == self.event_slug) \
-                or (not self.page.public and not self.request.user.is_staff):
-            raise Http404("Requested page doesn't exist")
-        header_menus = BigHeaderMenu.objects.filter(event__slug=self.event_slug).order_by('order')
-        footer_menus = self.get_footer_menus(self.event_slug)
+        # if (not self.page.event.slug == self.event_slug) \
+        #         or (not self.page.public and not self.request.user.is_staff):
+        #     raise Http404("Requested page doesn't exist")
+        # header_menus = BigHeaderMenu.objects.filter(event__slug=self.event_slug).order_by('order')
+        # footer_menus = self.get_footer_menus(self.event_slug)
 
-        modules = Module.objects.filter(modules_in_page__page=self.page, event__slug=self.event_slug).order_by('modules_in_page__order')
+        # modules = Module.objects.filter(modules_in_page__page=self.page, event__slug=self.event_slug).order_by('modules_in_page__order')
+        modules = Module.objects.filter(modules_in_page__page=self.page).order_by('modules_in_page__order')
         context.update({
-            'header_menus': header_menus,
+            # 'header_menus': header_menus,
             'title': self.page.title,
-            'footer_menus': footer_menus,
+            # 'footer_menus': footer_menus,
             'page' : self.page,
-            'modules' : modules
+            'modules' : modules,
+            'year' : None
         })
+        if self.kwargs.get('year'):
+            context.update({'year': self.kwargs['year']})
         return context
 
 
@@ -93,28 +98,42 @@ class PageView(BaseEventPageView):
         return super(PageView, self).get_context_data(**kwargs)
 
 
-# class TalkView(BaseEventPageView):
-#     template_name = "talk_detail.html"
-#     model = Talk
-#     context_object_name = "talk"
-#
-#     def get_context_data(self, **kwargs):
-#         context = super(BaseEventPageView, self).get_context_data(**kwargs)
-#
-#         self.talk = kwargs['object']
-#         if not self.talk.event.slug == self.event_slug:
-#             raise Http404("Requested page doesn't exist")
-#         header_menus = BigHeaderMenu.objects.filter(event__slug=self.event_slug).order_by('order')
-#         footer_menus = self.get_footer_menus(self.event_slug)
-#         back_url = Page.objects.get(title='Schedule').get_absolute_url()
-#         context.update({
-#             'header_menus': header_menus,
-#             'title': self.talk.title,
-#             'footer_menus': footer_menus,
-#             'talk': self.talk,
-#             'back_url' : back_url
-#         })
-#         return context
+class PostView(DetailView):
+    template_name = "post_detail.html"
+    model = Post
+    context_object_name = "post"
+
+    def __init__(self):
+        super(PostView, self).__init__()
+        self.page = None
+
+    def get_object(self, queryset=None):
+        if queryset is None:
+            queryset = self.get_queryset()
+
+        slug = self.kwargs['post_slug']
+
+        obj = queryset.filter(slug=slug).get()
+        return obj
+
+    def get_context_data(self, **kwargs):
+        context = super(PostView, self).get_context_data(**kwargs)
+
+        self.post = kwargs['object']
+        # if not self.post.event.slug == self.event_slug:
+        #     raise Http404("Requested page doesn't exist")
+        # header_menus = BigHeaderMenu.objects.filter(event__slug=self.event_slug).order_by('order')
+        # footer_menus = self.get_footer_menus(self.event_slug)
+        # social_menus = self.get_social_menus(self.event_slug)
+        # back_url = Page.objects.get(title='Schedule').get_absolute_url()
+        context.update({
+            # 'header_menus': header_menus,
+            'title': self.post.title,
+            # 'footer_menus': footer_menus,
+            'post': self.post,
+            # 'back_url' : back_url
+        })
+        return context
 
 
 class ClearCache(RedirectView): # TODO: move to admin.py?
