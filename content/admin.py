@@ -135,11 +135,11 @@ class ImageGalleryAdmin(EventModelAdmin):
             'fields': ('context', 'title', 'display_title', 'public')
         }),
         ('Layout', {
-            'fields': ('style',)
+            'fields': ('style', 'images_per_row')
         }),
     )
 
-    list_display = ('title', 'display_title', 'in_pages', 'modified')
+    list_display = ('title', 'display_title', 'in_pages', 'modified', 'images_per_row')
 
     inlines = (ImageInline, )
 

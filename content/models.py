@@ -117,8 +117,9 @@ class Sponsorship(Module):
     price = models.FloatField(blank=False)
 
 
-
 class ImageGallery(Module):
+
+    images_per_row = models.IntegerField(default=3, blank=False, null=False)
 
     class Meta:
         verbose_name_plural = 'Image galleries'
