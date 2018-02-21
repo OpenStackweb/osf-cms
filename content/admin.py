@@ -4,7 +4,7 @@ from django.utils.html import format_html
 
 from content.context import ContextManager
 from .models import Sponsorship, Page, Block, Module, ImageInGallery, ImageGallery, ModuleInPage, Style, \
-    ListItem, Icon, ButtonInModule, VideoGallery, Button, CustomHTML, PostInGallery, PostGallery, Post
+    ListItem, Icon, ButtonInModule, VideoGallery, Button, CustomHTML, PostCategory, Post
 
 # TOFIX: Single site fixing
 # from events.admin import EventModelAdmin, EventTabularInline
@@ -42,14 +42,6 @@ class ImageInline(SortableInlineAdminMixin, EventTabularInline):
     extra = 1
     max_num = 8
     
-
-class PostInline(EventTabularInline):
-    verbose_name_plural = "Posts"
-    model = PostInGallery
-    fields = ('post',)
-    extra = 1
-    max_num = 8
-
 
 # class TalkInline(SortableInlineAdminMixin, EventTabularInline):
 #     verbose_name_plural = "Talks"
@@ -161,10 +153,10 @@ class ImageGalleryAdmin(EventModelAdmin):
     context.allow_tags = True
     
 
-class PostGalleryAdmin(EventModelAdmin):
+class PostCategoryAdmin(EventModelAdmin):
     fieldsets = (
         (None, {
-            'fields': ('context', 'title', 'display_title', 'public')
+            'fields': ('context', 'title', 'display_title', 'public',)
         }),
         ('Layout', {
             'fields': ('style',)
@@ -172,8 +164,6 @@ class PostGalleryAdmin(EventModelAdmin):
     )
 
     list_display = ('title', 'display_title', 'in_pages', 'modified',)
-
-    inlines = (PostInline, )
 
     readonly_fields = ['context', ]
 
@@ -235,8 +225,8 @@ class StyleAdmin(EventModelAdmin):
     prepopulated_fields = {'slug': ('title',)}
     
 class PostAdmin(EventModelAdmin):
-    fields = ('title', 'slug', 'author', 'date', 'image', 'content')
-    list_display = ('title', 'slug', 'author', 'date')
+    fields = ('title', 'slug', 'author', 'date', 'image', 'content', 'categories')
+    list_display = ('title', 'slug', 'author', 'date',)
     prepopulated_fields = {'slug': ('title',)}
 
 
@@ -258,7 +248,7 @@ site.register(Sponsorship, SponsorshipAdmin)
 site.register(Page, PageAdmin)
 site.register(Block, BlockAdmin)
 site.register(ImageGallery, ImageGalleryAdmin)
-site.register(PostGallery, PostGalleryAdmin)
+site.register(PostCategory, PostCategoryAdmin)
 site.register(CustomHTML, CustomHTMLAdmin)
 site.register(Style, StyleAdmin)
 site.register(Icon, IconAdmin)

@@ -48,7 +48,7 @@ class Module(models.Model):
         ('SPONSORSHIP', 'Sponsorship'),
         ('IMAGEGALLERY', 'Image gallery'),
         ('VIDEOGALLERY', 'Video gallery'),
-        ('POSTS', 'Post gallery')
+        ('POSTCATEGORY', 'Post category')
     )
     title = models.CharField(max_length=50)
     display_title = models.BooleanField(default=True)
@@ -133,10 +133,10 @@ class VideoGallery(Module):
     class Meta:
         verbose_name_plural = 'Video galleries'
         
-class PostGallery(Module):
+class PostCategory(Module):
     
     class Meta:
-        verbose_name_plural = 'Post galleries'
+        verbose_name_plural = 'Post categories'
         
 class CustomHTML(Module):
     html_block = models.TextField()
@@ -221,6 +221,7 @@ class Post(models.Model):
     date = models.DateField()
     image = FileBrowseField(max_length=200, directory="images/posts", format='Image', blank=True, null=True)
     content = HTMLField(max_length=65535, blank=False)
+    categories = models.ManyToManyField('PostCategory', related_name='posts')
     
     class Meta:
         ordering = ['date', ]
@@ -228,13 +229,3 @@ class Post(models.Model):
     def __str__(self):
         return "{}, by {}".format(self.title, self.author)
 
-
-class PostInGallery(models.Model):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='postingallery')
-    postgallery = models.ForeignKey(PostGallery, on_delete=models.CASCADE, related_name='postingallery')
-
-    class Meta:
-        verbose_name_plural = 'Posts in gallery'
-    
-    def __str__(self):
-        return ''

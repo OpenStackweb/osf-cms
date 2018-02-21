@@ -103,13 +103,13 @@ def set_justify(justify):
 def get_events():
     return Event.objects.all()\
     
-@register.simple_tag(name='get_posts_for_module')
-def get_posts_for_module(module, year):
-    postsingallery = module.postgallery.postingallery.all()
-    posts = Post.objects.filter(postingallery__in=postsingallery)
-    if year:
-        posts = posts.filter(date__year=year)
-    return posts
+# @register.simple_tag(name='get_posts_for_module')
+# def get_posts_for_module(module, year):
+#     postsingallery = module.post.postingallery.all()
+#     posts = Post.objects.filter(postingallery__in=postsingallery)
+#     if year:
+#         posts = posts.filter(date__year=year)
+#     return posts
 
 
 @register.simple_tag(name='get_current_event')

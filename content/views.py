@@ -5,11 +5,12 @@ from django.apps import apps
 from django.conf import settings
 from django.contrib import messages
 from django.core.cache import cache
+from django.core.paginator import Paginator
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.template import loader
 from django.urls import reverse
-from django.views.generic import DetailView, TemplateView, RedirectView
+from django.views.generic import DetailView, TemplateView, RedirectView, ListView
 
 from filebrowser.decorators import path_exists, get_path
 from filebrowser.sites import filebrowser_view, site as filebrowser_site
@@ -22,10 +23,12 @@ from content.models import Page, Module, Post
 class BaseEventPageView(DetailView):
     template_name = 'base.html'
     model = Page
+    paginate_by = 2
 
     def __init__(self):
         super(BaseEventPageView, self).__init__()
         self.page = None
+        self.posts = Post.objects.none()
 
     def get_object(self, queryset=None):
         if queryset is None:
@@ -52,6 +55,24 @@ class BaseEventPageView(DetailView):
         #     return redirect('http://{}.{}'.format(last_event_slug, settings.SITE_HOST))
 
         return super(BaseEventPageView, self).dispatch(request, *args, **kwargs)
+    
+    def get_posts_for_module(self, module):
+        posts = module.postcategory.posts.all()
+        if self.kwargs.get('year'):
+            posts = posts.filter(date__year=self.kwargs['year'])
+        return (self.posts | posts).order_by('-date')
+        
+    def get_all_posts(self, modules):
+        if self.request.GET.get('category'):
+            try:
+                modules = [Module.objects.get(title__iexact=self.request.GET.get('category')), ]
+            except:
+                return
+        for module in modules:
+            if module.type == 'POSTCATEGORY':
+                self.posts = self.get_posts_for_module(module)
+    
+            
 
     def get_context_data(self, **kwargs):
         context = super(BaseEventPageView, self).get_context_data(**kwargs)
@@ -65,16 +86,20 @@ class BaseEventPageView(DetailView):
 
         # modules = Module.objects.filter(modules_in_page__page=self.page, event__slug=self.event_slug).order_by('modules_in_page__order')
         modules = Module.objects.filter(modules_in_page__page=self.page).order_by('modules_in_page__order')
+        self.get_all_posts(modules)
+        paginator = Paginator(self.posts, 2 )
+        page = self.request.GET.get('page')
+        posts = paginator.get_page(page)
         context.update({
             # 'header_menus': header_menus,
             'title': self.page.title,
             # 'footer_menus': footer_menus,
-            'page' : self.page,
-            'modules' : modules,
-            'year' : None
+            'page': self.page,
+            'modules': modules,
+            'year': None,
+            'posts': posts
         })
-        if self.kwargs.get('year'):
-            context.update({'year': self.kwargs['year']})
+
         return context
 
 
@@ -89,7 +114,6 @@ class HomeView(BaseEventPageView):
 
 
 class PageView(BaseEventPageView):
-
     context_object_name = "page"
 
     def get_context_data(self, **kwargs):
@@ -98,7 +122,7 @@ class PageView(BaseEventPageView):
         return super(PageView, self).get_context_data(**kwargs)
 
 
-class PostView(DetailView):
+class PostView(ListView):
     template_name = "post_detail.html"
     model = Post
     context_object_name = "post"

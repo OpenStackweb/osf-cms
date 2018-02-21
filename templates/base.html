@@ -1,7 +1,7 @@
-{% load get_posts_for_module from custom_tags %}
+{#{% load get_posts_for_module from custom_tags %}#}
 
-{% for module in modules %}
-    {% get_posts_for_module module year as posts %}
+{#{% for module in modules %}#}
+{#    {% get_posts_for_module module year as posts %}#}
     {% for post in posts %}
         <div style="margin: 5px; background-color: blanchedalmond; display: inline-block">
             <h1>{{ post.title }}</h1>
@@ -9,7 +9,25 @@
             <h3>{{ post.date.year }}</h3>
         </div>
     {% endfor %}
-{% endfor %}
+{#{% endfor %}#}
+
+<div class="pagination">
+    <span class="step-links">
+        {% if posts.has_previous %}
+            <a href="?page=1{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}">&laquo; first</a>
+            <a href="?page={{ posts.previous_page_number }}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ posts.number }} of {{ posts.paginator.num_pages }}.
+        </span>
+
+        {% if posts.has_next %}
+            <a href="?page={{ posts.next_page_number }}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}">next</a>
+            <a href="?page={{ posts.paginator.num_pages }}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
 
 
 {#{% load static from staticfiles %}#}

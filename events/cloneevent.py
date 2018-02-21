@@ -69,9 +69,9 @@ class CloneViewSet:
 
             1: ['button', 'icon', 'page', 'style'],
             2: ['post', 'bigheadermenu', 'footermenu', 'socialmediamenu'],
-            3: ['postgallery', 'videogallery', 'imagegallery', 'block', 'sponsorship'],
+            3: ['postcategory', 'videogallery', 'imagegallery', 'block', 'sponsorship'],
             4: ['buttoninmodule', 'listitem', 'moduleinpage', ],
-            5: ['talkingallery', 'imageingallery', 'postingallery']
+            5: ['talkingallery', 'imageingallery',]
 
         }
         fields = []
