@@ -17,7 +17,7 @@ import os
 #}
 
 # https://gist.github.com/ndarville/3452907#gistcomment-2321128
-SECRET_KEY = '.$Y?O?r:j@q+x@oRu<Rd3~9t'ZQ?GRRZNf``ove_^8u-[I8'
+SECRET_KEY = '.$Y?O?r:j@q+x@oRu<Rd3~9tZQ?GRRZNf``ove_^8u-[I8'
 
 SITE_HOST = "opendev.dev9.tipit.net"
 
