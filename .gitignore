@@ -4,7 +4,7 @@ __pycache__
 .env
 db.sqlite3
 media
-opendev/settings_local.py
+osf-cms/settings_local.py
 /static/
 
 *.sqlite3

@@ -4,7 +4,7 @@ from itertools import chain
 from django.apps import apps
 from filebrowser.fields import FileBrowseField
 
-import opendev.settings as settings
+from django.conf import settings
 
 class CloneViewSet:
     def __init__(self, og_event, new_event):
