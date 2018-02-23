@@ -40,7 +40,7 @@ class ImageInline(SortableInlineAdminMixin, EventTabularInline):
     fields = ('image', 'order', 'caption', 'as_circle', 'link')
     sortable_field_name = "order"
     extra = 1
-    max_num = 8
+    max_num = 28
     
 
 # class TalkInline(SortableInlineAdminMixin, EventTabularInline):

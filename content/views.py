@@ -21,7 +21,7 @@ from content.models import Page, Module, Post
 
 
 class BaseEventPageView(DetailView):
-    template_name = 'base.html'
+    template_name = 'index.html'
     model = Page
     paginate_by = 2
 
@@ -30,38 +30,38 @@ class BaseEventPageView(DetailView):
         self.page = None
         self.posts = Post.objects.none()
 
-    def get_object(self, queryset=None):
-        if queryset is None:
-            queryset = self.get_queryset()
+    # def get_object(self, queryset=None):
+    #     if queryset is None:
+    #         queryset = self.get_queryset()
+    #
+    #     slug = self.kwargs.get(self.slug_url_kwarg)
+    #
+    #     # obj = queryset.filter(event__slug=self.event_slug, slug=slug).get()
+    #     obj = queryset.filter(slug=slug).get()
+    #     return obj
+    #
+    # def get_menus(self, event_slug):
+    #     return BigHeaderMenu.objects.filter(event__slug=event_slug).order_by('order')
+    #
+    # def get_footer_menus(self, event_slug):
+    #     return FooterMenu.objects.filter(event__slug=event_slug).order_by('order')
+    #
+    # def dispatch(self, request, *args, **kwargs):
+    #     # regex_slug = re.match(r'(www.)?(\w+)?\.?(' + re.escape(settings.SITE_HOST) + ')', self.request.META['HTTP_HOST'])
+    #     # if regex_slug:
+    #     #     self.event_slug = regex_slug.group(2)
+    #     # if not self.event_slug:
+    #     #     last_event_slug = Event.objects.all().last().slug
+    #     #     return redirect('http://{}.{}'.format(last_event_slug, settings.SITE_HOST))
+    #
+    #     return super(BaseEventPageView, self).dispatch(request, *args, **kwargs)
 
-        slug = self.kwargs.get(self.slug_url_kwarg)
-
-        # obj = queryset.filter(event__slug=self.event_slug, slug=slug).get()
-        obj = queryset.filter(slug=slug).get()
-        return obj
-
-    def get_menus(self, event_slug):
-        return BigHeaderMenu.objects.filter(event__slug=event_slug).order_by('order')
-
-    def get_footer_menus(self, event_slug):
-        return FooterMenu.objects.filter(event__slug=event_slug).order_by('order')
-
-    def dispatch(self, request, *args, **kwargs):
-        # regex_slug = re.match(r'(www.)?(\w+)?\.?(' + re.escape(settings.SITE_HOST) + ')', self.request.META['HTTP_HOST'])
-        # if regex_slug:
-        #     self.event_slug = regex_slug.group(2)
-        # if not self.event_slug:
-        #     last_event_slug = Event.objects.all().last().slug
-        #     return redirect('http://{}.{}'.format(last_event_slug, settings.SITE_HOST))
-
-        return super(BaseEventPageView, self).dispatch(request, *args, **kwargs)
-    
     def get_posts_for_module(self, module):
         posts = module.postcategory.posts.all()
         if self.kwargs.get('year'):
             posts = posts.filter(date__year=self.kwargs['year'])
         return (self.posts | posts).order_by('-date')
-        
+
     def get_all_posts(self, modules):
         if self.request.GET.get('category'):
             try:
@@ -76,7 +76,7 @@ class BaseEventPageView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(BaseEventPageView, self).get_context_data(**kwargs)
-        
+
         #Checking slugs and if page is public. If it's not, user has to be staff to see it.
         # if (not self.page.event.slug == self.event_slug) \
         #         or (not self.page.public and not self.request.user.is_staff):
@@ -107,9 +107,9 @@ class HomeView(BaseEventPageView):
 
     def get_object(self, queryset=None):
         try:
-            self.page = Page.objects.get(slug='', event__slug=self.event_slug)
+            self.page = Page.objects.get(slug='')
         except:
-            self.page = Page.objects.filter(event__slug=self.event_slug).first()
+            self.page = Page.objects.all().first()
         return self.page
 
 
@@ -171,7 +171,9 @@ class ClearCache(RedirectView): # TODO: move to admin.py?
         return self.request.META.get('HTTP_REFERER') or reverse('admin:index') #TOFIX: use slugs
 
 def filebrowser_browse(request):
-    slug = request.META['HTTP_HOST'].split('.')[0]
+    # slug = request.META['HTTP_HOST'].split('.')[0]
+    #Temporary slug
+    slug = 'katacontainers'
     filebrowser_site.directory = "uploads/%s/" % slug
     # Check and create folder named as the hotel id number
 
@@ -191,7 +193,9 @@ def filebrowser_browse(request):
 
 def filebrowser_base(f_name):
     def f(request):
-        slug = request.META['HTTP_HOST'].split('.')[0]
+        # slug = request.META['HTTP_HOST'].split('.')[0]
+        # Temporary slug
+        slug = 'katacontainers'
         filebrowser_site.directory = "uploads/%s/" % slug
         return path_exists(filebrowser_site, filebrowser_view(getattr(globals()['filebrowser_site'], f_name)))(request)
     return f

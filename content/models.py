@@ -146,7 +146,7 @@ class CustomHTML(Module):
         verbose_name_plural = 'Custom HTML blocks'
 
 class ImageInGallery(models.Model):
-    image = FileBrowseField(max_length=200, directory='images', format='Image', blank=True, null=True)
+    image = FileBrowseField(max_length=200, directory='images', format='icon-image', blank=True, null=True)
     as_circle = models.BooleanField(default=False, blank=False, null=False)
     caption = models.CharField(max_length=50, blank=True, null=True)
     link = models.URLField(blank=True, null=True)
@@ -180,7 +180,7 @@ class Icon(models.Model):
 
 class ListItem(models.Model):
     icon = models.ForeignKey(Icon, on_delete=models.SET_NULL, null=True, blank=True)
-    title = models.CharField(max_length=50, blank=True, null=True)
+    title = models.CharField(max_length=75, blank=True, null=True)
     caption = models.CharField(max_length=200, blank=True, null=True)
     module = models.ForeignKey(Module, on_delete=models.CASCADE, related_name='list_items')
     order = models.PositiveIntegerField('Order', default=0)
