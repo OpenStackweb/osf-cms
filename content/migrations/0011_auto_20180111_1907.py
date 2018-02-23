@@ -10,10 +10,6 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='module',
-            name='kicker',
-        ),
         migrations.AddField(
             model_name='block',
             name='kicker',

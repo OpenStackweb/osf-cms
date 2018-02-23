@@ -19,11 +19,6 @@ class Migration(migrations.Migration):
             ],
             bases=('content.module',),
         ),
-        migrations.AddField(
-            model_name='module',
-            name='kicker',
-            field=models.CharField(blank=True, max_length=50),
-        ),
         migrations.AlterField(
             model_name='module',
             name='title',
