@@ -69,7 +69,8 @@ def set_col_size(item_count, col_type):
         col_size = '5ths'
     else:
         col_size = int(12 / int(item_count))
-    
+    if not col_type:
+        return 'col-{}'.format(str(col_size))
     return 'col-{}-{}'.format(col_type, str(col_size))
 
 @register.simple_tag(name='set_justify')
