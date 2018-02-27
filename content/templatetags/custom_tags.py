@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404
 from django.template import VariableDoesNotExist, Node
 from django.urls import reverse
 
-from content.models import Post
+from content.models import Post, Page, ModuleInPage
 from events.models import Event
 
 register = template.Library()
@@ -133,3 +133,12 @@ def parse_youtube_link(link):
     video_id = re.match(r'(https:\/\/)?(www.)?(youtube.com\/watch\?v=)(\w+)', link).group(4)
     formatted_link = 'https://www.youtube.com/embed/{}?rel=0&showinfo=0'.format(video_id)
     return formatted_link
+
+
+@register.simple_tag(name='get_post_back_links')
+def get_post_back_links(post):
+    pages = list()
+    modulesinpage = ModuleInPage.objects.filter(module__in=post.categories.all())
+    for moduleinpage in modulesinpage:
+        pages.append('<a href="{}">{}</a>'.format(moduleinpage.page.get_absolute_url(), moduleinpage.page.title))
+    return ', '.join(pages) + ' >'
