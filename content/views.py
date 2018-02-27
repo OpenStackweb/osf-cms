@@ -143,16 +143,17 @@ class PostView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(PostView, self).get_context_data(**kwargs)
-
-        self.post = kwargs['object']
+        slug = self.kwargs.get('post_slug')
+        self.post = context['post'].get(slug = slug)
         # if not self.post.event.slug == self.event_slug:
         #     raise Http404("Requested page doesn't exist")
-        # header_menus = BigHeaderMenu.objects.filter(event__slug=self.event_slug).order_by('order')
+        header_menus = BigHeaderMenu.objects.filter().order_by('order')
         # footer_menus = self.get_footer_menus(self.event_slug)
-        # social_menus = self.get_social_menus(self.event_slug)
+        social_menus = SocialMediaMenu.objects.all().order_by('order')
         # back_url = Page.objects.get(title='Schedule').get_absolute_url()
         context.update({
-            # 'header_menus': header_menus,
+            'header_menus': header_menus,
+            'social_menus': social_menus,
             'title': self.post.title,
             # 'footer_menus': footer_menus,
             'post': self.post,

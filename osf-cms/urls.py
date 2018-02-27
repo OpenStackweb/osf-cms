@@ -33,17 +33,17 @@ filebrowser_url = [
     url(r'^admin/filebrowser/detail/$', filebrowser_base('detail'), name="fb_detail"),
     url(r'^admin/filebrowser/version/$', filebrowser_base('version'), name="fb_version"),
 ]
-
 urlpatterns = filebrowser_url + [
     url(r'^admin/filebrowser/', filebrowser_site.urls), # filebrowser URLS
     path('admin/', admin.site.urls),
     url(r'^tinymce/', include('tinymce.urls')),
 
     url(r'^$', HomeView.as_view(), name='home'),
+    url(r'^posts/(?P<post_slug>[-\w]+)?/$', PostView.as_view(), name='post'),
     url(r'^(?P<slug>[-\w]+)?/$', PageView.as_view(), name='page'),
     url(r'^(?P<slug>[-\w]+)/(?P<year>[-\w]+)?/$', PageView.as_view(), name='posts_year'),
-    url(r'^(?P<slug>[-\w]+)/(?P<year>[-\w]+)/(?P<post_slug>[-\w]+)?/$', PostView.as_view(), name='post'),
     
     url(r'^admin/clear-cache/', staff_member_required(ClearCache.as_view()), name='clear-cache'),
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
