@@ -48,9 +48,10 @@ class Module(models.Model):
         ('SPONSORSHIP', 'Sponsorship'),
         ('IMAGEGALLERY', 'Image gallery'),
         ('VIDEOGALLERY', 'Video gallery'),
-        ('POSTCATEGORY', 'Post category')
+        ('POSTCATEGORY', 'Post category'),
+        ('CUSTOMHTML', 'Custom HTML')
     )
-    title = models.CharField(max_length=50)
+    title = models.CharField(max_length=80)
     display_title = models.BooleanField(default=True)
     public = models.BooleanField(default=True, help_text="If unchecked, only logged-in users can see this module")
     content = HTMLField(max_length=65535, blank=True)

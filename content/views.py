@@ -16,7 +16,7 @@ from filebrowser.decorators import path_exists, get_path
 from filebrowser.sites import filebrowser_view, site as filebrowser_site
 
 from events.models import Event
-from menus.models import BigHeaderMenu, FooterMenu
+from menus.models import BigHeaderMenu, FooterMenu, SocialMediaMenu
 from content.models import Page, Module, Post
 
 
@@ -83,7 +83,7 @@ class BaseEventPageView(DetailView):
         #     raise Http404("Requested page doesn't exist")
         # header_menus = BigHeaderMenu.objects.filter(event__slug=self.event_slug).order_by('order')
         # footer_menus = self.get_footer_menus(self.event_slug)
-
+        social_menus = SocialMediaMenu.objects.all()
         # modules = Module.objects.filter(modules_in_page__page=self.page, event__slug=self.event_slug).order_by('modules_in_page__order')
         modules = Module.objects.filter(modules_in_page__page=self.page).order_by('modules_in_page__order')
         self.get_all_posts(modules)
@@ -94,6 +94,7 @@ class BaseEventPageView(DetailView):
             # 'header_menus': header_menus,
             'title': self.page.title,
             # 'footer_menus': footer_menus,
+            'social_menus': social_menus,
             'page': self.page,
             'modules': modules,
             'year': None,

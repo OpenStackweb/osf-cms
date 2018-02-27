@@ -20,7 +20,7 @@ class MenuSortableAdmin(SortableAdminMixin, admin.ModelAdmin):
     get_target.short_description = 'target'
 
 class SocialMediaMenuSortableAdmin(SortableAdminMixin, admin.ModelAdmin):
-    fields = ('display_name', 'url', 'icon')
+    fields = ('display_name', 'url', 'social_network')
     list_display = ('display_name', 'url')
     ordering=('order', )
 
