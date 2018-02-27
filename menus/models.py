@@ -35,10 +35,17 @@ class BigHeaderMenu(Menu):
 
 
 class SocialMediaMenu(Menu):
+    NETWORKS = (
+        ('fa-twitter', 'Twitter'),
+        ('fa-github', 'GitHub'),
+        ('fa-slack', 'Slack'),
+        ('fa-youtube', 'Youtube'),
+        ('fa-facebook', 'Facebook'),
+    )
     
     url = models.CharField(max_length=200, blank=False)
 
-    icon = models.ForeignKey(Icon, on_delete=models.SET_NULL, null=True, blank=False)
+    social_network = models.CharField(max_length=25, blank=False, choices=NETWORKS)
     
     class Meta(Menu.Meta):
         verbose_name = verbose_name_plural = 'Social Media Menu'
