@@ -81,9 +81,9 @@ class BaseEventPageView(DetailView):
         # if (not self.page.event.slug == self.event_slug) \
         #         or (not self.page.public and not self.request.user.is_staff):
         #     raise Http404("Requested page doesn't exist")
-        # header_menus = BigHeaderMenu.objects.filter(event__slug=self.event_slug).order_by('order')
+        header_menus = BigHeaderMenu.objects.filter().order_by('order')
         # footer_menus = self.get_footer_menus(self.event_slug)
-        social_menus = SocialMediaMenu.objects.all()
+        social_menus = SocialMediaMenu.objects.all().order_by('order')
         # modules = Module.objects.filter(modules_in_page__page=self.page, event__slug=self.event_slug).order_by('modules_in_page__order')
         modules = Module.objects.filter(modules_in_page__page=self.page).order_by('modules_in_page__order')
         self.get_all_posts(modules)
@@ -91,7 +91,7 @@ class BaseEventPageView(DetailView):
         page = self.request.GET.get('page')
         posts = paginator.get_page(page)
         context.update({
-            # 'header_menus': header_menus,
+            'header_menus': header_menus,
             'title': self.page.title,
             # 'footer_menus': footer_menus,
             'social_menus': social_menus,
