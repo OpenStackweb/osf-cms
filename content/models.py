@@ -49,7 +49,8 @@ class Module(models.Model):
         ('IMAGEGALLERY', 'Image gallery'),
         ('VIDEOGALLERY', 'Video gallery'),
         ('POSTCATEGORY', 'Post category'),
-        ('CUSTOMHTML', 'Custom HTML')
+        ('CUSTOMHTML', 'Custom HTML'),
+        ('MODULECONTAINER', 'Module container')
     )
     title = models.CharField(max_length=80)
     display_title = models.BooleanField(default=True)
