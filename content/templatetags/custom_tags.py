@@ -141,4 +141,10 @@ def get_post_back_links(post):
     modulesinpage = ModuleInPage.objects.filter(module__in=post.categories.all())
     for moduleinpage in modulesinpage:
         pages.append('<a href="{}">{}</a>'.format(moduleinpage.page.get_absolute_url(), moduleinpage.page.title))
-    return ', '.join(pages) + ' >'
+    return ', '.join(pages) + ' >'\
+    
+    
+@register.simple_tag(name='get_recent_posts')
+def get_recent_posts():
+    posts = Post.objects.all().order_by('-date')[:3]
+    return posts
