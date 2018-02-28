@@ -139,6 +139,12 @@ class PostCategory(Module):
     class Meta:
         verbose_name_plural = 'Post categories'
         
+        
+class ModuleContainer(Module):
+    
+    class Meta:
+        verbose_name_plural = 'Module containers'
+        
 class CustomHTML(Module):
     html_block = models.TextField()
     kicker = models.CharField(max_length=50, blank=True)
@@ -232,3 +238,15 @@ class Post(models.Model):
     
     def get_absolute_url(self):
         return reverse('post', kwargs={'post_slug': self.slug})
+    
+
+class ModuleInModule(models.Model):
+    container = models.ForeignKey(ModuleContainer, null=False, on_delete=models.CASCADE, related_name='modulesinmodule')
+    module = models.OneToOneField(Module, null=False, on_delete=models.CASCADE, related_name='containers')
+    order = models.PositiveIntegerField('Order', default=0)
+    
+    class Meta:
+        ordering = ['order',]
+    
+    def __str__(self):
+        return "{} ({})".format(self.module.title, self.container.title)

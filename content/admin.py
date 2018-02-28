@@ -4,7 +4,8 @@ from django.utils.html import format_html
 
 from content.context import ContextManager
 from .models import Sponsorship, Page, Block, Module, ImageInGallery, ImageGallery, ModuleInPage, Style, \
-    ListItem, Icon, ButtonInModule, VideoGallery, Button, CustomHTML, PostCategory, Post
+    ListItem, Icon, ButtonInModule, VideoGallery, Button, CustomHTML, PostCategory, Post, ModuleInModule, \
+    ModuleContainer
 
 # TOFIX: Single site fixing
 # from events.admin import EventModelAdmin, EventTabularInline
@@ -32,6 +33,15 @@ class ButtonInline(SortableInlineAdminMixin, EventTabularInline):
     fields = ('order', 'button',)
     sortable_field_name = "order"
     extra = 1
+    
+
+class ModuleContainerInline(SortableInlineAdminMixin, EventTabularInline):
+    verbose_name_plural = "Modules"
+    model = ModuleInModule
+    fk_name = 'container'
+    fields = ('order', 'module',)
+    sortable_field_name = "order"
+    extra = 2
 
 
 class ImageInline(SortableInlineAdminMixin, EventTabularInline):
@@ -195,6 +205,30 @@ class CustomHTMLAdmin(EventModelAdmin):
         return format_html(cm.generate_context(pages_str_list))
 
     context.allow_tags = True
+    
+
+class ModuleContainerAdmin(EventModelAdmin):
+    fieldsets = (
+        (None, {
+            'fields': ('context', 'title', 'display_title', 'public',)
+        }),
+        ('Layout', {
+            'fields': ('style',)
+        }),
+    )
+
+    list_display = ('title', 'display_title', 'in_pages', 'modified')
+
+    readonly_fields = ['context', ]
+    
+    inlines = (ModuleContainerInline, )
+    
+    def context(self, instance):
+        cm = ContextManager
+        pages_str_list = cm.generate_pages_string(instance)
+        return format_html(cm.generate_context(pages_str_list))
+
+    context.allow_tags = True
 
 # class VideoGalleryAdmin(EventModelAdmin):
 #     fieldsets = (
@@ -254,3 +288,4 @@ site.register(Style, StyleAdmin)
 site.register(Icon, IconAdmin)
 site.register(Button, ButtonAdmin)
 site.register(Post, PostAdmin)
+site.register(ModuleContainer, ModuleContainerAdmin)

@@ -69,8 +69,8 @@ class CloneViewSet:
 
             1: ['button', 'icon', 'page', 'style'],
             2: ['post', 'bigheadermenu', 'footermenu', 'socialmediamenu'],
-            3: ['postcategory', 'videogallery', 'imagegallery', 'block', 'sponsorship'],
-            4: ['buttoninmodule', 'listitem', 'moduleinpage', ],
+            3: ['customhtml', 'postcategory', 'videogallery', 'imagegallery', 'block', 'sponsorship'],
+            4: ['buttoninmodule', 'listitem', 'moduleinpage', 'moduleinmodule', 'modulecontainer'],
             5: ['talkingallery', 'imageingallery',]
 
         }
