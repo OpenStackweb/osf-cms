@@ -16,6 +16,9 @@
     color: #fff;
 }
 
+.branding{
+    font-size: 120%;
+}
 
 #user-tools a:focus, #user-tools a:hover {
     color: #fff;
