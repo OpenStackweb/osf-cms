@@ -11,8 +11,8 @@
     <a href="{% url 'admin:index' %}" class="branding">The OpenStack Foundation CMS</a>
 {% endblock %}
 
-{#{% block userlinks %}#}
-{#    {% if user.is_superuser  %}#}
+{% block userlinks %}
+    {% if user.is_superuser  %}
 {#        {% get_events as events %}#}
 {#        {% get_current_event request as current_event %}#}
 {#        <form id="slug-form">#}
@@ -24,12 +24,12 @@
 {#            <button class="btn btn-primary" type="submit">Go</button>#}
 {#        </form>#}
 {##}
-{#        / <a href="{% url 'clear-cache' %}">Clear cache</a>#}
+       &nbsp;&nbsp;<a href="{% url 'clear-cache' %}">Clear cache</a>
 {##}
-{#    {% endif %}#}
-{#        /#}
-{#    {{ block.super }}#}
-{#{% endblock %}#}
+    {% endif %}
+        /
+    {{ block.super }}
+{% endblock %}
 
 
 {% block footer %}
