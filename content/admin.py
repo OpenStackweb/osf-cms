@@ -106,7 +106,7 @@ class BlockAdmin(EventModelAdmin):
 
     fieldsets = (
         (None, {
-            'fields': ('context', 'kicker', 'title', 'display_title', 'public', 'content',)
+            'fields': ('context', 'kicker', 'title', 'display_title', 'title_only', 'public', 'content',)
         }),
         ('Layout', {
             'fields': ('layout', 'style', 'content_width', 'content_justify')

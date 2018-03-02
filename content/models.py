@@ -104,7 +104,7 @@ class Block(Module):
         ('CENTER', '￭ Center'),
         ('RIGHT', '⯈ Right')
     )
-
+    title_only = models.BooleanField(default=False)
     list_title = models.CharField(max_length=50, blank=True)
     list_style = models.CharField(max_length=20, choices=STYLE_CHOICES, default='None')
     kicker = models.CharField(max_length=50, blank=True)
