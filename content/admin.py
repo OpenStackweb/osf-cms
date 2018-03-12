@@ -1,15 +1,17 @@
 from django.contrib.admin import site
 from adminsortable2.admin import SortableInlineAdminMixin, SortableAdminMixin
 from django.utils.html import format_html
+from nested_admin.nested import NestedStackedInline, NestedTabularInline, NestedModelAdmin
 
 from content.context import ContextManager
 from .models import Sponsorship, Page, Block, Module, ImageInGallery, ImageGallery, ModuleInPage, Style, \
     ListItem, Icon, ButtonInModule, VideoGallery, Button, CustomHTML, PostCategory, Post, ModuleInModule, \
-    ModuleContainer
+    ModuleContainer, List
 
 # TOFIX: Single site fixing
 # from events.admin import EventModelAdmin, EventTabularInline
 from django.contrib.admin import TabularInline as EventTabularInline
+from django.contrib.admin import StackedInline as EventStackedInline
 from django.contrib.admin import ModelAdmin as EventModelAdmin
 
 
@@ -62,12 +64,21 @@ class ImageInline(SortableInlineAdminMixin, EventTabularInline):
 #     max_num = 12
 
 
-class ListItemInline(SortableInlineAdminMixin, EventTabularInline):
+class ListItemInline(NestedTabularInline):
     model = ListItem
-    fields = ('icon', 'order', 'title', 'caption')
     sortable_field_name = "order"
-    extra = 3
+    # fields = ('icon', 'title', 'caption')
+    extra = 1
     max_num = 8
+
+
+class ListStackedInline(NestedTabularInline):
+    model = List
+    extra = 0
+    # exclude = ('order',)
+    inlines = [ListItemInline, ]
+    sortable_field_name = "order"
+    max_num = 2
 
 
 class PageAdmin(EventModelAdmin):
@@ -88,7 +99,7 @@ class SponsorshipAdmin(EventModelAdmin):
             'fields': ('image', 'image_position', 'image_on_background')
         }),
     )
-    inlines = [ListItemInline, ButtonInline]
+    inlines = [ButtonInline,]
 
     list_display = ('title', 'display_title', 'in_pages', 'modified')
 
@@ -102,7 +113,7 @@ class SponsorshipAdmin(EventModelAdmin):
     context.allow_tags = True
 
 
-class BlockAdmin(EventModelAdmin):
+class BlockAdmin(NestedModelAdmin):
 
     fieldsets = (
         (None, {
@@ -114,14 +125,11 @@ class BlockAdmin(EventModelAdmin):
         ('Media', {
             'fields': ('image', 'image_position', 'image_on_background')
         }),
-        ('List', {
-            'fields': ('list_title', 'list_style' )
-        }),
     )
 
     list_display = ('title', 'display_title', 'in_pages', 'modified')
 
-    inlines = [ListItemInline, ButtonInline]
+    inlines = [ListStackedInline, ButtonInline]
 
     readonly_fields = ['context', ]
 
@@ -278,7 +286,8 @@ class RoomAdmin(EventModelAdmin):
 class ButtonAdmin(EventModelAdmin):
     exclude = ('event',)
 
-site.register(Sponsorship, SponsorshipAdmin)
+
+# site.register(Sponsorship, SponsorshipAdmin)
 site.register(Page, PageAdmin)
 site.register(Block, BlockAdmin)
 site.register(ImageGallery, ImageGalleryAdmin)

@@ -93,20 +93,13 @@ class Block(Module):
         ('ONECOL', '□ One column'),
         ('TWOCOL', '◫ Two columns'),
     )
-    STYLE_CHOICES = (
-        ('NONE', 'None'),
-        ('VERTICALSEP', 'Vertical separators'),
-        ('HORIZONTALSEP', 'Horizontal separator on top'),
-        ('VERTICALHORIZONTAL', 'Vertical + horizontal separator'),
-    )
+
     ALIGN_CHOICES = (
         ('LEFT', '⯇ Left'),
         ('CENTER', '￭ Center'),
         ('RIGHT', '⯈ Right')
     )
     title_only = models.BooleanField(default=False)
-    list_title = models.CharField(max_length=50, blank=True)
-    list_style = models.CharField(max_length=20, choices=STYLE_CHOICES, default='None')
     kicker = models.CharField(max_length=50, blank=True)
     layout = models.CharField(max_length=6, choices=LAYOUT_CHOICES, default='ONECOL')
     content_justify = models.CharField('Content align', max_length=6, choices=ALIGN_CHOICES, default='LEFT')
@@ -186,19 +179,38 @@ class Icon(models.Model):
     def __str__(self):
         return self.name
 
+class List(models.Model):
+    STYLE_CHOICES = (
+        ('NONE', 'None'),
+        ('VERTICALSEP', 'Vertical separators'),
+        ('HORIZONTALSEP', 'Horizontal separator on top'),
+        ('VERTICALHORIZONTAL', 'Vertical + horizontal separator'),
+        ('INCOLUMNS', 'Display in two columns')
+    )
+    title = models.CharField(max_length=50, blank=True)
+    style = models.CharField(max_length=20, choices=STYLE_CHOICES, default='None')
+    order = models.PositiveIntegerField('Order', default=0)
+    module = models.ForeignKey(Module, on_delete=models.CASCADE, related_name='lists')
+    
+    class Meta:
+        ordering = ('order',)
+
+    def __str__(self):
+        return "{} ({})".format(self.title, self.module.title)
+
 class ListItem(models.Model):
     icon = models.ForeignKey(Icon, on_delete=models.SET_NULL, null=True, blank=True)
     title = models.CharField(max_length=75, blank=True, null=True)
-    caption = models.TextField(max_length=800, blank=True, null=True)
-    module = models.ForeignKey(Module, on_delete=models.CASCADE, related_name='list_items')
+    caption = models.CharField(max_length=120, blank=True, null=True)
     order = models.PositiveIntegerField('Order', default=0)
-
+    list = models.ForeignKey(List, on_delete=models.CASCADE, related_name='items')
+    
     class Meta:
         verbose_name_plural = 'List items'
         ordering = ('order',)
 
     def __str__(self):
-        return "{} ({})".format(self.caption, self.module.title)
+        return "{} ({})".format(self.title, self.list.title)
 
 
 class Button(models.Model):
