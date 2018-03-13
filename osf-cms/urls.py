@@ -37,6 +37,7 @@ urlpatterns = filebrowser_url + [
     url(r'^admin/filebrowser/', filebrowser_site.urls), # filebrowser URLS
     path('admin/', admin.site.urls),
     url(r'^tinymce/', include('tinymce.urls')),
+    url(r'^nested_admin/', include('nested_admin.urls')),
 
     url(r'^$', HomeView.as_view(), name='home'),
     url(r'^posts/(?P<post_slug>[-\w]+)?/$', PostView.as_view(), name='post'),

@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'events',
     'adminsortable2',
     'tinymce',
+    'nested_admin',
 ]
 
 MIDDLEWARE = [

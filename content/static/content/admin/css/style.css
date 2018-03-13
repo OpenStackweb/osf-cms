@@ -78,5 +78,12 @@
     display: inline-block;
 }
 
+/* Inline Order field fix */
 
+th.order{
+  display: none;
+}
 
+td.field-order{
+  display: none;
+}
