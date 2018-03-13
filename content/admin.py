@@ -68,7 +68,7 @@ class ListItemInline(NestedTabularInline):
     model = ListItem
     sortable_field_name = "order"
     # fields = ('icon', 'title', 'caption')
-    extra = 1
+    extra = 0
     max_num = 8
 
 
