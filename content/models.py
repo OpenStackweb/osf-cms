@@ -63,7 +63,7 @@ class Module(models.Model):
     image_on_background = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
-    type = models.CharField(max_length=12, choices=TYPE_CHOICES, null=True)
+    type = models.CharField(max_length=20, choices=TYPE_CHOICES, null=True)
 
     def in_pages(self):  # For admin
         return ", ".join(Page.objects.filter(modules_in_page__module=self).values_list('title', flat=True))
