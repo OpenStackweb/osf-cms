@@ -188,6 +188,7 @@ class List(models.Model):
         ('INCOLUMNS', 'Display in two columns')
     )
     title = models.CharField(max_length=50, blank=True)
+    display_title = models.BooleanField(default=True)
     style = models.CharField(max_length=20, choices=STYLE_CHOICES, default='None')
     order = models.PositiveIntegerField('Order', default=0)
     module = models.ForeignKey(Module, on_delete=models.CASCADE, related_name='lists')
@@ -201,7 +202,7 @@ class List(models.Model):
 class ListItem(models.Model):
     icon = models.ForeignKey(Icon, on_delete=models.SET_NULL, null=True, blank=True)
     title = models.CharField(max_length=75, blank=True, null=True)
-    caption = models.CharField(max_length=120, blank=True, null=True)
+    caption = models.TextField(max_length=800, blank=True, null=True)
     order = models.PositiveIntegerField('Order', default=0)
     list = models.ForeignKey(List, on_delete=models.CASCADE, related_name='items')
     
@@ -235,7 +236,7 @@ class ButtonInModule(models.Model):
     
 
 class Post(models.Model):
-    title = models.CharField(max_length=50, blank=False)
+    title = models.CharField(max_length=120, blank=False)
     slug = models.SlugField()
     author = models.CharField(max_length=50, blank=False)
     date = models.DateField()
