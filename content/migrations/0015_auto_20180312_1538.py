@@ -23,7 +23,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='listitem',
             name='list',
-            field=models.ForeignKey(default=0, on_delete=django.db.models.deletion.CASCADE, related_name='list_items', to='content.List'),
+            field=models.ForeignKey(default=None, on_delete=django.db.models.deletion.CASCADE, related_name='list_items', to='content.List'),
             preserve_default=False,
         ),
         migrations.AlterField(
