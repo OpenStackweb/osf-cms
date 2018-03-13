@@ -34,6 +34,8 @@ filebrowser_url = [
     url(r'^admin/filebrowser/version/$', filebrowser_base('version'), name="fb_version"),
 ]
 urlpatterns = filebrowser_url + [
+    url(r'^admin/clear-cache/$', staff_member_required(ClearCache.as_view()), name='clear-cache'),
+    
     url(r'^admin/filebrowser/', filebrowser_site.urls), # filebrowser URLS
     path('admin/', admin.site.urls),
     url(r'^tinymce/', include('tinymce.urls')),
@@ -44,7 +46,6 @@ urlpatterns = filebrowser_url + [
     url(r'^(?P<slug>[-\w]+)?/$', PageView.as_view(), name='page'),
     url(r'^(?P<slug>[-\w]+)/(?P<year>[-\w]+)?/$', PageView.as_view(), name='posts_year'),
     
-    url(r'^admin/clear-cache/', staff_member_required(ClearCache.as_view()), name='clear-cache'),
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
