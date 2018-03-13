@@ -241,7 +241,8 @@ class Post(models.Model):
     author = models.CharField(max_length=50, blank=False)
     date = models.DateField()
     image = FileBrowseField(max_length=200, directory="images/posts", format='Image', blank=True, null=True)
-    content = HTMLField(max_length=65535, blank=False)
+    content = HTMLField(max_length=65535, blank=False, null=True)
+    excerpt = models.TextField(max_length=350, blank=False)
     categories = models.ManyToManyField('PostCategory', related_name='posts')
     
     class Meta:
