@@ -1,6 +1,6 @@
 {% extends "admin/base_site.html" %}
 {% load staticfiles %}
-{% load get_events get_current_event from custom_tags %}
+{% load get_sites get_port from custom_tags %}
 {% block extrastyle %}
     {{ block.super }}
     <link rel="stylesheet" href="{% static 'content/admin/css/style.css' %}">
@@ -13,19 +13,18 @@
 
 {% block userlinks %}
     {% if user.is_superuser  %}
-{#        {% get_events as events %}#}
-{#        {% get_current_event request as current_event %}#}
-{#        <form id="slug-form">#}
-{#            <select name="header-select" id="header-select">#}
-{#            {% for event in events %}#}
-{#                <option  {% if event.slug == current_event.slug %}selected{% endif %}  value="http://{{ event.slug }}.opendevconf.com:8000/admin">{{ event.title }}</option>#}
-{#            {% endfor %}#}
-{#            </select>#}
-{#            <button class="btn btn-primary" type="submit">Go</button>#}
-{#        </form>#}
-{##}
+        {% get_sites as sites %}
+        <form id="slug-form">
+            <select name="header-select" id="header-select">
+            {% for site in sites %}
+                <option  {% if site.id == request.site.id %}selected{% endif %}  value="http://{{ site.domain}}{% get_port %}/admin">{{ site.name }}</option>
+            {% endfor %}
+            </select>
+            <button class="btn btn-primary" type="submit">Go</button>
+        </form>
+
        &nbsp;&nbsp;<a href="{% url 'clear-cache' %}">Clear cache</a>
-{##}
+
     {% endif %}
         /
     {{ block.super }}

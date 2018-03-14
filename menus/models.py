@@ -5,7 +5,10 @@ from content.models import Page, Icon
 from events.models import BaseEventModel
 
 # TOFIX implement Sites instead of models.Model
-class Menu(models.Model):
+from sites.models import BaseSiteModel
+
+
+class Menu(BaseSiteModel):
     display_name = models.CharField('Label', max_length=255)
     target_type = models.CharField('Link target', max_length=255, choices=[
         ('page', 'Page (select a page below)'), ('url', 'URL (enter one below)')

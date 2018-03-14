@@ -45,12 +45,14 @@ INSTALLED_APPS = [
     'adminsortable2',
     'tinymce',
     'nested_admin',
+    'django.contrib.sites',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.cache.UpdateCacheMiddleware',
+    'django.contrib.sites.middleware.CurrentSiteMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -214,6 +216,7 @@ CACHES = { # FXIME use STATIC_path
 CACHE_MIDDLEWARE_ALIAS = 'default'
 CACHE_MIDDLEWARE_SECONDS = 1800
 
+# SITE_ID = 1
 
 # Import local settings
 try:

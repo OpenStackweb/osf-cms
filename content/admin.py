@@ -1,21 +1,17 @@
 from django.contrib.admin import site
 from adminsortable2.admin import SortableInlineAdminMixin, SortableAdminMixin
 from django.utils.html import format_html
-from nested_admin.nested import NestedStackedInline, NestedTabularInline, NestedModelAdmin
+from nested_admin.nested import NestedTabularInline, NestedModelAdmin
 
 from content.context import ContextManager
-from .models import Sponsorship, Page, Block, Module, ImageInGallery, ImageGallery, ModuleInPage, Style, \
-    ListItem, Icon, ButtonInModule, VideoGallery, Button, CustomHTML, PostCategory, Post, ModuleInModule, \
+from .models import Page, Block, ImageInGallery, ImageGallery, ModuleInPage, Style, \
+    ListItem, Icon, ButtonInModule, Button, CustomHTML, PostCategory, Post, ModuleInModule, \
     ModuleContainer, List
 
-# TOFIX: Single site fixing
-# from events.admin import EventModelAdmin, EventTabularInline
-from django.contrib.admin import TabularInline as EventTabularInline
-from django.contrib.admin import StackedInline as EventStackedInline
-from django.contrib.admin import ModelAdmin as EventModelAdmin
+from sites.admin import SiteModelAdmin, SiteTabularInline, SiteStackedInline
 
 
-class ModuleInline(SortableInlineAdminMixin, EventTabularInline):
+class ModuleInline(SortableInlineAdminMixin, SiteTabularInline):
     verbose_name_plural = "Modules"
     model = ModuleInPage
     fields = ('order', 'module', 'actions')
@@ -29,7 +25,7 @@ class ModuleInline(SortableInlineAdminMixin, EventTabularInline):
     readonly_fields = ('actions',)
 
 
-class ButtonInline(SortableInlineAdminMixin, EventTabularInline):
+class ButtonInline(SortableInlineAdminMixin, SiteTabularInline):
     verbose_name_plural = "Buttons"
     model = ButtonInModule
     fields = ('order', 'button',)
@@ -37,7 +33,7 @@ class ButtonInline(SortableInlineAdminMixin, EventTabularInline):
     extra = 1
     
 
-class ModuleContainerInline(SortableInlineAdminMixin, EventTabularInline):
+class ModuleContainerInline(SortableInlineAdminMixin, SiteTabularInline):
     verbose_name_plural = "Modules"
     model = ModuleInModule
     fk_name = 'container'
@@ -46,7 +42,7 @@ class ModuleContainerInline(SortableInlineAdminMixin, EventTabularInline):
     extra = 2
 
 
-class ImageInline(SortableInlineAdminMixin, EventTabularInline):
+class ImageInline(SortableInlineAdminMixin, SiteTabularInline):
     verbose_name_plural = "Images"
     model = ImageInGallery
     fields = ('image', 'order', 'caption', 'as_circle', 'link')
@@ -55,7 +51,7 @@ class ImageInline(SortableInlineAdminMixin, EventTabularInline):
     max_num = 28
     
 
-# class TalkInline(SortableInlineAdminMixin, EventTabularInline):
+# class TalkInline(SortableInlineAdminMixin, SiteTabularInline):
 #     verbose_name_plural = "Talks"
 #     model = TalkInGallery
 #     fields = ('order', 'talk')
@@ -81,13 +77,13 @@ class ListStackedInline(NestedTabularInline):
     max_num = 2
 
 
-class PageAdmin(EventModelAdmin):
+class PageAdmin(SiteModelAdmin):
     prepopulated_fields = {'slug': ('title',)}
     list_display = ('title', 'slug', 'created', 'modified')
     inlines = [ModuleInline, ]
 
 
-class SponsorshipAdmin(EventModelAdmin):
+class SponsorshipAdmin(SiteModelAdmin):
     fieldsets = (
         (None, {
             'fields': ('context', 'title', 'display_title', 'public', 'subtitle', 'price', 'content',)
@@ -113,7 +109,7 @@ class SponsorshipAdmin(EventModelAdmin):
     context.allow_tags = True
 
 
-class BlockAdmin(NestedModelAdmin):
+class BlockAdmin(NestedModelAdmin, SiteModelAdmin):
 
     fieldsets = (
         (None, {
@@ -140,14 +136,14 @@ class BlockAdmin(NestedModelAdmin):
     context.allow_tags = True
 
 
-class TalkAdmin(SortableAdminMixin, EventModelAdmin):
+class TalkAdmin(SortableAdminMixin, SiteModelAdmin):
     fields = ('title', 'slug', 'content', 'language', 'translation', 'speakers', 'room', 'image', 'video', 'start', 'end' )
     ordering = ('order',)
     prepopulated_fields = {'slug': ('title',)}
     list_display = ('title', )
 
 
-class ImageGalleryAdmin(EventModelAdmin):
+class ImageGalleryAdmin(SiteModelAdmin):
     fieldsets = (
         (None, {
             'fields': ('context', 'title', 'display_title', 'public')
@@ -171,7 +167,7 @@ class ImageGalleryAdmin(EventModelAdmin):
     context.allow_tags = True
     
 
-class PostCategoryAdmin(EventModelAdmin):
+class PostCategoryAdmin(SiteModelAdmin):
     fieldsets = (
         (None, {
             'fields': ('context', 'title', 'display_title', 'public',)
@@ -193,7 +189,7 @@ class PostCategoryAdmin(EventModelAdmin):
     context.allow_tags = True
 
 
-class CustomHTMLAdmin(EventModelAdmin):
+class CustomHTMLAdmin(SiteModelAdmin):
     fieldsets = (
         (None, {
             'fields': ('context', 'kicker', 'title', 'display_title', 'public', 'html_block')
@@ -215,7 +211,7 @@ class CustomHTMLAdmin(EventModelAdmin):
     context.allow_tags = True
     
 
-class ModuleContainerAdmin(EventModelAdmin):
+class ModuleContainerAdmin(SiteModelAdmin):
     fieldsets = (
         (None, {
             'fields': ('context', 'title', 'display_title', 'public',)
@@ -238,7 +234,7 @@ class ModuleContainerAdmin(EventModelAdmin):
 
     context.allow_tags = True
 
-# class VideoGalleryAdmin(EventModelAdmin):
+# class VideoGalleryAdmin(SiteModelAdmin):
 #     fieldsets = (
 #         (None, {
 #             'fields': ('context', 'title', 'display_title', 'public', 'videos_per_row' )
@@ -261,29 +257,29 @@ class ModuleContainerAdmin(EventModelAdmin):
 #
 #     context.allow_tags = True
 
-class StyleAdmin(EventModelAdmin):
+class StyleAdmin(SiteModelAdmin):
     fields = ('title', 'slug')
     list_display = ('title', 'slug')
     prepopulated_fields = {'slug': ('title',)}
     
-class PostAdmin(EventModelAdmin):
+class PostAdmin(SiteModelAdmin):
     fields = ('title', 'slug', 'author', 'date', 'image', 'content', 'excerpt', 'categories')
     list_display = ('title', 'slug', 'author', 'date',)
     prepopulated_fields = {'slug': ('title',)}
 
 
-class IconAdmin(EventModelAdmin):
+class IconAdmin(SiteModelAdmin):
     exclude = ('event',)
 
 
-class LanguageAdmin(EventModelAdmin):
+class LanguageAdmin(SiteModelAdmin):
     exclude = ('event',)
 
 
-class RoomAdmin(EventModelAdmin):
+class RoomAdmin(SiteModelAdmin):
     exclude = ('event',)
 
-class ButtonAdmin(EventModelAdmin):
+class ButtonAdmin(SiteModelAdmin):
     exclude = ('event',)
 
 

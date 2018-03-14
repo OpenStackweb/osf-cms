@@ -1,5 +1,6 @@
 import re
 from django import template
+from django.contrib.sites.models import Site
 from django.shortcuts import get_object_or_404
 from django.template import VariableDoesNotExist, Node
 from django.urls import reverse
@@ -106,9 +107,15 @@ def set_justify(justify):
 #     return False
 
 
-@register.simple_tag(name='get_events')
-def get_events():
-    return Event.objects.all()\
+@register.simple_tag(name='get_sites')
+def get_sites():
+    return Site.objects.all()
+
+
+@register.simple_tag(name='get_port')
+def get_port():
+    from django.conf import settings
+    return settings.SITE_PORT if settings.SITE_PORT else ''
     
 # @register.simple_tag(name='get_posts_for_module')
 # def get_posts_for_module(module, year):

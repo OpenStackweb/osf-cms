@@ -4,7 +4,10 @@ from django.urls import reverse
 from filebrowser.fields import FileBrowseField
 from tinymce.models import HTMLField
 
-class Page(models.Model):
+from sites.models import BaseSiteModel
+
+
+class Page(BaseSiteModel):
     title = models.CharField(max_length=50, blank=False)
     slug = models.SlugField(unique=False, blank=True)
     public = models.BooleanField(default=True, help_text="If unchecked, only logged-in users can see this page")
@@ -21,7 +24,7 @@ class Page(models.Model):
         return self.title
 
 
-class Style(models.Model):
+class Style(BaseSiteModel):
     title = models.CharField(max_length=50, blank=False)
     slug = models.SlugField(unique=False, blank=False, null=False)
 
@@ -33,7 +36,7 @@ class Style(models.Model):
 
 
 
-class Module(models.Model):
+class Module(BaseSiteModel):
     IMAGE_POSITION_CHOICES = (
         ('LEFT', '◧ Left'),
         ('RIGHT', '◨ Right'),
@@ -146,7 +149,7 @@ class CustomHTML(Module):
     class Meta:
         verbose_name_plural = 'Custom HTML blocks'
 
-class ImageInGallery(models.Model):
+class ImageInGallery(BaseSiteModel):
     image = FileBrowseField(max_length=200, directory='images', format='icon-image', blank=True, null=True)
     as_circle = models.BooleanField(default=False, blank=False, null=False)
     caption = models.CharField(max_length=50, blank=True, null=True)
@@ -159,7 +162,7 @@ class ImageInGallery(models.Model):
         ordering = ('order',)
 
 
-class ModuleInPage(models.Model):
+class ModuleInPage(BaseSiteModel):
     module = models.ForeignKey(Module, on_delete=models.CASCADE, related_name='modules_in_page')
     page = models.ForeignKey(Page, on_delete=models.CASCADE, related_name='modules_in_page')
     order = models.PositiveIntegerField('Order', default=0)
@@ -172,14 +175,14 @@ class ModuleInPage(models.Model):
         return "{} ({})".format(self.module.title, self.page.title)
 
 
-class Icon(models.Model):
+class Icon(BaseSiteModel):
     name = models.CharField(max_length=25, blank=False)
     image = FileBrowseField(max_length=200, directory="images/icons", format='Icon', blank=True, null=True)
 
     def __str__(self):
         return self.name
 
-class List(models.Model):
+class List(BaseSiteModel):
     STYLE_CHOICES = (
         ('NONE', 'None'),
         ('VERTICALSEP', 'Vertical separators'),
@@ -199,7 +202,7 @@ class List(models.Model):
     def __str__(self):
         return "{} ({})".format(self.title, self.module.title)
 
-class ListItem(models.Model):
+class ListItem(BaseSiteModel):
     icon = models.ForeignKey(Icon, on_delete=models.SET_NULL, null=True, blank=True)
     title = models.CharField(max_length=75, blank=True, null=True)
     caption = models.TextField(max_length=800, blank=True, null=True)
@@ -214,7 +217,7 @@ class ListItem(models.Model):
         return "{} ({})".format(self.title, self.list.title)
 
 
-class Button(models.Model):
+class Button(BaseSiteModel):
     caption = models.CharField(max_length=40, blank=False)
     url = models.URLField()
 
@@ -222,7 +225,7 @@ class Button(models.Model):
         return "{}".format(self.caption)
 
 
-class ButtonInModule(models.Model):
+class ButtonInModule(BaseSiteModel):
     button = models.ForeignKey(Button, on_delete=models.CASCADE, related_name='modules')
     module = models.ForeignKey(Module, on_delete=models.CASCADE, related_name='buttons')
     order = models.PositiveIntegerField('Order', default=0)
@@ -235,7 +238,7 @@ class ButtonInModule(models.Model):
         return "{} ({})".format(self.button.caption, self.module.title)
     
 
-class Post(models.Model):
+class Post(BaseSiteModel):
     title = models.CharField(max_length=120, blank=False)
     slug = models.SlugField()
     author = models.CharField(max_length=50, blank=False)
@@ -255,7 +258,7 @@ class Post(models.Model):
         return reverse('post', kwargs={'post_slug': self.slug})
     
 
-class ModuleInModule(models.Model):
+class ModuleInModule(BaseSiteModel):
     container = models.ForeignKey(ModuleContainer, null=False, on_delete=models.CASCADE, related_name='modulesinmodule')
     module = models.OneToOneField(Module, null=False, on_delete=models.CASCADE, related_name='containers')
     order = models.PositiveIntegerField('Order', default=0)
