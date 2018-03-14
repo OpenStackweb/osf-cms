@@ -5,7 +5,7 @@ from content.models import Page, Icon
 from events.models import BaseEventModel
 
 # TOFIX implement Sites instead of models.Model
-from sites.models import BaseSiteModel
+from domains.models import BaseSiteModel
 
 
 class Menu(BaseSiteModel):

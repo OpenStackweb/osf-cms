@@ -4,7 +4,7 @@ from django.urls import reverse
 from filebrowser.fields import FileBrowseField
 from tinymce.models import HTMLField
 
-from sites.models import BaseSiteModel
+from domains.models import BaseSiteModel
 
 
 class Page(BaseSiteModel):

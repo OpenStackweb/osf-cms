@@ -1,8 +1,7 @@
 from adminsortable2.admin import SortableAdminMixin
 from django.contrib import admin
 
-from events.admin import EventModelAdmin
-from sites.admin import SiteModelAdmin
+from domains.admin import SiteModelAdmin
 from .models import BigHeaderMenu, FooterMenu, SocialMediaMenu
 
 # TOFIX implement EventModelAdmin as SiteModelAdmin instead of admin.ModelAdmin
@@ -25,7 +24,7 @@ class SocialMediaMenuSortableAdmin(SortableAdminMixin, SiteModelAdmin):
     list_display = ('display_name', 'url')
     ordering=('order', )
 
-    
+
 
 admin.site.register(BigHeaderMenu, MenuSortableAdmin)
 admin.site.register(FooterMenu, MenuSortableAdmin)

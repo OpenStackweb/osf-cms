@@ -8,7 +8,7 @@ from .models import Page, Block, ImageInGallery, ImageGallery, ModuleInPage, Sty
     ListItem, Icon, ButtonInModule, Button, CustomHTML, PostCategory, Post, ModuleInModule, \
     ModuleContainer, List
 
-from sites.admin import SiteModelAdmin, SiteTabularInline, SiteStackedInline
+from domains.admin import SiteModelAdmin, SiteTabularInline, SiteStackedInline
 
 
 class ModuleInline(SortableInlineAdminMixin, SiteTabularInline):
@@ -31,7 +31,7 @@ class ButtonInline(SortableInlineAdminMixin, SiteTabularInline):
     fields = ('order', 'button',)
     sortable_field_name = "order"
     extra = 1
-    
+
 
 class ModuleContainerInline(SortableInlineAdminMixin, SiteTabularInline):
     verbose_name_plural = "Modules"
@@ -49,7 +49,7 @@ class ImageInline(SortableInlineAdminMixin, SiteTabularInline):
     sortable_field_name = "order"
     extra = 1
     max_num = 28
-    
+
 
 # class TalkInline(SortableInlineAdminMixin, SiteTabularInline):
 #     verbose_name_plural = "Talks"
@@ -165,7 +165,7 @@ class ImageGalleryAdmin(SiteModelAdmin):
         return format_html(cm.generate_context(pages_str_list))
 
     context.allow_tags = True
-    
+
 
 class PostCategoryAdmin(SiteModelAdmin):
     fieldsets = (
@@ -209,7 +209,7 @@ class CustomHTMLAdmin(SiteModelAdmin):
         return format_html(cm.generate_context(pages_str_list))
 
     context.allow_tags = True
-    
+
 
 class ModuleContainerAdmin(SiteModelAdmin):
     fieldsets = (
@@ -224,9 +224,9 @@ class ModuleContainerAdmin(SiteModelAdmin):
     list_display = ('title', 'display_title', 'in_pages', 'modified')
 
     readonly_fields = ['context', ]
-    
+
     inlines = (ModuleContainerInline, )
-    
+
     def context(self, instance):
         cm = ContextManager
         pages_str_list = cm.generate_pages_string(instance)
@@ -261,7 +261,7 @@ class StyleAdmin(SiteModelAdmin):
     fields = ('title', 'slug')
     list_display = ('title', 'slug')
     prepopulated_fields = {'slug': ('title',)}
-    
+
 class PostAdmin(SiteModelAdmin):
     fields = ('title', 'slug', 'author', 'date', 'image', 'content', 'excerpt', 'categories')
     list_display = ('title', 'slug', 'author', 'date',)

@@ -47,15 +47,20 @@ class BaseEventPageView(DetailView):
     # def get_footer_menus(self, event_slug):
     #     return FooterMenu.objects.filter(event__slug=event_slug).order_by('order')
     #
-    # def dispatch(self, request, *args, **kwargs):
-    #     regex_slug = re.match(r'(www.)?(\w+)?\.?(' + re.escape(settings.SITE_HOST) + ')', self.request.META['HTTP_HOST'])
-    #     if regex_slug:
-    #         self.event_slug = regex_slug.group(2)
-    #     if not self.event_slug:
-    #         last_event_slug = Event.objects.all().last().slug
-    #         return redirect('http://{}.{}'.format(last_event_slug, settings.SITE_HOST))
-    #
-    #     return super(BaseEventPageView, self).dispatch(request, *args, **kwargs)
+    def dispatch(self, request, *args, **kwargs):
+        # regex_slug = re.match(r'(www.)?(\w+)?\.?(' + re.escape(settings.SITE_HOST) + ')', self.request.META['HTTP_HOST'])
+        domain_name = self.request.META['HTTP_HOST'].replace(settings.SITE_PORT, '')
+        try:
+            site = Site.objects.get(domain=domain_name)
+        except:
+            pass
+        # if regex_slug:
+        #     self.event_slug = regex_slug.group(2)
+        # if not self.event_slug:
+        #     last_event_slug = Event.objects.all().last().slug
+        #     return redirect('http://{}.{}'.format(last_event_slug, settings.SITE_HOST))
+
+        return super(BaseEventPageView, self).dispatch(request, *args, **kwargs)
 
     def get_posts_for_module(self, module):
         posts = module.postcategory.posts.filter(site=self.request.site)
