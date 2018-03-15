@@ -151,6 +151,8 @@ def get_post_back_links(post):
     
     
 @register.simple_tag(name='get_recent_posts')
-def get_recent_posts(post):
-    posts = Post.objects.exclude(id=post.id).order_by('-date')[:3]
-    return posts
+def get_recent_posts(post, request):
+    posts = Post.objects.exclude(id=post.id).order_by('-date')
+    if not request.user.is_staff:
+        posts = posts.filter(public=True)
+    return posts[:3]

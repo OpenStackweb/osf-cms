@@ -60,6 +60,8 @@ class BaseEventPageView(DetailView):
         posts = module.postcategory.posts.all()
         if self.kwargs.get('year'):
             posts = posts.filter(date__year=self.kwargs['year'])
+        if not self.request.user.is_staff:
+            posts = posts.filter(public=True)
         return (self.posts | posts).order_by('-date')
 
     def get_all_posts(self, modules):
@@ -117,6 +119,12 @@ class HomeView(BaseEventPageView):
 class PageView(BaseEventPageView):
     context_object_name = "page"
 
+    def get_object(self, queryset=None):
+        page = super(PageView, self).get_object(queryset)
+        if page.public or self.request.user.is_staff:
+            return page
+        raise Http404
+
     def get_context_data(self, **kwargs):
         self.page = kwargs['object']
 
@@ -145,6 +153,8 @@ class PostView(ListView):
         context = super(PostView, self).get_context_data(**kwargs)
         slug = self.kwargs.get('post_slug')
         self.post = context['post'].get(slug = slug)
+        if not self.post.public and not self.request.user.is_staff:
+            raise Http404
         # if not self.post.event.slug == self.event_slug:
         #     raise Http404("Requested page doesn't exist")
         header_menus = BigHeaderMenu.objects.filter().order_by('order')

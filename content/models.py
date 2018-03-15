@@ -238,6 +238,7 @@ class ButtonInModule(models.Model):
 class Post(models.Model):
     title = models.CharField(max_length=120, blank=False)
     slug = models.SlugField()
+    public = models.BooleanField(default=True, help_text="If unchecked, only logged-in users can see this page")
     author = models.CharField(max_length=50, blank=False)
     date = models.DateField()
     image = FileBrowseField(max_length=200, directory="images/posts", format='Image', blank=True, null=True)
