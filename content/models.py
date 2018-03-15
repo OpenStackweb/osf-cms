@@ -244,7 +244,7 @@ class Post(models.Model):
     image = FileBrowseField(max_length=200, directory="images/posts", format='Image', blank=True, null=True)
     content = HTMLField(max_length=65535, blank=False, null=True)
     excerpt = models.TextField(max_length=350, blank=False)
-    categories = models.ManyToManyField('PostCategory', related_name='posts')
+    categories = models.ManyToManyField('PostCategory', related_name='posts', blank=True)
     
     class Meta:
         ordering = ['date', ]
