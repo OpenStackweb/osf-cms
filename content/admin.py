@@ -1,3 +1,5 @@
+from copy import copy
+
 from django.contrib.admin import site
 from adminsortable2.admin import SortableInlineAdminMixin, SortableAdminMixin
 from django.utils.html import format_html
@@ -82,10 +84,21 @@ class ListStackedInline(NestedTabularInline):
 
 
 class PageAdmin(EventModelAdmin):
-    prepopulated_fields = {'slug': ('title',)}
     fields = ('title', 'slug', 'public', 'excerpt')
     list_display = ('title', 'slug', 'created', 'modified')
     inlines = [ModuleInline, ]
+
+    def get_readonly_fields(self, request, obj=None):
+        selfie = copy(self)
+        if obj:  # editing an existing object
+            return selfie.readonly_fields + ('slug',)
+        return selfie.readonly_fields
+    
+    def get_prepopulated_fields(self, request, obj=None):
+        selfie = copy(self)
+        if not obj:  # editing an existing object
+            return {'slug': ('title',)}
+        return {}
 
 
 class SponsorshipAdmin(EventModelAdmin):
