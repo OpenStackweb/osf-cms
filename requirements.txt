@@ -1,6 +1,6 @@
 Django==2.0.1
 django-admin-sortable2==0.6.19
-django-filebrowser-no-grappelli==3.7.3
+django-filebrowser-no-grappelli==3.7.4
 django-nested-admin==3.0.21
 django-tinymce==2.7.0
 Pillow==5.0.0
