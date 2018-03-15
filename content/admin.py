@@ -83,6 +83,7 @@ class ListStackedInline(NestedTabularInline):
 
 class PageAdmin(EventModelAdmin):
     prepopulated_fields = {'slug': ('title',)}
+    fields = ('title', 'slug', 'public', 'excerpt')
     list_display = ('title', 'slug', 'created', 'modified')
     inlines = [ModuleInline, ]
 

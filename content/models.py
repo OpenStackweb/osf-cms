@@ -8,6 +8,7 @@ class Page(models.Model):
     title = models.CharField(max_length=50, blank=False)
     slug = models.SlugField(unique=False, blank=True)
     public = models.BooleanField(default=True, help_text="If unchecked, only logged-in users can see this page")
+    excerpt = models.TextField(max_length=350, blank=False)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
 
