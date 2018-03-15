@@ -180,6 +180,13 @@ TINYMCE_DEFAULT_CONFIG = {
         "hr," +
         "table,thead,tbody,tfoot,th[colspan|rowspan],td[colspan|rowspan],tr," +
         "h3,h4,pre",
+    'toolbar': "styleselect",
+    'formats': {
+        'aligncenter': {'selector': 'p,h1,h2,h3,h4,h5,h6,td,th,div,ul,ol,li,table,img', 'classes': 'text-center'},
+        'alignleft': {'selector': 'p,h1,h2,h3,h4,h5,h6,td,th,div,ul,ol,li,table,img', 'classes': 'text-left'},
+        'alignright': {'selector': 'p,h1,h2,h3,h4,h5,h6,td,th,div,ul,ol,li,table,img', 'classes': 'text-right'},
+    }
+
 }
 
 
