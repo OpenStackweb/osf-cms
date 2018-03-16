@@ -111,11 +111,6 @@ def set_justify(justify):
 def get_sites():
     return Site.objects.all()
 
-
-@register.simple_tag(name='get_port')
-def get_port():
-    from django.conf import settings
-    return settings.SITE_PORT if settings.SITE_PORT else ''
     
 # @register.simple_tag(name='get_posts_for_module')
 # def get_posts_for_module(module, year):

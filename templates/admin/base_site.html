@@ -1,6 +1,6 @@
 {% extends "admin/base_site.html" %}
 {% load staticfiles %}
-{% load get_sites get_port from custom_tags %}
+{% load get_sites from custom_tags %}
 {% block extrastyle %}
     {{ block.super }}
     <link rel="stylesheet" href="{% static 'content/admin/css/style.css' %}">
@@ -17,7 +17,9 @@
         <form id="slug-form">
             <select name="header-select" id="header-select">
             {% for site in sites %}
-                <option  {% if site.id == request.site.id %}selected{% endif %}  value="http://{{ site.domain}}{% get_port %}/admin">{{ site.name }}</option>
+                <option  {% if site.id == request.site.id %}selected{% endif %}
+                         value="http://{{ site.domain}}{% if request.META.SERVER_PORT %}:{{ request.META.SERVER_PORT }}{% endif %}/admin">
+                    {{ site.name }}</option>
             {% endfor %}
             </select>
             <button class="btn btn-primary" type="submit">Go</button>

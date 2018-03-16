@@ -49,7 +49,7 @@ class BaseEventPageView(DetailView):
     #
     def dispatch(self, request, *args, **kwargs):
         # regex_slug = re.match(r'(www.)?(\w+)?\.?(' + re.escape(settings.SITE_HOST) + ')', self.request.META['HTTP_HOST'])
-        domain_name = self.request.META['HTTP_HOST'].replace(settings.SITE_PORT, '')
+        domain_name = self.request.META['HTTP_HOST'].replace(':'+ request.META['SERVER_PORT'], '')
         try:
             site = Site.objects.get(domain=domain_name)
         except:
