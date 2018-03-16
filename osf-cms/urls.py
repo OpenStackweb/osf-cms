@@ -43,7 +43,7 @@ urlpatterns = filebrowser_url + [
 
     url(r'^$', HomeView.as_view(), name='home'),
     url(r'^posts/(?P<post_slug>[-\w]+)?/$', PostView.as_view(), name='post'),
-    url(r'^(?P<slug>[-\w]+)?(?:.html)?/$', PageView.as_view(), name='page'),
+    url(r'^(?P<slug>[-\w]+)?/$', PageView.as_view(), name='page'),
     url(r'^(?P<slug>[-\w]+)/(?P<year>[-\w]+)?/$', PageView.as_view(), name='posts_year'),
     
 
