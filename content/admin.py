@@ -287,18 +287,18 @@ class PostAdmin(EventModelAdmin):
 
 
 class IconAdmin(EventModelAdmin):
-    exclude = ('event',)
+    exclude = ('site',)
 
 
 class LanguageAdmin(EventModelAdmin):
-    exclude = ('event',)
+    exclude = ('site',)
 
 
 class RoomAdmin(EventModelAdmin):
-    exclude = ('event',)
+    exclude = ('site',)
 
 class ButtonAdmin(EventModelAdmin):
-    exclude = ('event',)
+    exclude = ('site',)
 
 
 # site.register(Sponsorship, SponsorshipAdmin)
