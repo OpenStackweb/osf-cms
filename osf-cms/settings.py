@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     'adminsortable2',
     'tinymce',
     'nested_admin',
+    'django.contrib.sites',
+    'django.contrib.redirects',
 ]
 
 MIDDLEWARE = [
@@ -57,6 +59,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'osf-cms.middleware.UserAwareFetchFromCacheMiddleware',
+    'django.contrib.redirects.middleware.RedirectFallbackMiddleware',
 
 ]
 
