@@ -3,7 +3,7 @@ from django.contrib.sites.models import Site
 from django.contrib.sites.admin import SiteAdmin
 from filebrowser.sites import site as filebrowser_site
 
-from domains.models import RedirectHost
+from domains.models import RedirectHost, CustomSite
 
 
 class BaseSiteAdmin(admin.ModelAdmin):
@@ -80,4 +80,4 @@ class CustomSiteAdmin(SiteAdmin):
     inlines = [RedirectHostStackedInline,]
 
 admin.site.unregister(Site)
-admin.site.register(Site, CustomSiteAdmin)
+admin.site.register(CustomSite, CustomSiteAdmin)
