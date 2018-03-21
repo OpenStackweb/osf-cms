@@ -2,7 +2,6 @@ from django.contrib import admin
 from django.contrib.sites.models import Site
 from django.contrib.sites.admin import SiteAdmin
 from filebrowser.sites import site as filebrowser_site
-
 from domains.models import RedirectHost, CustomSite
 
 
@@ -21,7 +20,6 @@ class BaseSiteAdmin(admin.ModelAdmin):
     def filter_by_site(self, qs, request):
         site = request.site
         return qs.filter(site=site)
-
 
     def get_field_queryset(self, db, db_field, request, **kwargs):
         qs = super(BaseSiteAdmin, self).get_field_queryset(db, db_field, request, **kwargs)
@@ -69,6 +67,7 @@ class SiteStackedInline(admin.StackedInline):
 
         return field
 
+
 class RedirectHostStackedInline(admin.StackedInline):
     model = RedirectHost
     fields = ('redirect_name',)
@@ -77,7 +76,8 @@ class RedirectHostStackedInline(admin.StackedInline):
 
 
 class CustomSiteAdmin(SiteAdmin):
-    inlines = [RedirectHostStackedInline,]
+    inlines = [RedirectHostStackedInline, ]
+
 
 admin.site.unregister(Site)
 admin.site.register(CustomSite, CustomSiteAdmin)
