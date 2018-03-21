@@ -13,7 +13,7 @@ class UserAwareFetchFromCacheMiddleware(FetchFromCacheMiddleware):
 
 
 class SiteRedirectMiddleware(MiddlewareMixin):
-    
+
     def process_request(self, request):
         try:
             request.site = get_current_site(request)

@@ -19,7 +19,6 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.admin.views.decorators import staff_member_required
 from django.urls import path, include
-from django.views.generic import RedirectView
 
 from content.views import PageView, HomeView, filebrowser_browse, filebrowser_base, ClearCache, PostView
 from filebrowser.sites import site as filebrowser_site
@@ -27,7 +26,7 @@ from filebrowser.sites import site as filebrowser_site
 filebrowser_url = [
     url(r'^admin/filebrowser/browse/$', filebrowser_browse, name="fb_browse"),
     url(r'^admin/filebrowser/upload/$', filebrowser_base('upload'), name="fb_upload"),
-    url(r'^admin/filebrowser/createdir/$',filebrowser_base('createdir'), name="fb_createdir"),
+    url(r'^admin/filebrowser/createdir/$', filebrowser_base('createdir'), name="fb_createdir"),
     url(r'^admin/filebrowser/delete_confirm/$', filebrowser_base('delete_confirm'), name="fb_delete_confirm"),
     url(r'^admin/filebrowser/delete/$', filebrowser_base('delete'), name="fb_delete"),
     url(r'^admin/filebrowser/detail/$', filebrowser_base('detail'), name="fb_detail"),
@@ -35,8 +34,8 @@ filebrowser_url = [
 ]
 urlpatterns = filebrowser_url + [
     url(r'^admin/clear-cache/$', staff_member_required(ClearCache.as_view()), name='clear-cache'),
-    
-    url(r'^admin/filebrowser/', filebrowser_site.urls), # filebrowser URLS
+
+    url(r'^admin/filebrowser/', filebrowser_site.urls),  # filebrowser URLS
     path('admin/', admin.site.urls),
     url(r'^tinymce/', include('tinymce.urls')),
     url(r'^nested_admin/', include('nested_admin.urls')),
@@ -45,7 +44,6 @@ urlpatterns = filebrowser_url + [
     url(r'^posts/(?P<post_slug>[-\w]+)?/$', PostView.as_view(), name='post'),
     url(r'^(?P<slug>[-\w]+)?(?:.html)?/$', PageView.as_view(), name='page'),
     url(r'^(?P<slug>[-\w]+)/(?P<year>[-\w]+)?/$', PageView.as_view(), name='posts_year'),
-    
+
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-

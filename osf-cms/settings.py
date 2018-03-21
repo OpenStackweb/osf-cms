@@ -74,7 +74,7 @@ TEMPLATES = [
         'DIRS': [
             BASE_DIR + '/templates/',
             BASE_DIR + '/content/static/katacontainers/templates/'
-            ],
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -88,9 +88,7 @@ TEMPLATES = [
 ]
 
 
-
 WSGI_APPLICATION = 'osf-cms.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
@@ -150,7 +148,7 @@ TINYMCE_DEFAULT_CONFIG = {
     'theme': "advanced",
     'file': "/admin/filebrowser/browse?pop",
     'language': "en",
-    'gecko_spellcheck' : 'true',
+    'gecko_spellcheck': 'true',
     'dialog_type': "modal",
     'object_resizing': 'true',
     'cleanup_on_startup': 'true',
@@ -163,16 +161,16 @@ TINYMCE_DEFAULT_CONFIG = {
     'theme_advanced_buttons2': "tablecontrols, indent, outdent, justifyleft, justifycenter, justifyright",
     'theme_advanced_buttons3': "",
     'theme_advanced_path': 'false',
-    'theme_advanced_resizing' : 'false',
+    'theme_advanced_resizing': 'false',
     'theme_advanced_blockformats': 'p,h3,h4,pre',
     'width': '690',
     'height': '350',
     'plugins': "inlinepopups,paste,advimage,table",
-    'content_css' : "/static/app/assets/css/tinymce_custom.css",
+    'content_css': "/static/app/assets/css/tinymce_custom.css",
     'advimage_update_dimensions_onchange': 'true',
     'relative_urls': 'true',
-    'convert_urls' : 'true',
-    'valid_elements' : "" +
+    'convert_urls': 'true',
+    'valid_elements': "" +
         "-p[class|align]," +
         "a[href|title|id|class|target|align]," +
         "-strong/-b," +
@@ -195,22 +193,22 @@ DIRECTORY = ''
 FILEBROWSER_EXTENSIONS = {
     'Folder': [''],
     'Icon': ['.svg'],
-    'Image': ['.jpg','.jpeg','.gif','.png','.tif','.tiff',],
-    'Document': ['.pdf','.doc','.rtf','.txt','.xls','.csv'],
-    'Video': ['.mov','.wmv','.mpeg','.mpg','.avi','.rm'],
-    'Audio': ['.mp3','.mp4','.wav','.aiff','.midi','.m4p']
+    'Image': ['.jpg', '.jpeg', '.gif', '.png', '.tif', '.tiff', ],
+    'Document': ['.pdf', '.doc', '.rtf', '.txt', '.xls', '.csv'],
+    'Video': ['.mov', '.wmv', '.mpeg', '.mpg', '.avi', '.rm'],
+    'Audio': ['.mp3', '.mp4', '.wav', '.aiff', '.midi', '.m4p']
 }
 
 FILEBROWSER_SELECT_FORMATS = {
-    'file': ['Folder','Image','Document','Video','Audio'],
+    'file': ['Folder', 'Image', 'Document', 'Video', 'Audio'],
     'image': ['Image'],
     'icon': ['Icon'],
-    'icon-image': ['Icon','Image'],
+    'icon-image': ['Icon', 'Image'],
     # 'document': ['Document'],
     'video': ['Video'],
 }
 
-CACHES = { # FXIME use STATIC_path
+CACHES = {  # FXIME use STATIC_path
     'default': {
         'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
         'LOCATION': os.path.normpath(os.path.join(os.path.abspath(os.path.dirname(__file__)), '../static/CACHE')),
@@ -226,4 +224,4 @@ CACHE_MIDDLEWARE_SECONDS = 1800
 try:
     from .settings_local import *
 except ImportError:
-    print ("Notice: Didn't import settings_local.")
+    print("Notice: Didn't import settings_local.")
