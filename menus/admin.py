@@ -4,10 +4,11 @@ from django.contrib import admin
 from domains.admin import SiteModelAdmin
 from .models import BigHeaderMenu, FooterMenu, SocialMediaMenu
 
+
 # TOFIX implement EventModelAdmin as SiteModelAdmin instead of admin.ModelAdmin
 class MenuSortableAdmin(SortableAdminMixin, SiteModelAdmin):
     list_display = ('display_name', 'get_target')
-    ordering=('order', )
+    ordering = ('order', )
 
     def get_target(self, obj):
         if obj.target_type == 'page':
@@ -19,11 +20,11 @@ class MenuSortableAdmin(SortableAdminMixin, SiteModelAdmin):
 
     get_target.short_description = 'target'
 
+
 class SocialMediaMenuSortableAdmin(SortableAdminMixin, SiteModelAdmin):
     fields = ('display_name', 'url', 'social_network')
     list_display = ('display_name', 'url')
-    ordering=('order', )
-
+    ordering = ('order', )
 
 
 admin.site.register(BigHeaderMenu, MenuSortableAdmin)
