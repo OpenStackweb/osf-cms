@@ -1,11 +1,7 @@
-import re
-
 from django.contrib.sites.models import Site
 from django.contrib.sites.shortcuts import get_current_site
 from django.middleware.cache import FetchFromCacheMiddleware
-from django.template.defaultfilters import lower
 from django.utils.deprecation import MiddlewareMixin
-from pip import logger
 
 
 class UserAwareFetchFromCacheMiddleware(FetchFromCacheMiddleware):
@@ -21,7 +17,7 @@ class SiteRedirectMiddleware(MiddlewareMixin):
     def process_request(self, request):
         try:
             request.site = get_current_site(request)
-        except:
+        except Site.DoesNotExist:
             sites = Site.objects.all()
             domain_name = request.META['HTTP_HOST'].replace(':' + request.META['SERVER_PORT'], '')
             for site in sites:

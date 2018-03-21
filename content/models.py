@@ -1,4 +1,3 @@
-from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.urls import reverse
 from filebrowser.fields import FileBrowseField
@@ -30,10 +29,9 @@ class Style(BaseSiteModel):
 
     def __str__(self):
         return self.title
-    
+
     class Meta:
         ordering = ('title',)
-
 
 
 class Module(BaseSiteModel):
@@ -74,8 +72,8 @@ class Module(BaseSiteModel):
     def get_admin_url(self):
         """the url to the Django admin interface for the model instance"""
         return reverse('admin:%s_%s_change' % (self._meta.app_label,
-                                              self.type.lower()),
-                                                args=(self.id,))
+                                               self.type.lower()), args=(self.id,))
+
     def save(self, *args, **kwargs):
         is_new = False
         if self.pk is None:
@@ -130,24 +128,27 @@ class VideoGallery(Module):
 
     class Meta:
         verbose_name_plural = 'Video galleries'
-        
+
+
 class PostCategory(Module):
-    
+
     class Meta:
         verbose_name_plural = 'Post categories'
-        
-        
+
+
 class ModuleContainer(Module):
-    
+
     class Meta:
         verbose_name_plural = 'Module containers'
-        
+
+
 class CustomHTML(Module):
     html_block = models.TextField()
     kicker = models.CharField(max_length=50, blank=True)
 
     class Meta:
         verbose_name_plural = 'Custom HTML blocks'
+
 
 class ImageInGallery(BaseSiteModel):
     image = FileBrowseField(max_length=200, directory='images', format='icon-image', blank=True, null=True)
@@ -168,7 +169,7 @@ class ModuleInPage(BaseSiteModel):
     order = models.PositiveIntegerField('Order', default=0)
 
     class Meta:
-        ordering = ['order',]
+        ordering = ['order', ]
         verbose_name = "Module"
 
     def __str__(self):
@@ -181,6 +182,7 @@ class Icon(BaseSiteModel):
 
     def __str__(self):
         return self.name
+
 
 class List(BaseSiteModel):
     STYLE_CHOICES = (
@@ -195,12 +197,13 @@ class List(BaseSiteModel):
     style = models.CharField(max_length=20, choices=STYLE_CHOICES, default='None')
     order = models.PositiveIntegerField('Order', default=0)
     module = models.ForeignKey(Module, on_delete=models.CASCADE, related_name='lists')
-    
+
     class Meta:
         ordering = ('order',)
 
     def __str__(self):
         return "{} ({})".format(self.title, self.module.title)
+
 
 class ListItem(BaseSiteModel):
     icon = models.ForeignKey(Icon, on_delete=models.SET_NULL, null=True, blank=True)
@@ -208,7 +211,7 @@ class ListItem(BaseSiteModel):
     caption = models.TextField(max_length=800, blank=True, null=True)
     order = models.PositiveIntegerField('Order', default=0)
     list = models.ForeignKey(List, on_delete=models.CASCADE, related_name='items')
-    
+
     class Meta:
         verbose_name_plural = 'List items'
         ordering = ('order',)
@@ -231,12 +234,12 @@ class ButtonInModule(BaseSiteModel):
     order = models.PositiveIntegerField('Order', default=0)
 
     class Meta:
-        ordering = ['order',]
+        ordering = ['order', ]
         verbose_name = "Module"
 
     def __str__(self):
         return "{} ({})".format(self.button.caption, self.module.title)
-    
+
 
 class Post(BaseSiteModel):
     title = models.CharField(max_length=120, blank=False)
@@ -247,24 +250,24 @@ class Post(BaseSiteModel):
     content = HTMLField(max_length=65535, blank=False, null=True)
     excerpt = models.TextField(max_length=350, blank=False)
     categories = models.ManyToManyField('PostCategory', related_name='posts')
-    
+
     class Meta:
         ordering = ['date', ]
-    
+
     def __str__(self):
         return "{}, by {}".format(self.title, self.author)
-    
+
     def get_absolute_url(self):
         return reverse('post', kwargs={'post_slug': self.slug})
-    
+
 
 class ModuleInModule(BaseSiteModel):
     container = models.ForeignKey(ModuleContainer, null=False, on_delete=models.CASCADE, related_name='modulesinmodule')
     module = models.OneToOneField(Module, null=False, on_delete=models.CASCADE, related_name='containers')
     order = models.PositiveIntegerField('Order', default=0)
-    
+
     class Meta:
-        ordering = ['order',]
-    
+        ordering = ['order', ]
+
     def __str__(self):
         return "{} ({})".format(self.module.title, self.container.title)

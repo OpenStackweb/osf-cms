@@ -2,10 +2,8 @@ import re
 from django import template
 from django.contrib.sites.models import Site
 from django.shortcuts import get_object_or_404
-from django.template import VariableDoesNotExist, Node
 from django.urls import reverse
-
-from content.models import Post, Page, ModuleInPage
+from content.models import Post, ModuleInPage
 from events.models import Event
 
 register = template.Library()
@@ -24,14 +22,14 @@ def add_active(request, name, by_path=False):
         path = name
     else:
         path = reverse('page', kwargs={'slug': name})
-    
+
     # Adjustment for Home page
     if path == '/%2F':
         path = '/'
-    
+
     if request.path == path:
         return ' active '
-    
+
     return ''
 
 
@@ -46,8 +44,9 @@ def add_horizontal_separator(list_style):
     """
     if list_style == 'HORIZONTALSEP' or list_style == 'VERTICALHORIZONTAL':
         return ' top-side '
-    
+
     return ''
+
 
 @register.simple_tag(name='add_vertical_separator')
 def add_vertical_separator(is_last, list_style):
@@ -60,7 +59,7 @@ def add_vertical_separator(is_last, list_style):
     """
     if (list_style == 'VERTICALSEP' or list_style == 'VERTICALHORIZONTAL') and not is_last:
         return ' left-side '
-    
+
     return ''
 
 
@@ -74,11 +73,11 @@ def set_col_size(item_count, col_type):
     if not col_type:
         return 'col-{}'.format(str(col_size))
 
-    
     # 1 logo = col-12
     # para col, es 6 o 12
     # para sm es 12, 6, 4 para el resto.
     return 'col-{}-{}'.format(col_type, str(col_size))
+
 
 @register.simple_tag(name='set_justify')
 def set_justify(justify):
@@ -111,7 +110,7 @@ def set_justify(justify):
 def get_sites():
     return Site.objects.all()
 
-    
+
 # @register.simple_tag(name='get_posts_for_module')
 # def get_posts_for_module(module, year):
 #     postsingallery = module.post.postingallery.all()
@@ -138,7 +137,7 @@ def get_videos_row(per_row, videos):
 
 @register.simple_tag(name='parse_youtube_link')
 def parse_youtube_link(link):
-    video_id = re.match(r'(https:\/\/)?(www.)?(youtube.com\/watch\?v=)(\w+)', link).group(4)
+    video_id = re.match(r'(https://)?(www.)?(youtube.com/watch\?v=)(\w+)', link).group(4)
     formatted_link = 'https://www.youtube.com/embed/{}?rel=0&showinfo=0'.format(video_id)
     return formatted_link
 
@@ -149,9 +148,10 @@ def get_post_back_links(post):
     modulesinpage = ModuleInPage.objects.filter(module__in=post.categories.all())
     for moduleinpage in modulesinpage:
         pages.append('<a href="{}">{}</a>'.format(moduleinpage.page.get_absolute_url(), moduleinpage.page.title))
-    return ', '.join(pages) + ' >'\
-    
-    
+    return ', '.join(pages) + ' >'
+
+
+# TODO: get_recent_posts should get posts from current site only. Will be implemented when Multisite is on master.
 @register.simple_tag(name='get_recent_posts')
 def get_recent_posts(post):
     posts = Post.objects.exclude(id=post.id).order_by('-date')[:3]

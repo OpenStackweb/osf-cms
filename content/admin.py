@@ -8,7 +8,7 @@ from .models import Page, Block, ImageInGallery, ImageGallery, ModuleInPage, Sty
     ListItem, Icon, ButtonInModule, Button, CustomHTML, PostCategory, Post, ModuleInModule, \
     ModuleContainer, List
 
-from domains.admin import SiteModelAdmin, SiteTabularInline, SiteStackedInline
+from domains.admin import SiteModelAdmin, SiteTabularInline
 
 
 class ModuleInline(SortableInlineAdminMixin, SiteTabularInline):
@@ -95,7 +95,7 @@ class SponsorshipAdmin(SiteModelAdmin):
             'fields': ('image', 'image_position', 'image_on_background')
         }),
     )
-    inlines = [ButtonInline,]
+    inlines = [ButtonInline, ]
 
     list_display = ('title', 'display_title', 'in_pages', 'modified')
 
@@ -137,7 +137,8 @@ class BlockAdmin(NestedModelAdmin, SiteModelAdmin):
 
 
 class TalkAdmin(SortableAdminMixin, SiteModelAdmin):
-    fields = ('title', 'slug', 'content', 'language', 'translation', 'speakers', 'room', 'image', 'video', 'start', 'end' )
+    fields = ('title', 'slug', 'content', 'language', 'translation', 'speakers', 'room', 'image', 'video', 'start',
+              'end')
     ordering = ('order',)
     prepopulated_fields = {'slug': ('title',)}
     list_display = ('title', )
@@ -257,10 +258,12 @@ class ModuleContainerAdmin(SiteModelAdmin):
 #
 #     context.allow_tags = True
 
+
 class StyleAdmin(SiteModelAdmin):
     fields = ('title', 'slug')
     list_display = ('title', 'slug')
     prepopulated_fields = {'slug': ('title',)}
+
 
 class PostAdmin(SiteModelAdmin):
     fields = ('title', 'slug', 'author', 'date', 'image', 'content', 'excerpt', 'categories')
@@ -278,6 +281,7 @@ class LanguageAdmin(SiteModelAdmin):
 
 class RoomAdmin(SiteModelAdmin):
     exclude = ('site',)
+
 
 class ButtonAdmin(SiteModelAdmin):
     exclude = ('site',)

@@ -1,7 +1,7 @@
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 
-from content.models import Page, ModuleInPage
+from content.models import ModuleInPage
 
 
 class UrlReverser:
@@ -25,7 +25,6 @@ class ContextManager:
                 page_str = mark_safe('<a href="%s">%s</a>' % (rev, moduleinpage.page.title))
                 pages_str_list.append(page_str)
         return 'Pages: ', ', '.join(pages_str_list)
-
 
     @classmethod
     def generate_context(cls, *args):
