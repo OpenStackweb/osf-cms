@@ -3,6 +3,8 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.middleware.cache import FetchFromCacheMiddleware
 from django.utils.deprecation import MiddlewareMixin
 
+from domains.models import RedirectHost
+
 
 class UserAwareFetchFromCacheMiddleware(FetchFromCacheMiddleware):
     def process_request(self, request):
@@ -18,9 +20,7 @@ class SiteRedirectMiddleware(MiddlewareMixin):
         try:
             request.site = get_current_site(request)
         except Site.DoesNotExist:
-            sites = Site.objects.all()
             domain_name = request.META['HTTP_HOST'].replace(':' + request.META['SERVER_PORT'], '')
-            for site in sites:
-                redirects = site.redirect_hosts.all().filter(redirect_name=domain_name)
-                if redirects:
-                    request.site = redirects.first().site
+            redirect = RedirectHost.objects.get(redirect_name=domain_name)
+            request.site = redirect.site
+
