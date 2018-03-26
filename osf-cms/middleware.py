@@ -31,7 +31,7 @@ class SiteRedirectMiddleware(MiddlewareMixin):
     def process_request(self, request):
         try:
             request.site = self.get_current_site(request)
-        except CustomSite.DoesNotExist:
+        except Site.DoesNotExist:
             domain_name = request.META['HTTP_HOST'].replace(':' + request.META['SERVER_PORT'], '')
             redirect = RedirectHost.objects.get(redirect_name=domain_name)
             request.site = CustomSite.objects.get(id=redirect.site_id)
