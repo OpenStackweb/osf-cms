@@ -82,6 +82,54 @@
   }
 },
 {
+  "model": "domains.redirecthost",
+  "pk": 1,
+  "fields": {
+    "site": 1,
+    "redirect_name": "www.katatest.io"
+  }
+},
+{
+  "model": "domains.redirecthost",
+  "pk": 2,
+  "fields": {
+    "site": 1,
+    "redirect_name": "www.katatest.com"
+  }
+},
+{
+  "model": "domains.redirecthost",
+  "pk": 3,
+  "fields": {
+    "site": 1,
+    "redirect_name": "katatest.com"
+  }
+},
+{
+  "model": "domains.redirecthost",
+  "pk": 4,
+  "fields": {
+    "site": 2,
+    "redirect_name": "kukutest.com"
+  }
+},
+{
+  "model": "domains.redirecthost",
+  "pk": 5,
+  "fields": {
+    "site": 2,
+    "redirect_name": "www.kukutest.com"
+  }
+},
+{
+  "model": "domains.redirecthost",
+  "pk": 6,
+  "fields": {
+    "site": 2,
+    "redirect_name": "www.kukutest.io"
+  }
+},
+{
   "model": "sites.site",
   "pk": 1,
   "fields": {
@@ -123,74 +171,22 @@
   "model": "domains.customsite",
   "pk": 1,
   "fields": {
-    "custom_js": ""
+    "site": [
+      "katatest.io"
+    ],
+    "custom_js": "",
+    "home_page": 5
   }
 },
 {
   "model": "domains.customsite",
   "pk": 2,
   "fields": {
-    "custom_js": null
-  }
-},
-{
-  "model": "domains.redirecthost",
-  "pk": 1,
-  "fields": {
-    "site": [
-      "katatest.io"
-    ],
-    "redirect_name": "www.katatest.io"
-  }
-},
-{
-  "model": "domains.redirecthost",
-  "pk": 2,
-  "fields": {
-    "site": [
-      "katatest.io"
-    ],
-    "redirect_name": "www.katatest.com"
-  }
-},
-{
-  "model": "domains.redirecthost",
-  "pk": 3,
-  "fields": {
-    "site": [
-      "katatest.io"
-    ],
-    "redirect_name": "katatest.com"
-  }
-},
-{
-  "model": "domains.redirecthost",
-  "pk": 4,
-  "fields": {
     "site": [
       "kukutest.io"
     ],
-    "redirect_name": "kukutest.com"
-  }
-},
-{
-  "model": "domains.redirecthost",
-  "pk": 5,
-  "fields": {
-    "site": [
-      "kukutest.io"
-    ],
-    "redirect_name": "www.kukutest.com"
-  }
-},
-{
-  "model": "domains.redirecthost",
-  "pk": 6,
-  "fields": {
-    "site": [
-      "kukutest.io"
-    ],
-    "redirect_name": "www.kukutest.io"
+    "custom_js": "",
+    "home_page": 10
   }
 },
 {
@@ -2322,6 +2318,20 @@
     "public": true,
     "created": "2018-02-27T14:51:31.516Z",
     "modified": "2018-02-27T15:21:05.581Z"
+  }
+},
+{
+  "model": "content.page",
+  "pk": 10,
+  "fields": {
+    "site": [
+      "kukutest.io"
+    ],
+    "title": "Home",
+    "slug": "",
+    "public": true,
+    "created": "2018-03-26T16:17:17.366Z",
+    "modified": "2018-03-26T16:17:17.366Z"
   }
 }
 ]

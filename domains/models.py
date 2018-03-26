@@ -1,5 +1,7 @@
 from django.contrib.sites.models import Site
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 
 class BaseSiteModel(models.Model):
@@ -25,3 +27,9 @@ class CustomSite(models.Model):
     
     class Meta:
         verbose_name = 'Site'
+
+
+@receiver(post_save, sender=Site)
+def create_or_update_user_profile(sender, instance, created, **kwargs):
+    if created:
+        CustomSite.objects.create(site=instance)

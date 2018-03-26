@@ -16,11 +16,11 @@ class BaseSiteAdmin(admin.ModelAdmin):
         return self.filter_by_site(qs, request)
 
     def get_fieldsets(self, request, obj=None):
-        filebrowser_site.directory = "uploads/%s/" % request.site.domain
+        filebrowser_site.directory = "uploads/%s/" % request.site.site.domain
         return super(BaseSiteAdmin, self).get_fieldsets(request, obj)
 
     def filter_by_site(self, qs, request):
-        site = request.site
+        site = request.site.site
         return qs.filter(site=site)
 
     def get_field_queryset(self, db, db_field, request, **kwargs):
@@ -35,14 +35,14 @@ class SiteModelAdmin(BaseSiteAdmin):
         instances = formset.save(commit=False)
         for instance in instances:
             if getattr(instance, 'event', None) is None:
-                instance.site = request.site
+                instance.site = request.site.site
             instance.save()
         formset.save_m2m()
         super(SiteModelAdmin, self).save_formset(request, form, formset, change)
 
     def save_model(self, request, obj, form, change):
         if getattr(obj, 'event', None) is None:
-            obj.site = request.site
+            obj.site = request.site.site
         super(SiteModelAdmin, self).save_model(request, obj, form, change)
 
 
@@ -51,7 +51,7 @@ class SiteTabularInline(admin.TabularInline):
     def formfield_for_foreignkey(self, db_field, request=None, **kwargs):
         field = super(SiteTabularInline, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
-        field.queryset = field.queryset.filter(site__id=request.site.id)
+        field.queryset = field.queryset.filter(site__id=request.site.site.id)
         if not field.queryset:
             field.queryset = field.queryset.all()
 
@@ -87,7 +87,6 @@ class CustomSiteAdmin(SiteAdmin):
         if not obj:
             return list()
         return super(CustomSiteAdmin, self).get_inline_instances(request, obj)
-
 
 
 admin.site.unregister(Site)
