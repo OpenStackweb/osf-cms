@@ -2,6 +2,8 @@ from django.contrib import admin
 from django.contrib.sites.models import Site
 from django.contrib.sites.admin import SiteAdmin
 from filebrowser.sites import site as filebrowser_site
+
+from content.models import Page
 from domains.models import RedirectHost, CustomSite
 
 
@@ -56,16 +58,18 @@ class SiteTabularInline(admin.TabularInline):
         return field
 
 
-class SiteStackedInline(admin.StackedInline):
-
-    def formfield_for_foreignkey(self, db_field, request=None, **kwargs):
-        field = super(SiteStackedInline, self).formfield_for_foreignkey(db_field, request, **kwargs)
-
-        field.queryset = field.queryset.filter(site__id=request.site.id)
-        if not field.queryset:
-            field.queryset = field.queryset.all()
-
-        return field
+class CustomSiteStackedInline(admin.StackedInline):
+    model = CustomSite
+    can_delete = False
+    extra = 0
+    verbose_name_plural = 'Sites'
+    fk_name = 'site'
+    
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == 'home_page':
+            site_id = request.resolver_match.kwargs['object_id']
+            kwargs['queryset'] = Page.objects.filter(site_id=site_id)
+        return super(CustomSiteStackedInline, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
 
 class RedirectHostStackedInline(admin.StackedInline):
@@ -76,8 +80,15 @@ class RedirectHostStackedInline(admin.StackedInline):
 
 
 class CustomSiteAdmin(SiteAdmin):
-    inlines = [RedirectHostStackedInline, ]
+    fields = ['name', 'domain']
+    inlines = [CustomSiteStackedInline, ]
+
+    def get_inline_instances(self, request, obj=None):
+        if not obj:
+            return list()
+        return super(CustomSiteAdmin, self).get_inline_instances(request, obj)
+
 
 
 admin.site.unregister(Site)
-admin.site.register(CustomSite, CustomSiteAdmin)
+admin.site.register(Site, CustomSiteAdmin)
