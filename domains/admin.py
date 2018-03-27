@@ -90,7 +90,7 @@ class CustomSiteAdmin(SiteAdmin):
     
     def save_model(self, request, obj, form, change):
         redirect = super(CustomSiteAdmin, self).save_model(request, obj, form, change)
-        messages.warning(request, 'Remember to assign a Home Page on your new site for it to work properly.')
+        messages.warning(request, 'Remember to assign a Home Page to your new site for it to work properly.')
         return redirect
 
 admin.site.unregister(Site)
