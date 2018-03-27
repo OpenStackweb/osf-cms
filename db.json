@@ -4,7 +4,7 @@
   "pk": 1,
   "fields": {
     "password": "pbkdf2_sha256$100000$QIJMf5kYOWed$WG0zaAMk/qVGTOp3XM5XOqcPT5absgM9i5xe1lo/yPU=",
-    "last_login": "2018-03-15T17:29:03.773Z",
+    "last_login": "2018-03-26T18:07:39.718Z",
     "is_superuser": true,
     "username": "pablo",
     "first_name": "",
@@ -39,6 +39,14 @@
   "fields": {
     "session_data": "YmU2ZjMxNDY2YzFmYmM1YmY5ZGMxMDEwODhlZTdhZWZlMzc0NGI5MTp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9oYXNoIjoiNWExMGIyYTIzMWUzZDVmYzllMWI1NWZkYWVjNzY1ZDNkZjM1YjVhMCIsIl9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIn0=",
     "expire_date": "2018-03-28T15:28:45.370Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "5f4gbc9h58gtocnl5kkvdcjke8slx5ew",
+  "fields": {
+    "session_data": "YWExZDQzMTcyZGQxNGE5Mzc0MzE0MmNjMDk4NzlmNWU5NGJjOGE5ZTp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiI1YTEwYjJhMjMxZTNkNWZjOWUxYjU1ZmRhZWM3NjVkM2RmMzViNWEwIn0=",
+    "expire_date": "2018-04-09T18:07:39.796Z"
   }
 },
 {
@@ -82,54 +90,6 @@
   }
 },
 {
-  "model": "domains.redirecthost",
-  "pk": 1,
-  "fields": {
-    "site": 1,
-    "redirect_name": "www.katatest.io"
-  }
-},
-{
-  "model": "domains.redirecthost",
-  "pk": 2,
-  "fields": {
-    "site": 1,
-    "redirect_name": "www.katatest.com"
-  }
-},
-{
-  "model": "domains.redirecthost",
-  "pk": 3,
-  "fields": {
-    "site": 1,
-    "redirect_name": "katatest.com"
-  }
-},
-{
-  "model": "domains.redirecthost",
-  "pk": 4,
-  "fields": {
-    "site": 2,
-    "redirect_name": "kukutest.com"
-  }
-},
-{
-  "model": "domains.redirecthost",
-  "pk": 5,
-  "fields": {
-    "site": 2,
-    "redirect_name": "www.kukutest.com"
-  }
-},
-{
-  "model": "domains.redirecthost",
-  "pk": 6,
-  "fields": {
-    "site": 2,
-    "redirect_name": "www.kukutest.io"
-  }
-},
-{
   "model": "sites.site",
   "pk": 1,
   "fields": {
@@ -168,7 +128,7 @@
   }
 },
 {
-  "model": "domains.customsite",
+  "model": "domains.sitesettings",
   "pk": 1,
   "fields": {
     "site": [
@@ -179,7 +139,7 @@
   }
 },
 {
-  "model": "domains.customsite",
+  "model": "domains.sitesettings",
   "pk": 2,
   "fields": {
     "site": [
@@ -187,6 +147,66 @@
     ],
     "custom_js": "",
     "home_page": 10
+  }
+},
+{
+  "model": "domains.redirecthost",
+  "pk": 1,
+  "fields": {
+    "site": [
+      "katatest.io"
+    ],
+    "redirect_name": "www.katatest.io"
+  }
+},
+{
+  "model": "domains.redirecthost",
+  "pk": 2,
+  "fields": {
+    "site": [
+      "katatest.io"
+    ],
+    "redirect_name": "www.katatest.com"
+  }
+},
+{
+  "model": "domains.redirecthost",
+  "pk": 3,
+  "fields": {
+    "site": [
+      "katatest.io"
+    ],
+    "redirect_name": "katatest.com"
+  }
+},
+{
+  "model": "domains.redirecthost",
+  "pk": 4,
+  "fields": {
+    "site": [
+      "kukutest.io"
+    ],
+    "redirect_name": "kukutest.com"
+  }
+},
+{
+  "model": "domains.redirecthost",
+  "pk": 5,
+  "fields": {
+    "site": [
+      "kukutest.io"
+    ],
+    "redirect_name": "www.kukutest.com"
+  }
+},
+{
+  "model": "domains.redirecthost",
+  "pk": 6,
+  "fields": {
+    "site": [
+      "kukutest.io"
+    ],
+    "redirect_name": "www.kukutest.io"
   }
 },
 {
