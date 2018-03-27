@@ -24,16 +24,16 @@ class BaseEventPageView(DetailView):
         self.posts = Post.objects.none()
 
     def get_posts_for_module(self, module):
-        posts = module.postcategory.posts.filter(site=self.request.site.site)
+        posts = module.postcategory.posts.filter(site=self.request.site)
         if self.kwargs.get('year'):
-            posts = posts.filter(site=self.request.site.site,
+            posts = posts.filter(site=self.request.site,
                                  date__year=self.kwargs['year'])
         return (self.posts | posts).order_by('-date')
 
     def get_all_posts(self, modules):
         if self.request.GET.get('category'):
             try:
-                modules = [Module.objects.get(site=self.request.site.site,
+                modules = [Module.objects.get(site=self.request.site,
                                               title__iexact=self.request.GET.get('category')), ]
             except Module.DoesNotExist:
                 return
@@ -44,17 +44,17 @@ class BaseEventPageView(DetailView):
     def get_context_data(self, **kwargs):
         context = super(BaseEventPageView, self).get_context_data(**kwargs)
 
-        if (not self.page.site.id == self.request.site.site.id) \
+        if (not self.page.site.id == self.request.site.id) \
                 or (not self.page.public and not self.request.user.is_staff):
             raise Http404("Requested page doesn't exist")
 
         # Gathering menus
-        header_menus = BigHeaderMenu.objects.filter(site=self.request.site.site).order_by('order')
+        header_menus = BigHeaderMenu.objects.filter(site=self.request.site).order_by('order')
         social_menus = SocialMediaMenu.objects\
-            .filter(site=self.request.site.site).order_by('order')
+            .filter(site=self.request.site).order_by('order')
 
         # Gather modules and all its posts if available
-        modules = Module.objects.filter(modules_in_page__page=self.page, site=self.request.site.site)\
+        modules = Module.objects.filter(modules_in_page__page=self.page, site=self.request.site)\
             .order_by('modules_in_page__order')
 
         self.get_all_posts(modules)
@@ -77,12 +77,12 @@ class BaseEventPageView(DetailView):
 class HomeView(BaseEventPageView):
 
     def get_object(self, queryset=None):
-        self.page = self.request.site.home_page
+        self.page = self.request.site.settings.home_page
         if not self.page:
             try:
-                self.page = Page.objects.get(slug='', site=self.request.site.site)
+                self.page = Page.objects.get(slug='', site=self.request.site)
             except Page.DoesNotExist:
-                self.page = Page.objects.filter(site=self.request.site.site).first()
+                self.page = Page.objects.filter(site=self.request.site).first()
         return self.page
 
 
@@ -111,20 +111,20 @@ class PostView(ListView):
 
         slug = self.kwargs['post_slug']
 
-        obj = queryset.filter(slug=slug, site=self.request.site.site).get()
+        obj = queryset.filter(slug=slug, site=self.request.site).get()
         return obj
 
     def get_context_data(self, **kwargs):
         context = super(PostView, self).get_context_data(**kwargs)
         slug = self.kwargs.get('post_slug')
-        self.post = context['post'].get(slug=slug, site=self.request.site.site)
+        self.post = context['post'].get(slug=slug, site=self.request.site)
         # if not self.post.event.slug == self.event_slug:
         #     raise Http404("Requested page doesn't exist")
         header_menus = BigHeaderMenu.objects\
-            .filter(site=self.request.site.site).order_by('order')
+            .filter(site=self.request.site).order_by('order')
         # footer_menus = self.get_footer_menus(self.event_slug)
         social_menus = SocialMediaMenu.objects\
-            .filter(site=self.request.site.site).order_by('order')
+            .filter(site=self.request.site).order_by('order')
         # back_url = Page.objects.get(title='Schedule').get_absolute_url()
         context.update({
             'header_menus': header_menus,
@@ -152,7 +152,7 @@ class ClearCache(RedirectView):
 
 
 def filebrowser_browse(request):
-    slug = request.site.site.domain
+    slug = request.site.domain
     filebrowser_site.directory = "uploads/%s/" % slug
     # Check and create folder named as the site domain
 
@@ -174,7 +174,7 @@ def filebrowser_base(f_name):
     def f(request):
         # slug = request.META['HTTP_HOST'].split('.')[0]
         # Temporary slug
-        slug = request.site.site.domain
+        slug = request.site.domain
         filebrowser_site.directory = "uploads/%s/" % slug
         return path_exists(filebrowser_site, filebrowser_view(getattr(globals()['filebrowser_site'], f_name)))(request)
     return f

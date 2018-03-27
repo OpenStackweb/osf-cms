@@ -4,7 +4,7 @@ from django.contrib.sites.admin import SiteAdmin
 from filebrowser.sites import site as filebrowser_site
 
 from content.models import Page
-from domains.models import RedirectHost, CustomSite
+from domains.models import RedirectHost, SiteSettings
 
 
 class BaseSiteAdmin(admin.ModelAdmin):
@@ -16,11 +16,11 @@ class BaseSiteAdmin(admin.ModelAdmin):
         return self.filter_by_site(qs, request)
 
     def get_fieldsets(self, request, obj=None):
-        filebrowser_site.directory = "uploads/%s/" % request.site.site.domain
+        filebrowser_site.directory = "uploads/%s/" % request.site.domain
         return super(BaseSiteAdmin, self).get_fieldsets(request, obj)
 
     def filter_by_site(self, qs, request):
-        site = request.site.site
+        site = request.site
         return qs.filter(site=site)
 
     def get_field_queryset(self, db, db_field, request, **kwargs):
@@ -35,14 +35,14 @@ class SiteModelAdmin(BaseSiteAdmin):
         instances = formset.save(commit=False)
         for instance in instances:
             if getattr(instance, 'event', None) is None:
-                instance.site = request.site.site
+                instance.site = request.site
             instance.save()
         formset.save_m2m()
         super(SiteModelAdmin, self).save_formset(request, form, formset, change)
 
     def save_model(self, request, obj, form, change):
         if getattr(obj, 'event', None) is None:
-            obj.site = request.site.site
+            obj.site = request.site
         super(SiteModelAdmin, self).save_model(request, obj, form, change)
 
 
@@ -51,15 +51,15 @@ class SiteTabularInline(admin.TabularInline):
     def formfield_for_foreignkey(self, db_field, request=None, **kwargs):
         field = super(SiteTabularInline, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
-        field.queryset = field.queryset.filter(site__id=request.site.site.id)
+        field.queryset = field.queryset.filter(site__id=request.site.id)
         if not field.queryset:
             field.queryset = field.queryset.all()
 
         return field
 
 
-class CustomSiteStackedInline(admin.StackedInline):
-    model = CustomSite
+class SiteSettingsStackedInline(admin.StackedInline):
+    model = SiteSettings
     can_delete = False
     extra = 0
     verbose_name_plural = 'Sites'
@@ -69,7 +69,7 @@ class CustomSiteStackedInline(admin.StackedInline):
         if db_field.name == 'home_page':
             site_id = request.resolver_match.kwargs['object_id']
             kwargs['queryset'] = Page.objects.filter(site_id=site_id)
-        return super(CustomSiteStackedInline, self).formfield_for_foreignkey(db_field, request, **kwargs)
+        return super(SiteSettingsStackedInline, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
 
 class RedirectHostStackedInline(admin.StackedInline):
@@ -81,7 +81,7 @@ class RedirectHostStackedInline(admin.StackedInline):
 
 class CustomSiteAdmin(SiteAdmin):
     fields = ['name', 'domain']
-    inlines = [CustomSiteStackedInline, ]
+    inlines = [SiteSettingsStackedInline, ]
 
     def get_inline_instances(self, request, obj=None):
         if not obj:
