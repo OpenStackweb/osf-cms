@@ -69,13 +69,8 @@ def set_col_size(item_count, col_type):
         col_size = '5ths'
     else:
         col_size = int(12 / int(item_count))
-
     if not col_type:
         return 'col-{}'.format(str(col_size))
-
-    # 1 logo = col-12
-    # para col, es 6 o 12
-    # para sm es 12, 6, 4 para el resto.
     return 'col-{}-{}'.format(col_type, str(col_size))
 
 
