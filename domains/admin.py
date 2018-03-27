@@ -1,4 +1,4 @@
-from django.contrib import admin
+from django.contrib import admin, messages
 from django.contrib.sites.models import Site
 from django.contrib.sites.admin import SiteAdmin
 from filebrowser.sites import site as filebrowser_site
@@ -87,7 +87,11 @@ class CustomSiteAdmin(SiteAdmin):
         if not obj:
             return list()
         return super(CustomSiteAdmin, self).get_inline_instances(request, obj)
-
+    
+    def save_model(self, request, obj, form, change):
+        redirect = super(CustomSiteAdmin, self).save_model(request, obj, form, change)
+        messages.warning(request, 'Remember to assign a Home Page on your new site for it to work properly.')
+        return redirect
 
 admin.site.unregister(Site)
 admin.site.register(Site, CustomSiteAdmin)
