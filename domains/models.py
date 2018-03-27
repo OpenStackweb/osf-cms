@@ -21,6 +21,7 @@ class RedirectHost(models.Model):
 
 class SiteSettings(models.Model):
     site = models.OneToOneField(Site, on_delete=models.CASCADE, related_name='settings')
+    custom_css = models.TextField(blank=True, null=True, verbose_name='Custom CSS')
     custom_js = models.TextField(blank=True, null=True, verbose_name='Custom JS',
                                  help_text="Printed just before the closing </head> tag. Make sure it's an async script. It will be rendered as-is, unescaped, so make sure its coming from a trusted source.")
     home_page = models.ForeignKey('content.Page', on_delete=models.SET_NULL, null=True)
