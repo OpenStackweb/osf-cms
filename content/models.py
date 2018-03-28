@@ -197,7 +197,7 @@ class List(BaseSiteModel):
     )
     title = models.CharField(max_length=50, blank=True)
     display_title = models.BooleanField(default=True)
-    style = models.CharField(max_length=20, choices=STYLE_CHOICES, default='None')
+    list_style = models.CharField(max_length=20, choices=STYLE_CHOICES, default='None')
     order = models.PositiveIntegerField('Order', default=0)
     module = models.ForeignKey(Module, on_delete=models.CASCADE, related_name='lists')
 
@@ -276,10 +276,9 @@ class ModuleInModule(BaseSiteModel):
         return "{} ({})".format(self.module.title, self.container.title)
 
 
-@receiver(post_save, sender=Site)
+@receiver(post_save, sender=SiteSettings)
 def create_or_update_user_profile(sender, instance, created, **kwargs):
     if created:
-        settings = SiteSettings.objects.create(site=instance)
-        home_page = Page.objects.create(site=instance, title='Home', slug='')
-        settings.home_page = home_page
-        settings.save()
+        home_page = Page.objects.create(site=instance.site, title='Home', slug='')
+        instance.home_page = home_page
+        instance.save()

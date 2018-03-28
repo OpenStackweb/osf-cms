@@ -164,7 +164,7 @@ def filebrowser_browse(request):
     # Check and create folders named as modelname/fieldname
     url_dir = request.GET.get('dir', '')
     new_dir = settings.MEDIA_ROOT + '/' + filebrowser_site.directory + url_dir
-    if get_path(url_dir, site=filebrowser_site) is None and not os.path.exists(dir):
+    if get_path(url_dir, site=filebrowser_site) is None and not os.path.exists(new_dir):
         os.makedirs(new_dir)
 
     return path_exists(filebrowser_site, filebrowser_view(filebrowser_site.browse))(request)
@@ -172,8 +172,6 @@ def filebrowser_browse(request):
 
 def filebrowser_base(f_name):
     def f(request):
-        # slug = request.META['HTTP_HOST'].split('.')[0]
-        # Temporary slug
         slug = request.site.domain
         filebrowser_site.directory = "uploads/%s/" % slug
         return path_exists(filebrowser_site, filebrowser_view(getattr(globals()['filebrowser_site'], f_name)))(request)
