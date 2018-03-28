@@ -61,10 +61,18 @@ class SiteTabularInline(admin.TabularInline):
 class SiteSettingsStackedInline(admin.StackedInline):
     model = SiteSettings
     can_delete = False
-    extra = 0
-    verbose_name_plural = 'Sites'
+    extra = 1
+    max_num = 1
+    verbose_name_plural = 'Settings'
     fk_name = 'site'
+    verbose_name = 'Settings'
     
+    def get_exclude(self, request, obj=None):
+        exclude = super(SiteSettingsStackedInline, self).get_exclude(request, obj)
+        if not obj:
+            exclude = ('home_page',)
+        return exclude
+        
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'home_page':
             site_id = request.resolver_match.kwargs['object_id']
@@ -83,15 +91,16 @@ class CustomSiteAdmin(SiteAdmin):
     fields = ['name', 'domain']
     inlines = [SiteSettingsStackedInline, ]
 
-    def get_inline_instances(self, request, obj=None):
-        if not obj:
-            return list()
-        return super(CustomSiteAdmin, self).get_inline_instances(request, obj)
+    # def get_inline_instances(self, request, obj=None):
+    #     if not obj:
+    #         return list()
+    #     return super(CustomSiteAdmin, self).get_inline_instances(request, obj)
     
     def save_model(self, request, obj, form, change):
         redirect = super(CustomSiteAdmin, self).save_model(request, obj, form, change)
         messages.warning(request, 'Remember to assign a Home Page to your new site for it to work properly.')
         return redirect
+
 
 admin.site.unregister(Site)
 admin.site.register(Site, CustomSiteAdmin)

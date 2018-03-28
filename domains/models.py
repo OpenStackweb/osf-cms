@@ -1,7 +1,5 @@
 from django.contrib.sites.models import Site
 from django.db import models
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 
 
 class BaseSiteModel(models.Model):
@@ -26,11 +24,8 @@ class SiteSettings(models.Model):
                                  help_text="Printed just before the closing </head> tag. Make sure it's an async script. It will be rendered as-is, unescaped, so make sure its coming from a trusted source.")
     home_page = models.ForeignKey('content.Page', on_delete=models.SET_NULL, null=True)
     
+    def __str__(self):
+        return '{} settings'.format(self.site.name)
+    
     class Meta:
-        verbose_name = 'Site'
-
-
-@receiver(post_save, sender=Site)
-def create_or_update_user_profile(sender, instance, created, **kwargs):
-    if created:
-        SiteSettings.objects.create(site=instance)
+        verbose_name = 'Site Settings'

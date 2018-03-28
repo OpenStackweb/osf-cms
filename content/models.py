@@ -1,9 +1,12 @@
+from django.contrib.sites.models import Site
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.urls import reverse
 from filebrowser.fields import FileBrowseField
 from tinymce.models import HTMLField
 
-from domains.models import BaseSiteModel
+from domains.models import BaseSiteModel, SiteSettings
 
 
 class Page(BaseSiteModel):
@@ -271,3 +274,12 @@ class ModuleInModule(BaseSiteModel):
 
     def __str__(self):
         return "{} ({})".format(self.module.title, self.container.title)
+
+
+@receiver(post_save, sender=Site)
+def create_or_update_user_profile(sender, instance, created, **kwargs):
+    if created:
+        settings = SiteSettings.objects.create(site=instance)
+        home_page = Page.objects.create(site=instance, title='Home', slug='')
+        settings.home_page = home_page
+        settings.save()
