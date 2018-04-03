@@ -1,5 +1,9 @@
 from django.contrib.sites.models import Site
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
+from domains.clone_site import CloneViewSet
 
 
 class BaseSiteModel(models.Model):
@@ -18,6 +22,7 @@ class RedirectHost(models.Model):
 
 
 class SiteSettings(models.Model):
+    base_site = models.ForeignKey(Site, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Clone from', related_name='clone_settings')
     site = models.OneToOneField(Site, on_delete=models.CASCADE, related_name='settings')
     custom_css = models.TextField(blank=True, null=True, verbose_name='Custom CSS')
     custom_js = models.TextField(blank=True, null=True, verbose_name='Custom JS',
@@ -29,3 +34,10 @@ class SiteSettings(models.Model):
     
     class Meta:
         verbose_name = 'Site Settings'
+
+
+@receiver(post_save, sender=SiteSettings)
+def clone_site(sender, **kwargs):
+    if kwargs['created'] and kwargs['instance'].base_site:
+        cvs = CloneViewSet(kwargs['instance'].base_site, kwargs['instance'].site)
+        cvs.main()

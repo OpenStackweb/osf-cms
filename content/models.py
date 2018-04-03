@@ -277,7 +277,7 @@ class ModuleInModule(BaseSiteModel):
 
 
 @receiver(post_save, sender=SiteSettings)
-def create_or_update_user_profile(sender, instance, created, **kwargs):
+def create_home_page(sender, instance, created, **kwargs):
     if created:
         home_page = Page.objects.create(site=instance.site, title='Home', slug='')
         instance.home_page = home_page
