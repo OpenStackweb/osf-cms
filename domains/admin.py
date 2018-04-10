@@ -94,7 +94,7 @@ class RedirectHostStackedInline(admin.StackedInline):
 
 class CustomSiteAdmin(SiteAdmin):
     fields = ['name', 'domain']
-    inlines = [SiteSettingsStackedInline, ]
+    inlines = [SiteSettingsStackedInline, RedirectHostStackedInline ]
 
     def save_model(self, request, obj, form, change):
         redirect = super(CustomSiteAdmin, self).save_model(request, obj, form, change)

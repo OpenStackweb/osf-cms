@@ -1,7 +1,5 @@
 from django.contrib.sites.models import Site
 from django.db import models
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 from django.urls import reverse
 from filebrowser.fields import FileBrowseField
 from tinymce.models import HTMLField
@@ -158,7 +156,7 @@ class ImageInGallery(BaseSiteModel):
     as_circle = models.BooleanField(default=False, blank=False, null=False)
     caption = models.CharField(max_length=50, blank=True, null=True)
     link = models.URLField(blank=True, null=True)
-    imagegallery = models.ForeignKey(ImageGallery, on_delete=models.CASCADE, related_name='images')
+    imagegallery = models.ForeignKey(ImageGallery, on_delete=models.CASCADE, related_name='images', null=True)
     order = models.PositiveIntegerField('Order', default=0)
 
     class Meta:
@@ -167,8 +165,8 @@ class ImageInGallery(BaseSiteModel):
 
 
 class ModuleInPage(BaseSiteModel):
-    module = models.ForeignKey(Module, on_delete=models.CASCADE, related_name='modules_in_page')
-    page = models.ForeignKey(Page, on_delete=models.CASCADE, related_name='modules_in_page')
+    module = models.ForeignKey(Module, on_delete=models.CASCADE, related_name='modules_in_page', null=True)
+    page = models.ForeignKey(Page, on_delete=models.CASCADE, related_name='modules_in_page', null=True)
     order = models.PositiveIntegerField('Order', default=0)
 
     class Meta:
@@ -199,7 +197,7 @@ class List(BaseSiteModel):
     display_title = models.BooleanField(default=True)
     list_style = models.CharField(max_length=20, choices=STYLE_CHOICES, default='None')
     order = models.PositiveIntegerField('Order', default=0)
-    module = models.ForeignKey(Module, on_delete=models.CASCADE, related_name='lists')
+    module = models.ForeignKey(Module, on_delete=models.CASCADE, related_name='lists', null=True)
 
     class Meta:
         ordering = ('order',)
@@ -213,7 +211,7 @@ class ListItem(BaseSiteModel):
     title = models.CharField(max_length=75, blank=True, null=True)
     caption = models.TextField(max_length=800, blank=True, null=True)
     order = models.PositiveIntegerField('Order', default=0)
-    list = models.ForeignKey(List, on_delete=models.CASCADE, related_name='items')
+    list = models.ForeignKey(List, on_delete=models.CASCADE, related_name='items', null=True)
 
     class Meta:
         verbose_name_plural = 'List items'
@@ -232,8 +230,8 @@ class Button(BaseSiteModel):
 
 
 class ButtonInModule(BaseSiteModel):
-    button = models.ForeignKey(Button, on_delete=models.CASCADE, related_name='modules')
-    module = models.ForeignKey(Module, on_delete=models.CASCADE, related_name='buttons')
+    button = models.ForeignKey(Button, on_delete=models.CASCADE, related_name='modules', null=True)
+    module = models.ForeignKey(Module, on_delete=models.CASCADE, related_name='buttons', null=True)
     order = models.PositiveIntegerField('Order', default=0)
 
     class Meta:
@@ -265,8 +263,8 @@ class Post(BaseSiteModel):
 
 
 class ModuleInModule(BaseSiteModel):
-    container = models.ForeignKey(ModuleContainer, null=False, on_delete=models.CASCADE, related_name='modulesinmodule')
-    module = models.OneToOneField(Module, null=False, on_delete=models.CASCADE, related_name='containers')
+    container = models.ForeignKey(ModuleContainer, on_delete=models.CASCADE, related_name='modulesinmodule', null=True)
+    module = models.OneToOneField(Module, on_delete=models.CASCADE, related_name='containers', null=True)
     order = models.PositiveIntegerField('Order', default=0)
 
     class Meta:
@@ -274,11 +272,3 @@ class ModuleInModule(BaseSiteModel):
 
     def __str__(self):
         return "{} ({})".format(self.module.title, self.container.title)
-
-
-@receiver(post_save, sender=SiteSettings)
-def create_home_page(sender, instance, created, **kwargs):
-    if created:
-        home_page = Page.objects.create(site=instance.site, title='Home', slug='')
-        instance.home_page = home_page
-        instance.save()

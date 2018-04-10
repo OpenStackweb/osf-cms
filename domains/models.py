@@ -14,11 +14,11 @@ class BaseSiteModel(models.Model):
 
 
 class RedirectHost(models.Model):
-    site = models.ForeignKey(Site, on_delete=models.CASCADE, related_name='redirect_hosts')
+    site = models.ForeignKey(Site, on_delete=models.CASCADE, related_name='redirect_hosts', null=True)
     redirect_name = models.CharField(max_length=50, blank=False)
 
     def __str__(self):
-        return "{} {}".format(self.redirect_name, self.site.name)
+        return "{} --> {}".format(self.redirect_name, self.site.name)
 
 
 class SiteSettings(models.Model):
@@ -40,4 +40,8 @@ class SiteSettings(models.Model):
 def clone_site(sender, **kwargs):
     if kwargs['created'] and kwargs['instance'].base_site:
         cvs = CloneViewSet(kwargs['instance'].base_site, kwargs['instance'].site)
-        cvs.main()
+        home_page = cvs.main()
+        kwargs['instance'].home_page_id = home_page
+        kwargs['instance'].save()
+
+
