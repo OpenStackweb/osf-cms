@@ -90,6 +90,43 @@ class RedirectHostStackedInline(admin.StackedInline):
     fields = ('redirect_name',)
     extra = 0
     max_num = 8
+    
+    
+class SiteSettingsAdmin(admin.ModelAdmin):
+    
+    list_display = ['site', 'base_site', 'home_page']
+    exclude = ['site', ]
+
+    def get_actions(self, request):
+        return None
+
+    def has_add_permission(self, request):
+        return False
+    
+    def has_change_permission(self, request, obj=None):
+        if not request.user.is_superuser:
+            return True
+        return False
+    
+    def has_delete_permission(self, request, obj=None):
+        return False
+    
+    def has_module_permission(self, request):
+        if not request.user.is_superuser:
+            return True
+        return False
+    
+    def get_queryset(self, request):
+        qs = super(SiteSettingsAdmin, self).get_queryset(request)
+        if not request.user.is_superuser:
+            qs = qs.filter(site = request.site)
+        return qs
+
+    def save_model(self, request, obj, form, change):
+        redirect = super(SiteSettingsAdmin, self).save_model(request, obj, form, change)
+        obj.site = request.site
+        obj.save()
+        return redirect
 
 
 class CustomSiteAdmin(SiteAdmin):
@@ -99,7 +136,27 @@ class CustomSiteAdmin(SiteAdmin):
     def save_model(self, request, obj, form, change):
         redirect = super(CustomSiteAdmin, self).save_model(request, obj, form, change)
         return redirect
-
+    
+    def has_add_permission(self, request):
+        if request.user.is_superuser:
+            return True
+        return False
+    
+    def has_change_permission(self, request, obj=None):
+        if request.user.is_superuser:
+            return True
+        return False
+    
+    def has_delete_permission(self, request, obj=None):
+        if request.user.is_superuser:
+            return True
+        return False
+    
+    def has_module_permission(self, request):
+        if request.user.is_superuser:
+            return True
+        return False
 
 admin.site.unregister(Site)
 admin.site.register(Site, CustomSiteAdmin)
+admin.site.register(SiteSettings, SiteSettingsAdmin)

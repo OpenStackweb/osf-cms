@@ -28,12 +28,14 @@ class SiteSettings(models.Model):
     custom_js = models.TextField(blank=True, null=True, verbose_name='Custom JS',
                                  help_text="Printed just before the closing </head> tag. Make sure it's an async script. It will be rendered as-is, unescaped, so make sure its coming from a trusted source.")
     home_page = models.ForeignKey('content.Page', on_delete=models.SET_NULL, null=True)
+    remote_url = models.URLField()
     
     def __str__(self):
         return '{} settings'.format(self.site.name)
     
     class Meta:
         verbose_name = 'Site Settings'
+        verbose_name_plural = 'Site Settings'
 
 
 @receiver(post_save, sender=SiteSettings)
