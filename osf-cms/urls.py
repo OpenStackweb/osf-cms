@@ -20,7 +20,8 @@ from django.contrib import admin
 from django.contrib.admin.views.decorators import staff_member_required
 from django.urls import path, include
 
-from content.views import PageView, HomeView, filebrowser_browse, filebrowser_base, ClearCache, PostView
+from content.views import PageView, HomeView, filebrowser_browse, filebrowser_base, ClearCache, PostView, \
+    UpdateSourceRepo
 from filebrowser.sites import site as filebrowser_site
 
 filebrowser_url = [
@@ -34,6 +35,7 @@ filebrowser_url = [
 ]
 urlpatterns = filebrowser_url + [
     url(r'^admin/clear-cache/$', staff_member_required(ClearCache.as_view()), name='clear-cache'),
+    url(r'^admin/pull-source-repo/$', staff_member_required(UpdateSourceRepo.as_view()), name='pull-source-repo'),
 
     url(r'^admin/filebrowser/', filebrowser_site.urls),  # filebrowser URLS
     path('admin/', admin.site.urls),

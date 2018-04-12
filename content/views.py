@@ -1,3 +1,4 @@
+import git
 import os
 from django.conf import settings
 from django.contrib import messages
@@ -150,7 +151,14 @@ class ClearCache(RedirectView):
         return self.request.META.get('HTTP_REFERER') or reverse('admin:index')
         # TOFIX: use slugs
 
-
+class UpdateSourceRepo(RedirectView):
+    def get_redirect_url(self, *args, **kwargs):
+        submodule_name = self.request.site.name.replace(' ', '')
+        submodule = git.Repo('.git').submodule(submodule_name)
+        submodule.update()
+        messages.success(self.request, 'The source repo was updated successfully.')
+        return self.request.META.get('HTTP_REFERER') or reverse('admin:index')
+        
 def filebrowser_browse(request):
     slug = request.site.domain
     filebrowser_site.directory = "uploads/%s/" % slug

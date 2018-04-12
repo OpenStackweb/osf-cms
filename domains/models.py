@@ -1,7 +1,12 @@
+import git
+import os
 from django.contrib.sites.models import Site
+from django.core.exceptions import ValidationError
 from django.db import models
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
+from django.conf import settings
+from git import GitCommandError
 
 from domains.clone_site import CloneViewSet
 
@@ -30,6 +35,10 @@ class SiteSettings(models.Model):
     home_page = models.ForeignKey('content.Page', on_delete=models.SET_NULL, null=True)
     remote_url = models.URLField()
     
+    def __init__(self, *args, **kwargs):
+        super(SiteSettings, self).__init__(*args, **kwargs)
+        self.initial_remote_url = self.remote_url
+    
     def __str__(self):
         return '{} settings'.format(self.site.name)
     
@@ -47,8 +56,16 @@ def clone_site(sender, **kwargs):
         kwargs['instance'].save()
 
 
-@receiver(post_save, sender=SiteSettings)
-def setup_remote_repo(sender, **kwargs):
-    from pygit2 import Repository
-    repo = Repository('.git')
-    repo.init_submodules()
+@receiver(pre_save, sender=SiteSettings)
+def setup_remote_repo(sender, instance, **kwargs):
+    if instance.initial_remote_url != instance.remote_url:
+        submodule_name = instance.site.name.replace(' ', '')
+        repo = git.Repo('.git')
+        try:
+            repo.create_submodule(name=submodule_name,path=os.path.join(settings.STATIC_ROOT + '/' + submodule_name),
+                              url=instance.remote_url)
+            repo.commit()
+        except GitCommandError:
+            raise ValidationError('Please insert a correct git repository url')
+    
+    # submodules = repo.submodules
