@@ -47,3 +47,8 @@ def clone_site(sender, **kwargs):
         kwargs['instance'].save()
 
 
+@receiver(post_save, sender=SiteSettings)
+def setup_remote_repo(sender, **kwargs):
+    from pygit2 import Repository
+    repo = Repository('.git')
+    repo.init_submodules()

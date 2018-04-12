@@ -96,6 +96,8 @@ class RedirectHostStackedInline(admin.StackedInline):
 
 
 class RedirectHostAdmin(BaseSiteAdmin):
+    list_display = ['redirect_name', ]
+    
     def has_change_permission(self, request, obj=None):
         if not request.user.is_superuser:
             return True
