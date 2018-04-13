@@ -153,7 +153,7 @@ class ClearCache(RedirectView):
 
 class UpdateSourceRepo(RedirectView):
     def get_redirect_url(self, *args, **kwargs):
-        submodule_name = self.request.site.name.replace(' ', '')
+        submodule_name = self.request.site.domain
         submodule = git.Repo('.git').submodule(submodule_name)
         submodule.update()
         messages.success(self.request, 'The source repo was updated successfully.')

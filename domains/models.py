@@ -59,12 +59,12 @@ def clone_site(sender, **kwargs):
 @receiver(pre_save, sender=SiteSettings)
 def setup_remote_repo(sender, instance, **kwargs):
     if instance.initial_remote_url != instance.remote_url:
-        submodule_name = instance.site.name.replace(' ', '')
+        submodule_name = instance.site.domain
         repo = git.Repo('.git')
         try:
-            repo.create_submodule(name=submodule_name,path=os.path.join(settings.STATIC_ROOT + '/' + submodule_name),
+            repo.create_submodule(name=submodule_name,path=os.path.join(settings.STATIC_ROOT, submodule_name),
                               url=instance.remote_url)
-            repo.commit()
+            # repo.index.commit(message='Added submodule')
         except GitCommandError:
             raise ValidationError('Please insert a correct git repository url')
     
