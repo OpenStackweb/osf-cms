@@ -153,14 +153,16 @@ class ClearCache(RedirectView):
         return self.request.META.get('HTTP_REFERER') or reverse('admin:index')
         # TOFIX: use slugs
 
+
 class UpdateSourceRepo(RedirectView):
     def get_redirect_url(self, *args, **kwargs):
-        submodule_name = re.match(r"((git@|https://|http://)([\w.@]+)(/|:))([\w,\-_]+)/([\w,\-_]+)(.git){0,1}((/){0,1})",
+        submodule_name = re.match(r"((git@|https://|http://)([\w.@]+)(/|:))([\w,\-_]+)/([\w,\-_]+)(.git)?((/)?)",
                                   self.request.site.settings.remote_url).group(6)
         submodule = git.Repo('.git').submodule(submodule_name)
         submodule.update(to_latest_revision=True)
         messages.success(self.request, 'The source repo was updated successfully.')
         return self.request.META.get('HTTP_REFERER') or reverse('admin:index')
+
         
 def filebrowser_browse(request):
     slug = request.site.domain
