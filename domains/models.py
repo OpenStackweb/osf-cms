@@ -1,5 +1,7 @@
 import git
 import os
+
+import re
 from django.contrib.sites.models import Site
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -59,12 +61,13 @@ def clone_site(sender, **kwargs):
 @receiver(pre_save, sender=SiteSettings)
 def setup_remote_repo(sender, instance, **kwargs):
     if instance.initial_remote_url != instance.remote_url:
-        submodule_name = instance.site.domain
+        submodule_name = re.match(r"((git@|https://|http://)([\w.@]+)(/|:))([\w,\-_]+)/([\w,\-_]+)(.git){0,1}((/){0,1})",
+                                  instance.site.settings.remote_url).group(6)
         repo = git.Repo('.git')
         try:
             repo.create_submodule(name=submodule_name,path=os.path.join(settings.STATIC_ROOT, submodule_name),
                               url=instance.remote_url)
-            # repo.index.commit(message='Added submodule')
+            repo.index.commit(message='Added submodule {}'.format(submodule_name))
         except GitCommandError:
             raise ValidationError('Please insert a correct git repository url')
     
