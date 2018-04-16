@@ -1,9 +1,3 @@
 [submodule "content/static/katacontainers"]
 	path = content/static/katacontainers
 	url = https://github.com/convistaalmar/www.katacontainers.io
-[submodule "www"]
-	url = https://github.com/convistaalmar/www.katacontainers.io
-	path = static/www
-[submodule "www.katacontainers.io"]
-	url = https://github.com/convistaalmar/www.katacontainers.io.git
-	path = static/www.katacontainers.io
