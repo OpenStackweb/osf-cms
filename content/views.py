@@ -42,8 +42,6 @@ class BaseEventPageView(DetailView):
         for module in modules:
             if module.type == 'POSTCATEGORY':
                 self.posts = self.get_posts_for_module(module)
-    
-            
 
     def get_context_data(self, **kwargs):
         context = super(BaseEventPageView, self).get_context_data(**kwargs)
@@ -61,7 +59,8 @@ class BaseEventPageView(DetailView):
             'page': self.page,
             'modules': modules,
             'year': None,
-            'posts': posts
+            'posts': posts,
+            'base_template': 'base.html'
         })
 
         return context
