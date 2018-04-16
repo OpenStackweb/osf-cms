@@ -73,7 +73,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             BASE_DIR + '/templates/',
-            BASE_DIR + '/content/static/katacontainers/templates/'
+            BASE_DIR + '/static/themes/',
         ],
         'APP_DIRS': True,
         'OPTIONS': {

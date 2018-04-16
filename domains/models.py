@@ -35,7 +35,7 @@ class SiteSettings(models.Model):
     custom_js = models.TextField(blank=True, null=True, verbose_name='Custom JS',
                                  help_text="Printed just before the closing </head> tag. Make sure it's an async script. It will be rendered as-is, unescaped, so make sure its coming from a trusted source.")
     home_page = models.ForeignKey('content.Page', on_delete=models.SET_NULL, null=True)
-    remote_url = models.URLField()
+    remote_url = models.URLField('Theme repo URL')
     
     def __init__(self, *args, **kwargs):
         super(SiteSettings, self).__init__(*args, **kwargs)
@@ -61,14 +61,14 @@ def clone_site(sender, **kwargs):
 @receiver(pre_save, sender=SiteSettings)
 def setup_remote_repo(sender, instance, **kwargs):
     if instance.initial_remote_url != instance.remote_url:
-        submodule_name = re.match(r"((git@|https://|http://)([\w.@]+)(/|:))([\w,\-_]+)/([\w,\-_]+)(.git){0,1}((/){0,1})",
-                                  instance.site.settings.remote_url).group(6)
+        submodule_name = re.match(r"((git@|https://|http://)([\w.@]+)(/|:))([\w,\-_]+)/([\w,\-_.]+)(.git)?((/)?)",
+                                  instance.site.settings.remote_url).group(6).replace('.git', '')
         repo = git.Repo('.git')
+        if not os.path.exists(os.path.join(settings.STATIC_ROOT, 'themes')):
+            os.makedirs(os.path.join(settings.STATIC_ROOT, 'themes'))
         try:
-            repo.create_submodule(name=submodule_name,path=os.path.join(settings.STATIC_ROOT, submodule_name),
+            repo.create_submodule(name=submodule_name,path=os.path.join(settings.STATIC_ROOT, 'themes', submodule_name),
                               url=instance.remote_url)
             repo.index.commit(message='Added submodule {}'.format(submodule_name))
         except GitCommandError:
             raise ValidationError('Please insert a correct git repository url')
-    
-    # submodules = repo.submodules

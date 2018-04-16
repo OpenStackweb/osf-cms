@@ -35,7 +35,7 @@ filebrowser_url = [
 ]
 urlpatterns = filebrowser_url + [
     url(r'^admin/clear-cache/$', staff_member_required(ClearCache.as_view()), name='clear-cache'),
-    url(r'^admin/pull-source-repo/$', staff_member_required(UpdateSourceRepo.as_view()), name='pull-source-repo'),
+    url(r'^admin/pull-theme-repo/$', staff_member_required(UpdateSourceRepo.as_view()), name='pull-theme-repo'),
 
     url(r'^admin/filebrowser/', filebrowser_site.urls),  # filebrowser URLS
     path('admin/', admin.site.urls),

@@ -8,6 +8,7 @@ from django.contrib.sites.models import Site
 from django.core.cache import cache
 from django.core.paginator import Paginator
 from django.http import Http404
+from django.template.loader import get_template
 from django.urls import reverse
 from django.views.generic import DetailView, RedirectView, ListView
 from filebrowser.decorators import path_exists, get_path
@@ -17,7 +18,6 @@ from content.models import Page, Module, Post
 
 
 class BaseEventPageView(DetailView):
-    template_name = 'index.html'
     model = Page
     paginate_by = 2
 
@@ -25,6 +25,23 @@ class BaseEventPageView(DetailView):
         super(BaseEventPageView, self).__init__()
         self.page = None
         self.posts = Post.objects.none()
+    
+    def get_theme_folder_name(self):
+        folder_name = re.match(r"((git@|https://|http://)([\w.@]+)(/|:))([\w,\-_]+)/([\w,\-_.]+)(.git)?((/)?)",
+                               self.request.site.settings.remote_url).group(6).replace('.git', '')
+        return folder_name
+
+    def get_template_names(self):
+        template_dir = os.path.join(self.get_theme_folder_name(), 'templates', 'index.html')
+        return [template_dir]
+
+    def get_base_template(self):
+        base_template_dir = os.path.join(self.get_theme_folder_name(), 'templates', 'base.html')
+        return base_template_dir
+
+    def get_object(self, queryset=None):
+        self.page = Page.objects.get(slug=self.kwargs['slug'], site=self.request.site)
+        return self.page
 
     def get_posts_for_module(self, module):
         posts = module.postcategory.posts.filter(site=self.request.site)
@@ -71,7 +88,8 @@ class BaseEventPageView(DetailView):
             'page': self.page,
             'modules': modules,
             'year': None,
-            'posts': posts
+            'posts': posts,
+            'base_template': self.get_base_template()
         })
 
         return context
@@ -156,8 +174,8 @@ class ClearCache(RedirectView):
 
 class UpdateSourceRepo(RedirectView):
     def get_redirect_url(self, *args, **kwargs):
-        submodule_name = re.match(r"((git@|https://|http://)([\w.@]+)(/|:))([\w,\-_]+)/([\w,\-_]+)(.git)?((/)?)",
-                                  self.request.site.settings.remote_url).group(6)
+        submodule_name = re.match(r"((git@|https://|http://)([\w.@]+)(/|:))([\w,\-_]+)/([\w,\-_.]+)(.git)?((/)?)",
+                                  self.request.site.settings.remote_url).group(6).replace('.git', '')
         submodule = git.Repo('.git').submodule(submodule_name)
         submodule.update(to_latest_revision=True)
         messages.success(self.request, 'The source repo was updated successfully.')
