@@ -1,12 +1,8 @@
 import re
-
-import os
 from django import template
 from django.contrib.sites.models import Site
-from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from content.models import Post, ModuleInPage
-from events.models import Event
 
 register = template.Library()
 
@@ -85,54 +81,9 @@ def set_justify(justify):
     return ' align-left '
 
 
-# @register.simple_tag(name='get_next_talk')
-# def get_next_talk(talk):
-#     order = talk.order
-#     next = Talk.objects.filter(order=order + 1).first()
-#     if next:
-#         return next.get_absolute_url()
-#     return False
-#
-#
-# @register.simple_tag(name='get_prev_talk')
-# def get_prev_talk(talk):
-#     order = talk.order
-#     prev = Talk.objects.filter(order=order - 1).first()
-#     if prev:
-#         return prev.get_absolute_url()
-#     return False
-
-
 @register.simple_tag(name='get_sites')
 def get_sites():
     return Site.objects.all()
-
-
-# @register.simple_tag(name='get_posts_for_module')
-# def get_posts_for_module(module, year):
-#     postsingallery = module.post.postingallery.all()
-#     posts = Post.objects.filter(postingallery__in=postsingallery)
-#     if year:
-#         posts = posts.filter(date__year=year)
-#     return posts
-
-
-@register.simple_tag(name='get_current_event')
-def get_current_event(request):
-    slug = request.META['HTTP_HOST'].split('.')[0]
-    event = get_object_or_404(Event, slug=slug)
-    return event\
-    
-    
-@register.simple_tag(name='ms_extends')
-def ms_extends(request, filename):
-    base_template_dir = filename
-    if getattr(request, 'site'):
-        repo_name = re.match(r"((git@|https://|http://)([\w.@]+)(/|:))([\w,\-_]+)/([\w,\-_.]+)(.git)?((/)?)",
-                               request.site.settings.remote_url).group(6).replace('.git', '')
-        base_template_dir = os.path.join(repo_name, 'templates', filename)
-
-    return base_template_dir
 
 
 @register.simple_tag(name='get_videos_row')
