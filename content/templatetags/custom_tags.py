@@ -1,4 +1,6 @@
 import re
+
+import os
 from django import template
 from django.contrib.sites.models import Site
 from django.shortcuts import get_object_or_404
@@ -119,7 +121,18 @@ def get_sites():
 def get_current_event(request):
     slug = request.META['HTTP_HOST'].split('.')[0]
     event = get_object_or_404(Event, slug=slug)
-    return event
+    return event\
+    
+    
+@register.simple_tag(name='ms_extends')
+def ms_extends(request, filename):
+    base_template_dir = filename
+    if getattr(request, 'site'):
+        repo_name = re.match(r"((git@|https://|http://)([\w.@]+)(/|:))([\w,\-_]+)/([\w,\-_.]+)(.git)?((/)?)",
+                               request.site.settings.remote_url).group(6).replace('.git', '')
+        base_template_dir = os.path.join(repo_name, 'templates', filename)
+
+    return base_template_dir
 
 
 @register.simple_tag(name='get_videos_row')
