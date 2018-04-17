@@ -89,7 +89,8 @@ class BaseEventPageView(DetailView):
             'modules': modules,
             'year': None,
             'posts': posts,
-            'base_template': self.get_base_template()
+            'base_template': self.get_base_template(),
+            'theme_name': self.get_theme_folder_name()
         })
 
         return context
