@@ -5,7 +5,7 @@ import re
 from django.contrib.sites.models import Site
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.db.models.signals import post_save, pre_save
+from django.db.models.signals import post_save, pre_save, pre_delete
 from django.dispatch import receiver
 from django.conf import settings
 from git import GitCommandError
@@ -62,7 +62,7 @@ def clone_site(sender, **kwargs):
 def setup_remote_repo(sender, instance, **kwargs):
     if instance.initial_remote_url != instance.remote_url:
         submodule_name = re.match(r"((git@|https://|http://)([\w.@]+)(/|:))([\w,\-_]+)/([\w,\-_.]+)(.git)?((/)?)",
-                                  instance.site.settings.remote_url).group(6).replace('.git', '')
+                                  instance.remote_url).group(6).replace('.git', '')
         repo = git.Repo('.git')
         if not os.path.exists(os.path.join(settings.STATIC_ROOT, 'themes')):
             os.makedirs(os.path.join(settings.STATIC_ROOT, 'themes'))
@@ -72,3 +72,13 @@ def setup_remote_repo(sender, instance, **kwargs):
             repo.index.commit(message='Added submodule {}'.format(submodule_name))
         except GitCommandError:
             raise ValidationError('Please insert a correct git repository url')
+
+
+@receiver(pre_delete, sender= SiteSettings)
+def remove_remote_repo(sender, instance, **kwargs):
+    submodule_name = re.match(r"((git@|https://|http://)([\w.@]+)(/|:))([\w,\-_]+)/([\w,\-_.]+)(.git)?((/)?)",
+                              instance.remote_url).group(6).replace('.git', '')
+    repo = git.Repo('.git')
+    sm = repo.submodule(submodule_name)
+    sm.remove(module=True, configuration=True)
+    repo.index.commit(message='Removed submodule {}'.format(submodule_name))
