@@ -1,3 +1,5 @@
+from subprocess import call
+
 import git
 import os
 
@@ -182,7 +184,33 @@ class UpdateSourceRepo(RedirectView):
         messages.success(self.request, 'The source repo was updated successfully.')
         return self.request.META.get('HTTP_REFERER') or reverse('admin:index')
 
+
+class GetSSLCertificate(RedirectView):
+    def get_redirect_url(self, *args, **kwargs):
+        command = 'certbot certonly -n --apache -d '
+        to_certify = []
+        redirect_hosts = self.request.site.redirect_hosts
         
+        if not self.request.site.settings.ssl_certified:
+            to_certify.append(self.request.site.domain)
+            self.request.site.settings.ssl_certified = True
+            self.request.site.settings.save()
+
+        uncertified_hosts = redirect_hosts.filter(ssl_certified=False)
+        for host in uncertified_hosts:
+            to_certify.append(host.redirect_name)
+            host.ssl_certified = True
+            host.save()
+
+        if to_certify:
+            command = command + ', '.join(to_certify)
+            call(command)
+            messages.success(self.request, 'The SSL certificate request was sent successfully.')
+            return self.request.META.get('HTTP_REFERER') or reverse('admin:index')
+        messages.warning(self.request, 'All hosts are already certified.')
+        return self.request.META.get('HTTP_REFERER') or reverse('admin:index')
+
+
 def filebrowser_browse(request):
     slug = request.site.domain
     filebrowser_site.directory = "uploads/%s/" % slug

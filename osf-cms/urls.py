@@ -21,7 +21,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.urls import path, include
 
 from content.views import PageView, HomeView, filebrowser_browse, filebrowser_base, ClearCache, PostView, \
-    UpdateSourceRepo
+    UpdateSourceRepo, GetSSLCertificate
 from filebrowser.sites import site as filebrowser_site
 
 filebrowser_url = [
@@ -35,6 +35,7 @@ filebrowser_url = [
 ]
 urlpatterns = filebrowser_url + [
     url(r'^admin/clear-cache/$', staff_member_required(ClearCache.as_view()), name='clear-cache'),
+    url(r'^admin/get-ssl-certificate/$', staff_member_required(GetSSLCertificate.as_view()), name='get-ssl-certificate'),
     url(r'^admin/pull-theme-repo/$', staff_member_required(UpdateSourceRepo.as_view()), name='pull-theme-repo'),
 
     url(r'^admin/filebrowser/', filebrowser_site.urls),  # filebrowser URLS

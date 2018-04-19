@@ -27,6 +27,9 @@
 
        &nbsp;&nbsp;<a href="{% url 'clear-cache' %}">Clear cache</a> /
          <a href="{% url 'pull-theme-repo' %}">Update theme repo</a>
+         {% if not request.site.settings.is_fully_certified %}/
+             <a href="{% url 'get-ssl-certificate' %}">Get SSL certificates</a>
+         {% endif %}
 
     {% endif %}
         /

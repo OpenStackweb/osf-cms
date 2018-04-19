@@ -126,7 +126,7 @@ class RedirectHostAdmin(BaseSiteAdmin):
     
 class SiteSettingsAdmin(admin.ModelAdmin, SiteSettingsBaseAdmin):
     
-    list_display = ['site', 'base_site', 'home_page']
+    list_display = ['site', 'base_site', 'home_page', 'ssl_certified']
     exclude = ['site', ]
 
     def get_actions(self, request):
