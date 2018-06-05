@@ -87,3 +87,14 @@ th.order{
 td.field-order{
   display: none;
 }
+
+
+/* Select2 */
+
+.select2-choices{
+    width: 100%;
+}
+
+.select2-container.select2-container-multi{
+    margin-right: 20px;
+}
