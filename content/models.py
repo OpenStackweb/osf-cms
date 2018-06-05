@@ -2,6 +2,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.urls import reverse
 from filebrowser.fields import FileBrowseField
+from tagulous.models import TagField
 from tinymce.models import HTMLField
 
 class Page(models.Model):
@@ -180,6 +181,14 @@ class Icon(models.Model):
     def __str__(self):
         return self.name
 
+
+class Tag(models.Model):
+    name = models.CharField(max_length=25, blank=False)
+
+    def __str__(self):
+        return self.name
+
+
 class List(models.Model):
     STYLE_CHOICES = (
         ('NONE', 'None'),
@@ -246,6 +255,7 @@ class Post(models.Model):
     content = HTMLField(max_length=65535, blank=False, null=True)
     excerpt = models.TextField(max_length=350, blank=False)
     categories = models.ManyToManyField('PostCategory', related_name='posts', blank=True)
+    tags = TagField()
     
     class Meta:
         ordering = ['date', ]

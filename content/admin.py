@@ -1,14 +1,18 @@
 from copy import copy
+from importlib import import_module, reload
 
+from django.conf import settings
 from django.contrib.admin import site
 from adminsortable2.admin import SortableInlineAdminMixin, SortableAdminMixin
 from django.utils.html import format_html
 from nested_admin.nested import NestedStackedInline, NestedTabularInline, NestedModelAdmin
+from tagulous.admin import register as tagulous_register
 
 from content.context import ContextManager
+from content.forms import PostForm
 from .models import Sponsorship, Page, Block, Module, ImageInGallery, ImageGallery, ModuleInPage, Style, \
     ListItem, Icon, ButtonInModule, VideoGallery, Button, CustomHTML, PostCategory, Post, ModuleInModule, \
-    ModuleContainer, List
+    ModuleContainer, List, Tag
 
 # TOFIX: Single site fixing
 # from events.admin import EventModelAdmin, EventTabularInline
@@ -281,7 +285,8 @@ class StyleAdmin(EventModelAdmin):
     prepopulated_fields = {'slug': ('title',)}
     
 class PostAdmin(EventModelAdmin):
-    fields = ('title', 'slug', 'author', 'public', 'date', 'image', 'content', 'excerpt', 'categories')
+    # form = PostForm
+    fields = ('title', 'slug', 'author', 'public', 'date', 'image', 'content', 'excerpt', 'categories', 'tags')
     list_display = ('title', 'slug', 'author', 'date', 'public')
     prepopulated_fields = {'slug': ('title',)}
 
@@ -312,3 +317,4 @@ site.register(Icon, IconAdmin)
 site.register(Button, ButtonAdmin)
 site.register(Post, PostAdmin)
 site.register(ModuleContainer, ModuleContainerAdmin)
+tagulous_register(Post.tags.tag_model)

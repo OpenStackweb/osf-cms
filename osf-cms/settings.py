@@ -47,6 +47,8 @@ INSTALLED_APPS = [
     'nested_admin',
     'django.contrib.sites',
     'django.contrib.redirects',
+    'tagulous',
+    
 ]
 
 MIDDLEWARE = [
