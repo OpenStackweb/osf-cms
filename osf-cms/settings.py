@@ -171,20 +171,6 @@ TINYMCE_DEFAULT_CONFIG = {
     'advimage_update_dimensions_onchange': 'true',
     'relative_urls': 'true',
     'convert_urls' : 'true',
-    'valid_elements' : "" +
-        "-p[class|align]," +
-        "a[href|title|id|class|target|align]," +
-        "-strong/-b," +
-        "-em/-i," +
-        "-sup," +
-        "-ol," +
-        "-ul," +
-        "-li," +
-        "img[src|alt|width|height]," +
-        "br," +
-        "hr," +
-        "table,thead,tbody,tfoot,th[colspan|rowspan],td[colspan|rowspan],tr," +
-        "h3,h4,pre",
     'toolbar': "styleselect",
     'formats': {
         'aligncenter': {'selector': 'p,h1,h2,h3,h4,h5,h6,td,th,div,ul,ol,li,table,img', 'classes': 'text-center'},
