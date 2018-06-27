@@ -255,9 +255,7 @@ class Post(models.Model):
     content = HTMLField(max_length=65535, blank=False, null=True)
     excerpt = models.TextField(max_length=350, blank=False)
     categories = models.ManyToManyField('PostCategory', related_name='posts', blank=True)
-    tags = TagField(get_absolute_url=lambda tag: reverse(
-            'posts_by_tag', kwargs={'tag': tag.slug}
-        ))
+    tags = TagField()
     
     class Meta:
         ordering = ['date', ]

@@ -30,7 +30,7 @@ class BaseEventPageView(DetailView):
         if self.kwargs.get('year'):
             posts = posts.filter(date__year=self.kwargs['year'])
         if self.kwargs.get('tag'):
-            pass
+            posts = posts.filter(tags = self.kwargs['tag'])
         if not self.request.user.is_staff:
             posts = posts.filter(public=True)
         return (self.posts | posts).order_by('-date')
