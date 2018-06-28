@@ -12,7 +12,6 @@ gitdb2==2.0.3
 GitPython==2.1.9
 mccabe==0.6.1
 Pillow==5.0.0
-pkg-resources==0.0.0
 pluggy==0.6.0
 py==1.5.3
 pycodestyle==2.3.1
