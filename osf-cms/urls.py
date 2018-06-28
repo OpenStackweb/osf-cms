@@ -21,7 +21,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.urls import path, include
 from django.views.generic import RedirectView
 
-from content.views import PageView, HomeView, filebrowser_browse, filebrowser_base, ClearCache, PostView
+from content.views import PageView, HomeView, filebrowser_browse, filebrowser_base, ClearCache, PostView, PostListView
 from filebrowser.sites import site as filebrowser_site
 
 filebrowser_url = [
@@ -42,10 +42,10 @@ urlpatterns = filebrowser_url + [
     url(r'^nested_admin/', include('nested_admin.urls')),
 
     url(r'^$', HomeView.as_view(), name='home'),
+    url(r'^tags/(?P<tag>[-\w]+)?/$', PostListView.as_view(), name='posts_by_tag'),
     url(r'^posts/(?P<post_slug>[-\w]+)?/$', PostView.as_view(), name='post'),
     url(r'^(?P<slug>[-\w]+)?/$', PageView.as_view(), name='page'),
     url(r'^(?P<slug>[-\w]+)/(?P<year>[-\w]+)?/$', PageView.as_view(), name='posts_year'),
-    url(r'^(?P<slug>[-\w]+)/tags/(?P<tag>[-\w]+)?/$', PageView.as_view(), name='posts_by_tag'),
 
     url(r'^select2/', include('django_select2.urls')),
 

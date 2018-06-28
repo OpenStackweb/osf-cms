@@ -12,7 +12,7 @@ from filebrowser.decorators import path_exists, get_path
 from filebrowser.sites import filebrowser_view, site as filebrowser_site
 
 from menus.models import BigHeaderMenu, SocialMediaMenu
-from content.models import Page, Module, Post
+from content.models import Page, Module, Post, PostCategory
 
 
 class BaseEventPageView(DetailView):
@@ -29,8 +29,6 @@ class BaseEventPageView(DetailView):
         posts = module.postcategory.posts.all()
         if self.kwargs.get('year'):
             posts = posts.filter(date__year=self.kwargs['year'])
-        if self.kwargs.get('tag'):
-            posts = posts.filter(tags = self.kwargs['tag'])
         if not self.request.user.is_staff:
             posts = posts.filter(public=True)
         return (self.posts | posts).order_by('-date')
@@ -56,7 +54,6 @@ class BaseEventPageView(DetailView):
         posts = paginator.get_page(page)
         context.update({
             'header_menus': header_menus,
-            'title': self.page.title,
             'social_menus': social_menus,
             'page': self.page,
             'modules': modules,
@@ -91,6 +88,25 @@ class PageView(BaseEventPageView):
         self.page = kwargs['object']
 
         return super(PageView, self).get_context_data(**kwargs)
+
+
+class PostListView(BaseEventPageView):
+    
+    model = Post
+    
+    def __init__(self):
+        super(PostListView, self).__init__()
+        self.page = None
+
+    def get_object(self, queryset=None):
+        return None
+    
+    def get_context_data(self, **kwargs):
+        ctx = super(PostListView, self).get_context_data(**kwargs)
+        ctx['is_posts_list'] = True
+        ctx['posts'] = Post.objects.filter(tags=self.kwargs['tag'])
+        ctx['modules'] = None
+        return ctx
 
 
 class PostView(ListView):
