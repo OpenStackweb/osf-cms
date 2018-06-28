@@ -35,7 +35,7 @@ filebrowser_url = [
 ]
 urlpatterns = filebrowser_url + [
     url(r'^admin/clear-cache/$', staff_member_required(ClearCache.as_view()), name='clear-cache'),
-    
+
     url(r'^admin/filebrowser/', filebrowser_site.urls), # filebrowser URLS
     path('admin/', admin.site.urls),
     url(r'^tinymce/', include('tinymce.urls')),
@@ -45,7 +45,8 @@ urlpatterns = filebrowser_url + [
     url(r'^posts/(?P<post_slug>[-\w]+)?/$', PostView.as_view(), name='post'),
     url(r'^(?P<slug>[-\w]+)?/$', PageView.as_view(), name='page'),
     url(r'^(?P<slug>[-\w]+)/(?P<year>[-\w]+)?/$', PageView.as_view(), name='posts_year'),
-    
+    url(r'^(?P<slug>[-\w]+)/tags/(?P<tag>[-\w]+)?/$', PageView.as_view(), name='posts_by_tag'),
+
     url(r'^select2/', include('django_select2.urls')),
 
 
