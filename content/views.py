@@ -93,6 +93,7 @@ class PageView(BaseEventPageView):
 class PostListView(BaseEventPageView):
     
     model = Post
+    paginate_by = 2
     
     def __init__(self):
         super(PostListView, self).__init__()
@@ -101,10 +102,12 @@ class PostListView(BaseEventPageView):
     def get_object(self, queryset=None):
         return None
     
+    def get_all_posts(self, modules):
+        self.posts = Post.objects.filter(tags=self.kwargs['tag']).order_by('-date')
+    
     def get_context_data(self, **kwargs):
         ctx = super(PostListView, self).get_context_data(**kwargs)
         ctx['is_posts_list'] = True
-        ctx['posts'] = Post.objects.filter(tags=self.kwargs['tag'])
         ctx['modules'] = None
         return ctx
 
